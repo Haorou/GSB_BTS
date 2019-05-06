@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewData["Title"] = "Comptable";
+}
+
+<h2>Comptable</h2>
+
+@{
+    <div class="container">
+        <h2>Hover Rows</h2>
+        <p>Consultation des fiches frais</p>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Commercial</th>
+                    <th>Date fiche </th>
+                    <th>Date modification</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                
+                @foreach (var ficheFrais in ViewBag.FichesFrais)
+                {
+                    <tr>
+                        <th>@ficheFrais.Commercial_visiteur.Nom</th>
+                        <th>@ficheFrais.Date_fiche</th>
+                        <th>@ficheFrais.Date_modification</th>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+

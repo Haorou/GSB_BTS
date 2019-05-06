@@ -1,0 +1,37 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+
+}
+
+<div class="container">
+    <h2>Liste des personnes</h2>
+    <p>Cette liste présente les personnes enregistrées dans la base de données</p>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Prenom</th>
+                <th>Adresse</th>
+                <th>Email</th>
+                <th>Telephone</th>
+                <th>Etablissement</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var personne in ViewBag.MesPersonnes)
+            {
+                <tr>
+                    <th>@personne.Nom</th>
+                    <th>@personne.Prenom</th>
+                    <th>@personne.Adresse</th>
+                    <th>@personne.Email</th>
+                    <th>@personne.Telephone</th>
+                    <th>@personne.Etablissement</th>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+

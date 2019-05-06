@@ -1,0 +1,41 @@
+﻿@{
+    ViewData["Title"] = "ConsultationRDV";
+    
+}
+
+
+<div class="container">
+    <h2>Hover Rows</h2>
+    <p>Consultation de vos Rendez vous</p>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Commercial</th>
+                <th>Praticien</th>
+                <th>Date RDV</th>
+                <th>Motif du rendez-vous</th>
+                <th>Indice de Confiance</th>
+                <th>Date Bilan</th>
+                <th>Enchantillons donnés</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var rdv in ViewBag.MesRDV)
+            {
+            <a href="www.google.fr">
+                <tr>
+                    <th>@rdv.Employe.Id</th>
+                    <th>@rdv.Praticien.Id</th>
+                    <th>@rdv.Date_rdv</th>
+                    <th>@rdv.Motif_rdv</th>
+                    <th>@rdv.Indice_confiance</th>
+                    <th>@rdv.Date_bilan</th>
+                    <th>@rdv.Liste_echantillons_donnes.Count</th>
+                </tr>
+            </a>
+            }
+        </tbody>
+    </table>
+</div>
+
+
