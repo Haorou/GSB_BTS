@@ -98,7 +98,7 @@ namespace GSB.Models.DAO
             if (OpenConnection())
             {
                 EchantillonDAO echantillonManager = new EchantillonDAO();
-                Produit produit = new Produit();
+                Produit produit;
 
                 command = manager.CreateCommand();
                 command.CommandText = "SELECT * " +
@@ -109,6 +109,7 @@ namespace GSB.Models.DAO
 
                 while (dataReader.Read())
                 {
+                    produit = new Produit();
                     produit.Id_produit = (int)dataReader["id_produit"];
                     produit.Pathologie = (string)dataReader["pathologie"];
                     produit.Famille = (string)dataReader["famille"];

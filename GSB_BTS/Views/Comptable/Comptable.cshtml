@@ -1,6 +1,8 @@
 ﻿
 @{
-    ViewData["Title"] = "Comptable";
+                /**/
+
+                ViewData["Title"] = "Comptable";
 }
 
 <h2>Comptable</h2>
@@ -13,24 +15,85 @@
             <thead>
                 <tr>
                     <th>Commercial</th>
+                    <th>Comptable</th>
                     <th>Date fiche </th>
                     <th>Date modification</th>
                 </tr>
             </thead>
             <tbody>
 
-                
+
                 @foreach (var ficheFrais in ViewBag.FichesFrais)
                 {
                     <tr>
                         <th>@ficheFrais.Commercial_visiteur.Nom</th>
+                        <th>@if (ficheFrais.Comptable != null) { @ficheFrais.Comptable.Nom }</th>
                         <th>@ficheFrais.Date_fiche</th>
                         <th>@ficheFrais.Date_modification</th>
+                        <th>
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-id="@ficheFrais.Id_fiche_frais">Modifier</button>
+                        </th>
                     </tr>
                 }
             </tbody>
         </table>
+
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Fiche Frais</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">Recipient:</label>
+                                <input type="text" class="form-control" id="recipient-name">
+                            </div>
+                            <div class="form-group">
+                                <label for="message-text" class="col-form-label">Message:</label>
+                                <textarea class="form-control" id="message-text"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Send message</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-}
 
+        @section scripts {
+            <script type="text/javascript">
+                $('#exampleModal').on('show.bs.modal', function (event) {
+                    var button = $(event.relatedTarget) // Button that triggered the modal
+                    var recipient = button.data('id')
 
+                    try {
+
+                        $.ajax({
+                            type: "POST",
+                            url: "http://localhost:51921/Comptable/AjaxReceiver",
+                            data: 'table=' + "fiche_frais" + '&id=' + recipient,
+                        }).then(function (response) {
+                            alert(response);
+                        });
+                    }
+                    catch (ex) {
+                        alert("catch Ajax Error");
+                    }
+
+                    var modal = $(this)
+
+                    modal.find('.modal-title').text('Fiche Frais n°' + recipient)
+                    modal.find('.modal-body input').val(recipient)
+                })
+            </script>
+        }
+    }

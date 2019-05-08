@@ -108,7 +108,7 @@ namespace GSB.Models.DAO
             List<RendezVous> liste_rdv = new List<RendezVous>();
             if (OpenConnection())
             {
-                RendezVous rdv = new RendezVous();
+                RendezVous rdv;
                 EmployeDAO employeManager = new EmployeDAO();
                 PraticienDAO praticienManager = new PraticienDAO();
                 EchantillonDonneDAO echantillonDonneManager = new EchantillonDonneDAO();
@@ -121,6 +121,7 @@ namespace GSB.Models.DAO
                 
                 while (dataReader.Read())
                 {
+                    rdv = new RendezVous();
                     rdv.Id_rdv = (int)dataReader["id_rdv"];
                     rdv.Employe = employeManager.Read((int)dataReader["id_commercial"]);
                     rdv.Praticien = praticienManager.Read((int)dataReader["id_praticien"]);
@@ -144,7 +145,7 @@ namespace GSB.Models.DAO
             List<RendezVous> liste_rdv = new List<RendezVous>();
             if (OpenConnection())
             {
-                RendezVous rdv = new RendezVous();
+                RendezVous rdv;
                 EmployeDAO employeManager = new EmployeDAO();
                 PraticienDAO praticienManager = new PraticienDAO();
                 EchantillonDonneDAO echantillonDonneManager = new EchantillonDonneDAO();
@@ -158,6 +159,7 @@ namespace GSB.Models.DAO
 
                 while (dataReader.Read())
                 {
+                    rdv = new RendezVous();
                     rdv.Id_rdv = (int)dataReader["id_rdv"];
                     rdv.Employe = employeManager.Read((int)dataReader["id_commercial"]);
                     rdv.Praticien = praticienManager.Read((int)dataReader["id_praticien"]);
