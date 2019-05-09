@@ -11,14 +11,14 @@ namespace GSB.Models
         private Employe commercial_visiteur;
         private Employe comptable;
         private DateTime date_fiche;
-        private DateTime date_modification;
+        private DateTime? date_modification;
         private List<LigneFrais> liste_lignes_frais;
 
         public int Id_fiche_frais { get => id_fiche_frais; set => id_fiche_frais = value; }
         public Employe Commercial_visiteur { get => commercial_visiteur; set => commercial_visiteur = value; }
         public Employe Comptable { get => comptable; set => comptable = value; }
         public DateTime Date_fiche { get => date_fiche; set => date_fiche = value; }
-        public DateTime Date_modification { get => date_modification; set => date_modification = value; }
+        public DateTime? Date_modification { get => date_modification; set => date_modification = value; }
         public List<LigneFrais> Liste_lignes_frais { get => liste_lignes_frais; set => liste_lignes_frais = value; }
 
         public FicheFrais() { }

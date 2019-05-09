@@ -36,8 +36,6 @@ namespace GSB.Models.DAO
                                             (string)dataReader["mot_de_passe"],
                                             (Employe.TypeEmploye)Enum.Parse(typeof(Employe.TypeEmploye), 
                                                                            (string)dataReader["type_employe"]));
-
-                    Debug.WriteLine(employe);
                 }
 
                 dataReader.Close();
@@ -163,8 +161,6 @@ namespace GSB.Models.DAO
                                             (string)dataReader["mot_de_passe"],
                                             (Employe.TypeEmploye)Enum.Parse(typeof(Employe.TypeEmploye),
                                                                            (string)dataReader["type_employe"]));
-
-                    Debug.WriteLine(employe);
                 }
 
                 dataReader.Close();

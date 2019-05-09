@@ -5,37 +5,6 @@ namespace GSB.Models.DAO
 {
     public class PersonneDAO : DAO_Manager
     {
-        public string Read(int id)
-        {
-            string texte = "vide";
-            if (OpenConnection())
-            {
-                command = manager.CreateCommand();
-                command.CommandText =   "SELECT nom, prenom, adresse, email, etablissement" +
-                                        "from personne" +
-                                        "WHERE id_personne= @id";
-                command.Parameters.AddWithValue("@id", id);
-
-                // Lecture des résultats
-                dataReader = command.ExecuteReader();
-
-                while (dataReader.Read())
-                {
-                    texte = (string)dataReader["nom"];
-                    texte += (string)dataReader["prenom"];
-                    texte += (string)dataReader["adresse"];
-                    texte += (string)dataReader["email"];
-                    texte += (string)dataReader["etablissement"];
-                    System.Diagnostics.Debug.WriteLine(texte);
-                }
-
-                dataReader.Close();
-                CloseConnection();
-            }
-
-            return texte;
-        }
-
         public List<Personne> ReadAll()
         {
             List<Personne> liste_personnes = new List<Personne>();

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using GSB.Models;
 using GSB.Models.DAO;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 
 namespace GSB.Controllers
 {
@@ -20,6 +21,20 @@ namespace GSB.Controllers
             ViewData["Message"] = "Page de Consultation des fiches de frais.";
 
             return View();
+        }
+
+        public string AjaxReceiver(string table, int id)
+        {
+            string reponse = "";
+            if(table.Equals("fiche_frais"))
+            {
+                FicheFraisDAO ficheFraisManager = new FicheFraisDAO();
+                FicheFrais ficheFrais = ficheFraisManager.Read(id, true);
+                JavaScriptSerializer serializer = new JavaScriptSerializer();
+                reponse = serializer.Serialize(ficheFrais);
+            }
+
+            return reponse;
         }
     }
 }

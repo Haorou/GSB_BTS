@@ -8,18 +8,19 @@ namespace GSB.Models.DAO
 {
     public class FicheFraisDAO : DAO_Manager
     {
-        public FicheFrais Read(int id_rdv)
+        public FicheFrais Read(int id, bool isSerializeRead)
         {
             FicheFrais ficheFrais = null;
             if (OpenConnection())
             {
                 ficheFrais = new FicheFrais();
+                LigneFraisDAO ligneFraisManager = new LigneFraisDAO();
                 EmployeDAO employeManager = new EmployeDAO();
                 command = manager.CreateCommand();
                 command.CommandText = "SELECT * " +
                                       "FROM fiche_frais " +
                                       "WHERE id_fiche_frais = @id_fiche_frais";
-                command.Parameters.AddWithValue("@id", id_rdv);
+                command.Parameters.AddWithValue("@id_fiche_frais", id);
 
                 // Lecture des résultats
                 dataReader = command.ExecuteReader();
@@ -27,11 +28,11 @@ namespace GSB.Models.DAO
                 while (dataReader.Read())
                 {
                     ficheFrais.Id_fiche_frais = (int)dataReader["id_fiche_frais"];
-                    ficheFrais.Comptable = employeManager.Read((int)dataReader["id_comptable"]);
+                    ficheFrais.Comptable = dataReader["id_comptable"].ToString() == "" ? null : employeManager.Read((int)dataReader["id_comptable"]);
                     ficheFrais.Commercial_visiteur = employeManager.Read((int)dataReader["id_commercial_visiteur"]);
                     ficheFrais.Date_fiche = (DateTime)dataReader["date_fiche"];
-                    ficheFrais.Date_modification = (DateTime)dataReader["date_modification"];
-                    // ficheFrais.Liste_ligne_frais = Read();
+                    ficheFrais.Date_modification = dataReader["date_modification"].ToString() == "" ? null : (DateTime?)dataReader["date_modification"];
+                    ficheFrais.Liste_lignes_frais = ligneFraisManager.ReadAllFromFicheFrais(ficheFrais, isSerializeRead);
                     Debug.WriteLine(ficheFrais);
                 }
 
@@ -68,7 +69,7 @@ namespace GSB.Models.DAO
             List<FicheFrais> liste_ficheFrais = new List<FicheFrais>();
             if (OpenConnection())
             {
-                FicheFrais ficheFrais = new FicheFrais();
+                FicheFrais ficheFrais;
                 EmployeDAO employeManager = new EmployeDAO();
                 LigneFraisDAO ligneFraisManager = new LigneFraisDAO();
                 command = manager.CreateCommand();
@@ -79,12 +80,13 @@ namespace GSB.Models.DAO
 
                 while (dataReader.Read())
                 {
+                    ficheFrais = new FicheFrais();
                     ficheFrais.Id_fiche_frais = (int)dataReader["id_fiche_frais"];
                     ficheFrais.Commercial_visiteur = employeManager.Read((int)dataReader["id_commercial_visiteur"]);
-                    ficheFrais.Comptable = employeManager.Read((int)dataReader["id_comptable"]);
+                    ficheFrais.Comptable = dataReader["id_comptable"].ToString() == "" ? null : employeManager.Read((int)dataReader["id_comptable"]);
                     ficheFrais.Date_fiche = (DateTime)dataReader["date_fiche"];
-                    ficheFrais.Date_modification = (DateTime)dataReader["date_modification"];
-                    ficheFrais.Liste_lignes_frais = ligneFraisManager.ReadAllFromFicheFrais(ficheFrais);
+                    ficheFrais.Date_modification = dataReader["date_modification"].ToString() == "" ? null : (DateTime?)dataReader["date_modification"];
+                    ficheFrais.Liste_lignes_frais = ligneFraisManager.ReadAllFromFicheFrais(ficheFrais, false);
 
                     liste_ficheFrais.Add(ficheFrais);
                 }
@@ -100,7 +102,7 @@ namespace GSB.Models.DAO
             List<FicheFrais> liste_ficheFrais = new List<FicheFrais>();
             if (OpenConnection())
             {
-                FicheFrais ficheFrais = new FicheFrais();
+                FicheFrais ficheFrais;
                 EmployeDAO employeManager = new EmployeDAO();
                 LigneFraisDAO ligneFraisManager = new LigneFraisDAO();
 
@@ -127,12 +129,13 @@ namespace GSB.Models.DAO
                 {
                     while (dataReader.Read())
                     {
+                        ficheFrais = new FicheFrais();
                         ficheFrais.Id_fiche_frais = (int)dataReader["id_fiche_frais"];
                         ficheFrais.Commercial_visiteur = employeManager.Read((int)dataReader["id_commercial_visiteur"]);
                         ficheFrais.Comptable = employe;
                         ficheFrais.Date_fiche = (DateTime)dataReader["date_fiche"];
-                        ficheFrais.Date_modification = (DateTime)dataReader["date_modification"];
-                        ficheFrais.Liste_lignes_frais = ligneFraisManager.ReadAllFromFicheFrais(ficheFrais);
+                        ficheFrais.Date_modification = dataReader["date_modification"].ToString() == "" ? null : (DateTime?)dataReader["date_modification"];
+                        ficheFrais.Liste_lignes_frais = ligneFraisManager.ReadAllFromFicheFrais(ficheFrais, false);
 
                         liste_ficheFrais.Add(ficheFrais);
                     }
@@ -141,12 +144,13 @@ namespace GSB.Models.DAO
                 {
                     while (dataReader.Read())
                     {
+                        ficheFrais = new FicheFrais();
                         ficheFrais.Id_fiche_frais = (int)dataReader["id_fiche_frais"];
                         ficheFrais.Commercial_visiteur = employe;
-                        ficheFrais.Comptable = employeManager.Read((int)dataReader["id_comptable"]);
+                        ficheFrais.Comptable = dataReader["id_comptable"].ToString() == "" ? null : employeManager.Read((int)dataReader["id_comptable"]);
                         ficheFrais.Date_fiche = (DateTime)dataReader["date_fiche"];
-                        ficheFrais.Date_modification = (DateTime)dataReader["date_modification"];
-                        ficheFrais.Liste_lignes_frais = ligneFraisManager.ReadAllFromFicheFrais(ficheFrais);
+                        ficheFrais.Date_modification = dataReader["date_modification"].ToString() == "" ? null : (DateTime?)dataReader["date_modification"];
+                        ficheFrais.Liste_lignes_frais = ligneFraisManager.ReadAllFromFicheFrais(ficheFrais, false);
 
                         liste_ficheFrais.Add(ficheFrais);
                     }
