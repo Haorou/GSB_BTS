@@ -25,16 +25,16 @@ namespace GSB.Controllers
 
         public string AjaxReceiver(string table, int id)
         {
-            string reponse = "";
+            string response = "";
             if(table.Equals("fiche_frais"))
             {
                 FicheFraisDAO ficheFraisManager = new FicheFraisDAO();
                 FicheFrais ficheFrais = ficheFraisManager.Read(id, true);
                 JavaScriptSerializer serializer = new JavaScriptSerializer();
-                reponse = serializer.Serialize(ficheFrais);
+                response = serializer.Serialize(ficheFrais);
             }
 
-            return reponse;
+            return response;
         }
     }
 }
