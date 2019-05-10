@@ -31,6 +31,9 @@ namespace GSB.Controllers
 
             ViewData["Message"] = "Test de push";
 
+            Debug.WriteLine("=========================================================================");
+            Debug.WriteLine("=========================================================================");
+
             return View();
         }
 
