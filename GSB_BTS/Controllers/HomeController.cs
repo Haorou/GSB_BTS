@@ -29,7 +29,7 @@ namespace GSB.Controllers
            
             ViewBag.MesPersonnes = mesPersonnes;*/
 
-            ViewData["Message"] = "Veuillez-vous connecter";
+            ViewData["Message"] = "Test de push";
 
             return View();
         }
