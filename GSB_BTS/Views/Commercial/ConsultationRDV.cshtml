@@ -6,110 +6,84 @@
 <h2>Comptable</h2>
 
 @{
-<div class="container">
-    <h2>Bienvenue @ViewBag.Employe.Prenom @ViewBag.Employe.Nom</h2>
-    <p>Consultation de vos Rendez vous</p>
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <td>
-                    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-plus-sign"></span>Ajouter</button>
-                </td>
-                <td>
-                    <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-edit"></span>Modifier</button>
-                </td>
-                <td>
-                    <button type="submit" class="btn btn-warning"><span class="glyphicon glyphicon-trash"></span>Supprimer</button>
-                </td>
-            </tr>
-            <tr>
-                <th>Commercial</th>
-                <th>Praticien</th>
-                <th>Date RDV</th>
-                <th>Motif du rendez-vous</th>
-                <th>Indice de Confiance</th>
-                <th>Date Bilan</th>
-                <th>Enchantillons donnés</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var rdv in ViewBag.MesRDV)
-            {
-                /*<a href="www.google.fr">*/
+    <div class="container">
+        <h2>Bienvenue @ViewBag.Employe.Prenom @ViewBag.Employe.Nom</h2>
+        <p>Consultation de vos Rendez vous</p>
+        <table class="table table-hover">
+            <thead>
                 <tr>
-                    <th>@rdv.Employe.Id</th>
-                    <th>@rdv.Praticien.Nom</th>
-                    <th>@rdv.Date_rdv</th>
-                    <th>@rdv.Motif_rdv</th>
-                    <th>@rdv.Indice_confiance</th>
-                    <th>@rdv.Date_bilan</th>
-                    <th>@rdv.Liste_echantillons_donnes.Count</th>
-                    <th>
-                        <input type="radio" aria-label="" value="@rdv.Id_rdv" data-toggle="modal" data-target="#ficheRDVModal" data-id="@rdv.Id_rdv">
-                    </th>
+                    <td>
+                        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-plus-sign"></span>Ajouter</button>
+                    </td>
+                    <td>
+                        <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-edit"></span>Modifier</button>
+                    </td>
+                    <td>
+                        <button type="submit" class="btn btn-warning"><span class="glyphicon glyphicon-trash"></span>Supprimer</button>
+                    </td>
                 </tr>
-                /*</a>*/
-            }
-        </tbody>
-    </table>
+                <tr>
+                    <th>Commercial</th>
+                    <th>Praticien</th>
+                    <th>Date RDV</th>
+                    <th>Motif du rendez-vous</th>
+                    <th>Indice de Confiance</th>
+                    <th>Date Bilan</th>
+                    <th>Enchantillons donnés</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var rdv in ViewBag.MesRDV)
+                {
+                    /*<a href="www.google.fr">*/
+                    <tr>
+                        <th>@rdv.Employe.Id</th>
+                        <th>@rdv.Praticien.Nom</th>
+                        <th>@rdv.Date_rdv</th>
+                        <th>@rdv.Motif_rdv</th>
+                        <th>@rdv.Indice_confiance</th>
+                        <th>@rdv.Date_bilan</th>
+                        <th>@rdv.Liste_echantillons_donnes.Count</th>
+                        <th>
+                            <input type="radio" aria-label="" value="@rdv.Id_rdv" data-toggle="modal" data-target="#ficheRDVModal" data-id="@rdv.Id_rdv">
+                        </th>
+                    </tr>
+                    /*</a>*/
+                }
+            </tbody>
+        </table>
 
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Compte Rendu</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="form-group">
-                            <label for="recipient-name" class="col-form-label">Recipient:</label>
-                            <input type="text" class="form-control" id="recipient-name">
-                        </div>
-                        <div class="form-group">
-                            <label for="message-text" class="col-form-label">Message:</label>
-                            <textarea class="form-control" id="message-text"></textarea>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Envoyer</button>
+        @*Permet d'appeler d'autre vue*@
+        @RenderPage("~/Views/Commercial/Detail_RDV.cshtml")
+
+        <div class="modal fade" id="ficheRDVModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Compte Rendu</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">Recipient:</label>
+                                <input type="text" class="form-control" id="recipient-name">
+                            </div>
+                            <div class="form-group">
+                                <label for="message-text" class="col-form-label">Message:</label>
+                                <textarea class="form-control" id="message-text"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Envoyer</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="modal fade" id="ficheRDVModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Compte Rendu</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="form-group">
-                            <label for="recipient-name" class="col-form-label">Recipient:</label>
-                            <input type="text" class="form-control" id="recipient-name">
-                        </div>
-                        <div class="form-group">
-                            <label for="message-text" class="col-form-label">Message:</label>
-                            <textarea class="form-control" id="message-text"></textarea>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Envoyer</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     </div>
     @section scripts {
