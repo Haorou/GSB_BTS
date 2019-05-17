@@ -10,9 +10,10 @@ namespace GSB.Models.DAO
     {
         public RendezVous Read(int id_rdv)
         {
-            RendezVous rendezVous = new RendezVous();
+            RendezVous rendezVous = null;
             if (OpenConnection())
             {
+                rendezVous = new RendezVous();
                 EmployeDAO employeManager = new EmployeDAO();
                 PraticienDAO praticienManager = new PraticienDAO();
                 EchantillonDonneDAO echantillonDonneManager = new EchantillonDonneDAO();
@@ -26,6 +27,7 @@ namespace GSB.Models.DAO
                 // Lecture des résultats
                 dataReader = command.ExecuteReader();
 
+                rendezVous.Id_rdv = id_rdv;
                 while (dataReader.Read())
                 {
                     rendezVous.Date_bilan = (DateTime)dataReader["date_bilan"];

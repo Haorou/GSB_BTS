@@ -9,30 +9,7 @@ namespace GSB.Controllers
     {
         public ActionResult Index()
         {
-            /*PraticienDAO PersonneManager = new PraticienDAO();
-            string personneText = PersonneManager.Read(1);
-            Debug.WriteLine("dzeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee  => " + personneText);
-            ViewBag.text = personneText;*/
-
-            /*PraticienDAO monDoc = new PraticienDAO();
-
-            Praticien praticien = new Praticien();
-            praticien.Fonction = "Generaliste";
-            praticien.Specialite = "Cancer";
-            praticien.Date_derniere_entrevue = DateTime.Now;
-
-            monDoc.Create(praticien);*/
-
-            /*PersonneDAO personneDAO = new PersonneDAO();
-
-            List<Personne> mesPersonnes = personneDAO.ReadAll();
-           
-            ViewBag.MesPersonnes = mesPersonnes;*/
-
             ViewData["Message"] = "Test de push";
-
-            Debug.WriteLine("=========================================================================");
-            Debug.WriteLine("=========================================================================");
 
             return View();
         }

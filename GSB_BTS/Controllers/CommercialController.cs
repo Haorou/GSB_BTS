@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using GSB.Models;
 using GSB.Models.DAO;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 
 namespace GSB.Controllers
 {
@@ -13,25 +14,41 @@ namespace GSB.Controllers
     {
         public ActionResult ConsultationRDV()
         {
-            RendezVousDAO rendezVousDAO = new RendezVousDAO();
-            PraticienDAO praticienDAO = new PraticienDAO();
-
             ViewBag.Employe = (Employe)Session["Employe"];
-            ViewBag.Praticien = (Praticien)Session["Praticien"];
+            
+            if(ViewBag.Employe != null)
+            {
+                RendezVousDAO rendezVousDAO = new RendezVousDAO();
+                PraticienDAO praticienDAO = new PraticienDAO();
+                List<RendezVous> mesRDV = rendezVousDAO.ReadAllFromCommercialID(ViewBag.Employe.Id);
+                List<Praticien> mesPraticiens = praticienDAO.ReadAll();
 
-            List<RendezVous> mesRDV = rendezVousDAO.ReadAllFromCommercialID(ViewBag.Employe.Id);
-            List<Praticien> mesPraticiens = praticienDAO.ReadAll();
+                ViewBag.MesRDV = mesRDV;
+                ViewBag.MesPraticiens = mesPraticiens;
 
-            Debug.WriteLine("***************************************************");
-            Debug.WriteLine(mesRDV);
-            Debug.WriteLine(mesPraticiens);
+                ViewData["Message"] = "Page de Consultation de vos Rendez-vous.";
 
-            ViewBag.MesRDV = mesRDV;
-            ViewBag.MesPraticiens = mesPraticiens;
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+        }
 
-            ViewData["Message"] = "Page de Consultation de vos Rendez-vous.";
+        public string AjaxReceiver(string table, int id)
+        {
+            string response = "";
+            if (table.Equals("rendez_vous"))
+            {
+                RendezVousDAO rendezVousManager = new RendezVousDAO();
+                RendezVous rendezVous = rendezVousManager.Read(id);
+                JavaScriptSerializer serializer = new JavaScriptSerializer();
+                response = serializer.Serialize(rendezVous);
+                Debug.WriteLine("=============>" + response);
+            }
 
-            return View();
+            return response;
         }
     }
    
