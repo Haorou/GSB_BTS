@@ -13,13 +13,13 @@
         <thead>
             <tr>
                 <td>
-                    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-plus-sign"></span>Ajouter</button>
+                    <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#ajouterRDVModal"><span class="glyphicon glyphicon-plus-sign"></span>Ajouter</button>
                 </td>
                 <td>
-                    <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-edit"></span>Modifier</button>
+                    <button type="submit" class="btn btn-success" data-toggle="modal" data-target="#modifierRDVModal"><span class="glyphicon glyphicon-edit"></span>Modifier</button>
                 </td>
                 <td>
-                    <button type="submit" class="btn btn-warning"><span class="glyphicon glyphicon-trash"></span>Supprimer</button>
+                    <button type="submit" class="btn btn-warning" data-toggle="modal" data-target="#supprimerRDVModal"><span class="glyphicon glyphicon-trash"></span>Supprimer</button>
                 </td>
             </tr>
             <tr>
@@ -35,7 +35,6 @@
         <tbody>
             @foreach (var rdv in ViewBag.MesRDV)
             {
-                /*<a href="www.google.fr">*/
                 <tr>
                     <th>@rdv.Employe.Id</th>
                     <th>@rdv.Praticien.Nom</th>
@@ -45,15 +44,14 @@
                     <th>@rdv.Date_bilan</th>
                     <th>@rdv.Liste_echantillons_donnes.Count</th>
                     <th>
-                        <input type="radio" aria-label="" value="@rdv.Id_rdv" data-toggle="modal" data-target="#ficheRDVModal" data-id="@rdv.Id_rdv">
+                        <input type="radio" aria-label="" value="@rdv.Id_rdv" data-id="@rdv.Id_rdv">
                     </th>
                 </tr>
-                /*</a>*/
             }
         </tbody>
     </table>
 
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="ajouterRDVModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -65,13 +63,24 @@
                 <div class="modal-body">
                     <form>
                         <div class="form-group">
-                            <label for="recipient-name" class="col-form-label">Recipient:</label>
-                            <input type="text" class="form-control" id="recipient-name">
+                            <select class="browser-default custom-select">
+                                <option selected>Choisir un praticien</option>
+                                @{
+                                    foreach (var praticien in ViewBag.MesPraticiens)
+                                    {
+                                        <option value="praticien.Id">@praticien.Nom @praticien.Prenom</option>
+                                    }
+                                }
+                            </select>
                         </div>
-                        <div class="form-group">
-                            <label for="message-text" class="col-form-label">Message:</label>
-                            <textarea class="form-control" id="message-text"></textarea>
-                        </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="praticien" id="praticien" placeholder="Praticien">
+                                <input type="text" class="form-control" id="recipient-name_Praticien">
+                            </div>
+                            <div class="form-group">
+                                <label for="message-text" class="col-form-label">Message:</label>
+                                <textarea class="form-control" id="message-text"></textarea>
+                            </div>
                     </form>
                 </div>
                 <div class="modal-footer">
