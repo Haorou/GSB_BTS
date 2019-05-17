@@ -46,8 +46,9 @@ namespace GSB.Controllers
             if(employe != null)
             {
                 Session["Employe"] =  employe;
+                
 
-                if(employe.Type == Employe.TypeEmploye.comptable)
+                if (employe.Type == Employe.TypeEmploye.comptable)
                 {
                     return RedirectToAction("Comptable", "Comptable");
                 }
