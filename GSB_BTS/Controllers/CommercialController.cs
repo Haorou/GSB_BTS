@@ -15,9 +15,9 @@ namespace GSB.Controllers
         {
             RendezVousDAO rendezVousDAO = new RendezVousDAO();
 
-            Employe employe = (Employe)Session["Employe"];
+            ViewBag.Employe = (Employe)Session["Employe"];
 
-            List<RendezVous> mesRDV = rendezVousDAO.ReadAllFromCommercialID(employe.Id);
+            List<RendezVous> mesRDV = rendezVousDAO.ReadAllFromCommercialID(ViewBag.Employe.Id);
 
             Debug.WriteLine(mesRDV);
 
