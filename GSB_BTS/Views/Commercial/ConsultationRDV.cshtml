@@ -78,20 +78,13 @@
 
                                 <div class='col-sm-6'>
                                     <div class="form-group" style="display:flex; flex-direction: row; align-items: center;">
-                                        <label for="date_rdv" class="col-form-label">Date:</label>
-                                        <div class='input-group date' id='datetimepicker1' style="margin-right:10px;">
-                                            <input type='text' class="form-control" id="date_rdv" />
-                                            <span class="input-group-addon">
-                                                <span class="glyphicon glyphicon-calendar"></span>
-                                            </span>
-                                        </div>
-                                        <label for="date_rdv" class="col-form-label">Heure:</label>
-                                        <div class='input-group time' id='datetimepicker1'>
-                                            <input type='text' class="form-control" id="heure_rdv" />
-                                            <span class="input-group-addon">
-                                                <span class="glyphicon glyphicon-time"></span>
-                                            </span>
-                                        </div>
+
+                                        <label for="example-date-input" class="col-2 col-form-label">Date</label>
+                                        <input class="form-control" type="date" value="" id="date_rdv">
+
+                                        <label for="example-date-input" class="col-2 col-form-label">Time</label>
+                                        <input class="form-control" type="time" value="" id="time_rdv">
+
                                     </div>
                                 </div>
 
@@ -101,7 +94,7 @@
                         <div class="form-group">
                             <label for="praticien" class="col-form-label">Praticien:</label>
                             <select class="browser-default custom-select" id="select_praticien">
-                                <option selected>Choisir un praticien</option>
+                                <option value="Choisir un praticien" selected>Choisir un praticien</option>
                                 @{
                                     foreach (var praticien in ViewBag.MesPraticiens)
                                     {
@@ -128,9 +121,9 @@
                         </div>
                         <div class='col-sm-8'>
                             <div class="form-group">
-                                <label for="date_rdv" class="col-form-label">Date bilan:</label>
+                                <label for="datetimepicker_rdv" class="col-form-label">Date bilan:</label>
                                 <div class='input-group date' id='datetimepicker2'>
-                                    <input type='text' class="form-control" id="date_rdv" />
+                                    <input type='text' class="form-control" id="datetimepicker_rdv" />
                                     <span class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
                                     </span>
@@ -160,7 +153,8 @@
                 var modal = $('#RDVModal');
                 var id_rdv = $("input[name='rdv_radio']:checked").data('id');
 
-                if (action === 'modify' && id_rdv != null) {
+                if (action === 'modify' && id_rdv != null)
+                {
                     try {
 
                         $.ajax({
@@ -174,8 +168,10 @@
 
                             var milli = JsonResponse.Date_rdv.replace(/\/Date\((-?\d+)\)\//, '$1');
                             var date = new Date(parseInt(milli));
+                            var dateAmericanFormat = date.toISOString();
 
-                            $('#date_rdv').val(date);
+                            $('#date_rdv').val(dateAmericanFormat.substring(0, 10));
+                            $('#time_rdv').val(dateAmericanFormat.substring(14,19));
                         });
                     }
                     catch (ex) {
@@ -185,7 +181,9 @@
                     modal.find('.modal-title').text('Rendez-Vous n°' + id_rdv);
                     modal.find('.modal-body input').val(id_rdv);
                 }
-                else if (action === 'add') {
+                else if (action === 'add')
+                {
+                    $("#select_praticien").val("Choisir un praticien");
                     modal.find('.modal-title').text('Nouveau rendez-vous');
                 }
 
