@@ -1,6 +1,5 @@
 ﻿@{
     ViewData["Title"] = "ConsultationRDV";
-
 }
 
 <h2>Comptable</h2>
@@ -26,6 +25,7 @@
                 <th></th>
                 <th>Praticien</th>
                 <th>Date RDV</th>
+                <th>Heure RDV</th>
                 <th>Motif du rendez-vous</th>
                 <th>Indice de Confiance</th>
                 <th>Date Bilan</th>
@@ -38,20 +38,25 @@
                 int tailleRDV = rdvs.Count;
 
 
+
                 for (int index = 0; index < tailleRDV; index++)
                 {
-                <tr>
-                    <th>
-                        <input @{ string select = index == 0 ? "checked" : ""; } type="radio" aria-label="" name="rdv_radio" value="@rdvs[index].Id_rdv" data-id="@rdvs[index].Id_rdv">
-                    </th>
-                    <th>@rdvs[index].Praticien.Nom</th>
-                    <th>@rdvs[index].Date_rdv</th>
-                    <th>@rdvs[index].Motif_rdv</th>
-                    <th>@rdvs[index].Indice_confiance</th>
-                    <th>@rdvs[index].Date_bilan</th>
-                    <th>@rdvs[index].Liste_echantillons_donnes.Count</th>
+                    var dateRDV = rdvs[index].Date_rdv.ToShortDateString();
+                    var heureRDV = rdvs[index].Date_rdv.ToShortTimeString();
+                    var dateBilan = rdvs[index].Date_bilan.ToShortDateString();
 
-                </tr>
+                    <tr>
+                        <th>
+                            <input @{ string select = index == 0 ? "checked" : ""; } type="radio" aria-label="" name="rdv_radio" value="@rdvs[index].Id_rdv" data-id="@rdvs[index].Id_rdv">
+                        </th>
+                            <th>@rdvs[index].Praticien.Nom</th>
+                            <th>@dateRDV</th>
+                            <th>@heureRDV</th>
+                            <th>@rdvs[index].Motif_rdv</th>
+                            <th>@rdvs[index].Indice_confiance</th>
+                            <th>@dateBilan</th>
+                            <th>@rdvs[index].Liste_echantillons_donnes.Count</th>
+                    </tr>
                 }
             }
         </tbody>
@@ -68,22 +73,25 @@
                 </div>
                 <div class="modal-body">
                     <form>
-
-
                         <div class="container">
                             <div class="row">
 
                                 <div class='col-sm-6'>
-                                    <div class="form-group">
-
-                                        <label for="date_rdv" class="col-form-label">Date Rendez-Vous:</label>
-                                        <div class='input-group date' id='datetimepicker1'>
+                                    <div class="form-group" style="display:flex; flex-direction: row; align-items: center;">
+                                        <label for="date_rdv" class="col-form-label">Date:</label>
+                                        <div class='input-group date' id='datetimepicker1' style="margin-right:10px;">
                                             <input type='text' class="form-control" id="date_rdv" />
                                             <span class="input-group-addon">
                                                 <span class="glyphicon glyphicon-calendar"></span>
                                             </span>
                                         </div>
-
+                                        <label for="date_rdv" class="col-form-label">Heure:</label>
+                                        <div class='input-group time' id='datetimepicker1'>
+                                            <input type='text' class="form-control" id="heure_rdv" />
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-time"></span>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -91,6 +99,7 @@
                         </div>
 
                         <div class="form-group">
+                            <label for="praticien" class="col-form-label">Praticien:</label>
                             <select class="browser-default custom-select" id="select_praticien">
                                 <option selected>Choisir un praticien</option>
                                 @{
@@ -102,13 +111,33 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" name="praticien" id="praticien" placeholder="Praticien">
-                            <input type="text" class="form-control" id="recipient-name_Praticien">
+                            <label for="text" class="col-form-label">Motif du RDV:</label>
+                            <input type='text' class="form-control" id="motif_rdv" />
                         </div>
                         <div class="form-group">
-                            <label for="message-text" class="col-form-label">Message:</label>
-                            <textarea class="form-control" id="message-text"></textarea>
+                            <label for="text" class="col-form-label">Indice de confiance:</label>
+                            <select class="browser-default custom-select" id="select_praticien">
+                                <option selected>Choisir un indice</option>
+                                @{
+                                    for (int i = 1; i < 6; i++)
+                                    {
+                                        <option value="@i">@i</option>
+                                    }
+                                }
+                            </select>
                         </div>
+                        <div class='col-sm-8'>
+                            <div class="form-group">
+                                <label for="date_rdv" class="col-form-label">Date bilan:</label>
+                                <div class='input-group date' id='datetimepicker2'>
+                                    <input type='text' class="form-control" id="date_rdv" />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
                     </form>
                 </div>
                 <div class="modal-footer">

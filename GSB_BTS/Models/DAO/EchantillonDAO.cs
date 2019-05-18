@@ -31,7 +31,7 @@ namespace GSB.Models.DAO
                     echantillon.Id_echantillon = (int)dataReader["id_echantillon"];
                     echantillon.Quantite = (int)dataReader["quantite"];
                     echantillon.Libelle = (string)dataReader["libelle"];
-                    echantillon.Concentration = (int)dataReader["contentration"];
+                    echantillon.Concentration = (int)dataReader["concentration"];
                     echantillon.Produit = produitManager.Read((int)dataReader["id_produit"]);
                     echantillon.Liste_echantillons_donnes = enchantillonDonneManager.ReadAllFromEchantillon(echantillon);
                 }

@@ -36,7 +36,7 @@ namespace GSB.Models.DAO
                                       "FROM echantillon_donne " +
                                       "WHERE id_echantillon = @id_echantillon";
 
-                command.Parameters.AddWithValue("@id_produit", echantillon.Id_echantillon);
+                command.Parameters.AddWithValue("@id_echantillon", echantillon.Id_echantillon);
 
                 // Lecture des résultats
                 dataReader = command.ExecuteReader();
