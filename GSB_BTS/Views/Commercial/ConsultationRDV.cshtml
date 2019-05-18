@@ -105,11 +105,17 @@
                         </div>
                         <div class="form-group">
                             <label for="text" class="col-form-label">Motif du RDV:</label>
-                            <input type='text' class="form-control" id="motif_rdv" />
+                            <select class="browser-default custom-select" id="motif_rdv">
+                                <option value="Choisir un motif" selected>Choisir un motif</option>
+                                <option value="0">reprise_contact</option>
+                                <option value="1">nouveaux_medicaments</option>
+                                <option value="2">suivi</option>
+                            </select>
                         </div>
+
                         <div class="form-group">
                             <label for="text" class="col-form-label">Indice de confiance:</label>
-                            <select class="browser-default custom-select" id="select_praticien">
+                            <select class="browser-default custom-select" id="indice_confiance">
                                 <option selected>Choisir un indice</option>
                                 @{
                                     for (int i = 1; i < 6; i++)
@@ -171,7 +177,9 @@
                             var dateAmericanFormat = date.toISOString();
 
                             $('#date_rdv').val(dateAmericanFormat.substring(0, 10));
-                            $('#time_rdv').val(dateAmericanFormat.substring(14,19));
+                            $('#time_rdv').val(dateAmericanFormat.substring(14, 19));
+                            $('#motif_rdv').val(JsonResponse.Motif_rdv);
+                            $('#indice_confiance').val(JsonResponse.Indice_confiance);
                         });
                     }
                     catch (ex) {
@@ -185,6 +193,14 @@
                 {
                     $("#select_praticien").val("Choisir un praticien");
                     modal.find('.modal-title').text('Nouveau rendez-vous');
+
+                    var date = new Date($.now());
+                    var dateAmericanFormat = date.toISOString();
+
+                    $('#date_rdv').val(dateAmericanFormat.substring(0, 10));
+                    $('#time_rdv').val(dateAmericanFormat.substring(14, 19));
+                    $('#motif_rdv').val("Choisir un motif");
+                    $('#indice_confiance').val(1);
                 }
 
             });
