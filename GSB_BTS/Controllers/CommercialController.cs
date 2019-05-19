@@ -36,21 +36,6 @@ namespace GSB.Controllers
             }
         }
 
-        public string AjaxReceiver(string table, int id)
-        {
-            string response = "";
-            if (table.Equals("rendez_vous"))
-            {
-                RendezVousDAO rendezVousManager = new RendezVousDAO();
-                RendezVous rendezVous = rendezVousManager.Read(id);
-                JavaScriptSerializer serializer = new JavaScriptSerializer();
-                response = serializer.Serialize(rendezVous);
-                //Debug.WriteLine("=============>" + response);
-            }
-
-            return response;
-        }
-
         public ActionResult Etablissement()
         {
             PraticienDAO praticienDAO = new PraticienDAO();
@@ -60,7 +45,21 @@ namespace GSB.Controllers
 
             ViewBag.MesEtablissement = mesEtablissement;
 
-            return View("Etablissement");
+            return View();
+        }
+
+        public string AjaxReceiver(string table, int id)
+        {
+            string response = "";
+            if (table.Equals("rendez_vous"))
+            {
+                RendezVousDAO rendezVousManager = new RendezVousDAO();
+                RendezVous rendezVous = rendezVousManager.Read(id);
+                JavaScriptSerializer serializer = new JavaScriptSerializer();
+                response = serializer.Serialize(rendezVous);
+            }
+
+            return response;
         }
     }
    

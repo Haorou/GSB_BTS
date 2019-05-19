@@ -55,10 +55,11 @@ namespace GSB.Models.DAO
         public List<Personne> ReadEtablissement()
         {
             List<Personne> liste_etablissement = new List<Personne>();
+            Personne personne;
             if (OpenConnection())
             {
                 command = manager.CreateCommand();
-                command.CommandText = "SELECT etablissement, adresse FROM personne p JOIN praticien prat ON prat.id_praticien = p.id_personne ";
+                command.CommandText = "SELECT id_personne, etablissement, adresse FROM personne p JOIN praticien prat ON prat.id_praticien = p.id_personne ";
 
 
                 // Lecture des résultats
@@ -66,9 +67,11 @@ namespace GSB.Models.DAO
 
                 while (dataReader.Read())
                 {
-                    liste_etablissement.Add(new Personne((int)dataReader["id_personne"],
-                                (string)dataReader["etablissement"],
-                                (string)dataReader["adresse"]));
+                    personne = new Personne();
+                    personne.Id = (int)dataReader["id_personne"];
+                    personne.Etablissement = (string)dataReader["etablissement"];
+                    personne.Adresse = (string)dataReader["adresse"];
+                    liste_etablissement.Add(personne);
                 }
                 dataReader.Close();
                 CloseConnection();
