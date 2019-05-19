@@ -45,7 +45,7 @@ namespace GSB.Controllers
                 RendezVous rendezVous = rendezVousManager.Read(id);
                 JavaScriptSerializer serializer = new JavaScriptSerializer();
                 response = serializer.Serialize(rendezVous);
-                Debug.WriteLine("=============>" + response);
+                //Debug.WriteLine("=============>" + response);
             }
 
             return response;

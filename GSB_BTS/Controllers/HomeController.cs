@@ -9,7 +9,7 @@ namespace GSB.Controllers
     {
         public ActionResult Index()
         {
-            ViewData["Message"] = "Test de push";
+            ViewData["Message"] = "Veuillez vous authentifier";
 
             return View();
         }
@@ -36,7 +36,7 @@ namespace GSB.Controllers
             }
             else
             {
-                ViewBag.Message = "Accès refusé, veuillez vous connecter";
+                ViewBag.Message = "Accès refusé, veuillez vous authentifier";
                 return View("Index");
             }
         }

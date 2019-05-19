@@ -22,7 +22,7 @@
                 </td>
             </tr>
             <tr>
-                <th></th>
+                <th>Choix</th>
                 <th>Praticien</th>
                 <th>Date RDV</th>
                 <th>Heure RDV</th>
@@ -49,13 +49,13 @@
                         <th>
                             <input @{ string select = index == 0 ? "checked" : ""; } type="radio" aria-label="" name="rdv_radio" value="@rdvs[index].Id_rdv" data-id="@rdvs[index].Id_rdv">
                         </th>
-                            <th>@rdvs[index].Praticien.Nom</th>
-                            <th>@dateRDV</th>
-                            <th>@heureRDV</th>
-                            <th>@rdvs[index].Motif_rdv</th>
-                            <th>@rdvs[index].Indice_confiance</th>
-                            <th>@dateBilan</th>
-                            <th>@rdvs[index].Liste_echantillons_donnes.Count</th>
+                        <th>@rdvs[index].Praticien.Nom</th>
+                        <th>@dateRDV</th>
+                        <th>@heureRDV</th>
+                        <th>@rdvs[index].Motif_rdv</th>
+                        <th>@rdvs[index].Indice_confiance</th>
+                        <th>@dateBilan</th>
+                        <th>@rdvs[index].Liste_echantillons_donnes.Count</th>
                     </tr>
                 }
             }
@@ -78,16 +78,12 @@
 
                                 <div class='col-sm-6'>
                                     <div class="form-group" style="display:flex; flex-direction: row; align-items: center;">
-
                                         <label for="example-date-input" class="col-2 col-form-label">Date</label>
                                         <input class="form-control" type="date" value="" id="date_rdv">
-
-                                        <label for="example-date-input" class="col-2 col-form-label">Time</label>
+                                        <label for="example-date-input" class="col-2 col-form-label">Heure</label>
                                         <input class="form-control" type="time" value="" id="time_rdv">
-
                                     </div>
                                 </div>
-
                             </div>
                         </div>
 
@@ -100,7 +96,7 @@
                                     {
                                         <option value="@praticien.Id">@praticien.Nom @praticien.Prenom</option>
                                     }
-                                }
+                                 }
                             </select>
                         </div>
                         <div class="form-group">
@@ -129,7 +125,7 @@
                             <div class="form-group">
                                 <label for="datetimepicker_rdv" class="col-form-label">Date bilan:</label>
                                 <div class='input-group date' id='datetimepicker2'>
-                                    <input type='text' class="form-control" id="datetimepicker_rdv" />
+                                    <input type='date' class="form-control" id="datetimepicker_rdv" />
                                     <span class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
                                     </span>
@@ -165,7 +161,7 @@
 
                         $.ajax({
                             type: "POST",
-                            url: "http://localhost:51921/Commercial/AjaxReceiver",
+                            url: "~/Commercial/AjaxReceiver",
                             data: 'table=' + "rendez_vous" + '&id=' + id_rdv,
                         }).then(function (response) {
                             var JsonResponse = JSON.parse(response);
