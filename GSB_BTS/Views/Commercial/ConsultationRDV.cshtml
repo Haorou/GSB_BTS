@@ -2,7 +2,7 @@
     ViewData["Title"] = "ConsultationRDV";
 }
 
-<h2>Comptable</h2>
+<h2>Espace Commercial</h2>
 
 @{
 <div class="container">
@@ -20,16 +20,19 @@
                 <td>
                     <button type="submit" class="btn btn-warning" data-toggle="modal" data-target="#eraseRDV"><span class="glyphicon glyphicon-trash"></span>Supprimer</button>
                 </td>
+                <td>
+                    <a type="button" class="btn btn-link" href="~/Commercial/Etablissement"><span class="glyphicon glyphicon-home"></span>Etablissements</a>
+                </td>
             </tr>
             <tr>
-                <th>Choix</th>
-                <th>Praticien</th>
-                <th>Date RDV</th>
-                <th>Heure RDV</th>
-                <th>Motif du rendez-vous</th>
-                <th>Indice de Confiance</th>
-                <th>Date Bilan</th>
-                <th>Enchantillons donnés</th>
+                <th class="modal_RDV_form">Choix</th>
+                <th class="modal_RDV_form">Praticien</th>
+                <th class="modal_RDV_form">Date RDV</th>
+                <th class="modal_RDV_form">Heure RDV</th>
+                <th class="modal_RDV_form">Motif du rendez-vous</th>
+                <th class="modal_RDV_form">Indice de Confiance</th>
+                <th class="modal_RDV_form">Date Bilan</th>
+                <th class="modal_RDV_form">Enchantillons donnés</th>
             </tr>
         </thead>
         <tbody>
@@ -46,16 +49,16 @@
                     var dateBilan = rdvs[index].Date_bilan.ToShortDateString();
 
                     <tr>
-                        <th>
+                        <th class="modal_RDV_form">
                             <input @{ string select = index == 0 ? "checked" : ""; } type="radio" aria-label="" name="rdv_radio" value="@rdvs[index].Id_rdv" data-id="@rdvs[index].Id_rdv">
                         </th>
-                        <th>@rdvs[index].Praticien.Nom</th>
-                        <th>@dateRDV</th>
-                        <th>@heureRDV</th>
-                        <th>@rdvs[index].Motif_rdv</th>
-                        <th>@rdvs[index].Indice_confiance</th>
-                        <th>@dateBilan</th>
-                        <th>@rdvs[index].Liste_echantillons_donnes.Count</th>
+                        <th class="modal_RDV_form">@rdvs[index].Praticien.Nom</th>
+                        <th class="modal_RDV_form">@dateRDV</th>
+                        <th class="modal_RDV_form">@heureRDV</th>
+                        <th class="modal_RDV_form">@rdvs[index].Motif_rdv</th>
+                        <th class="modal_RDV_form">@rdvs[index].Indice_confiance</th>
+                        <th class="modal_RDV_form">@dateBilan</th>
+                        <th class="modal_RDV_form">@rdvs[index].Liste_echantillons_donnes.Count</th>
                     </tr>
                 }
             }
@@ -75,7 +78,7 @@
                     <form>
                         <div class="container">
                             <div class="row">
-                                <div class='col-sm-6'>
+                                <div class='col-sm-6' id="col-sm-6_RDV">
                                     <div class="form-group" style="display:flex; flex-direction: row; align-items: center;">
                                         <label for="example-date-input" class="col-2 col-form-label">Date</label>
                                         <input class="form-control" type="date" value="" id="date_rdv">
@@ -121,7 +124,7 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <div class='col-sm-8'>
+                            <div class='col-sm-8' id="col-sm-8_RDV">
                                 <div class="form-group">
                                     <label for="datetimepicker_rdv" class="col-form-label">Date bilan:</label>
                                     <div class='input-group date' id='datetimepicker2'>

@@ -42,20 +42,24 @@ label{
     display: flex;
     flex-direction: column;
 }
+    .modal_RDV_form{
+        text-align: center;
+    }
     .modal-footer {
         display: flex;
         flex-direction: row;
-        }
+    }
         .modal-footer .btn{
             margin-top : 5px;
         }
-
+    #col-sm-6_RDV, #col-sm-8_RDV{
+        padding-left: 0;
+    }
 /********************************************/
 /*                                          */
 /*              Page Comptable              */
 /*                                          */
 /********************************************/
-
 /* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification\ 
 for details on configuring this project to bundle and minify static web assets. */
 body {

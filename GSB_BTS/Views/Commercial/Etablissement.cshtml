@@ -1,0 +1,54 @@
+﻿
+@{
+    ViewBag.Title = "Etablissements";
+}
+
+<h2>Praticien</h2>
+@{
+    <div class="container">
+        <h2>Liste des établissements répertoriés</h2>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <td>
+                        <button type="submit" class="btn btn-primary buttonModal" data-toggle="modal" data-target="" data-action="add"><span class="glyphicon glyphicon-plus-sign"></span>Ajouter</button>
+                    </td>
+                    <td>
+                        <button type="submit" class="btn btn-success buttonModal" data-toggle="modal" data-target="" data-action="modify"><span class="glyphicon glyphicon-edit"></span>Modifier</button>
+                    </td>
+                    <td>
+                        <button type="submit" class="btn btn-warning" data-toggle="modal" data-target=""><span class="glyphicon glyphicon-trash"></span>Supprimer</button>
+                    </td>
+                    <td>
+                        <button type="submit" class="btn btn-warning" data-toggle="modal" data-target=""><span class="glyphicon glyphicon-trash"></span>Supprimer</button>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="modal_RDV_form">Choix</th>
+                    <th class="modal_RDV_form">Etablissement</th>
+                    <th class="modal_RDV_form">Adresse RDV</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var bat = ViewBag.MesEtablissement;
+                    int tailleBat = bat.Count;
+
+
+
+                    for (int index = 0; index < tailleBat; index++)
+                    {
+                        <tr>
+                            <th class="modal_RDV_form">
+                                <input @{ string select = index == 0 ? "checked" : ""; } type="radio" aria-label="" name="bat_radio" value="@bat[index].etablissement" data-id="@bat[index].etablissement">
+                            </th>
+                            <th class="modal_RDV_form">@bat[index].etablissement</th>
+                            <th class="modal_RDV_form">@bat[index].adresse</th>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+}
+

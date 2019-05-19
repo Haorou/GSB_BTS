@@ -52,6 +52,31 @@ namespace GSB.Models.DAO
             }
         }*/
 
+        public List<Personne> ReadEtablissement()
+        {
+            List<Personne> liste_etablissement = new List<Personne>();
+            if (OpenConnection())
+            {
+                command = manager.CreateCommand();
+                command.CommandText = "SELECT etablissement, adresse FROM personne p JOIN praticien prat ON prat.id_praticien = p.id_personne ";
+
+
+                // Lecture des résultats
+                dataReader = command.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+                    liste_etablissement.Add(new Personne((int)dataReader["id_personne"],
+                                (string)dataReader["etablissement"],
+                                (string)dataReader["adresse"]));
+                }
+                dataReader.Close();
+                CloseConnection();
+            }
+
+            return liste_etablissement;
+        }
+
         public void Update(Personne personne)
         {
             if (OpenConnection())

@@ -50,6 +50,18 @@ namespace GSB.Controllers
 
             return response;
         }
+
+        public ActionResult Etablissement()
+        {
+            PraticienDAO praticienDAO = new PraticienDAO();
+            PersonneDAO etablissementDAO = new PersonneDAO();
+
+            List<Personne> mesEtablissement = etablissementDAO.ReadEtablissement();
+
+            ViewBag.MesEtablissement = mesEtablissement;
+
+            return View("Etablissement");
+        }
     }
    
 }
