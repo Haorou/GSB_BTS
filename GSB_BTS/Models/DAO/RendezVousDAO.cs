@@ -60,13 +60,16 @@ namespace GSB.Models.DAO
                 command.Parameters.AddWithValue("@id_commercial", rendezVous.Employe.Id);
                 command.Parameters.AddWithValue("@id_praticien", rendezVous.Praticien.Id);
                 command.Parameters.AddWithValue("@date_rdv", rendezVous.Date_rdv);
-                command.Parameters.AddWithValue("@motif_rdv", rendezVous.Motif_rdv);
+                command.Parameters.AddWithValue("@motif_rdv", rendezVous.Motif_rdv.ToString());
                 command.Parameters.AddWithValue("@indice_confiance", rendezVous.Indice_confiance);
                 command.Parameters.AddWithValue("@date_bilan", rendezVous.Date_bilan);
 
-                foreach (EchantillonDonne echantillonDonne in rendezVous.Liste_echantillons_donnes)
+                if(rendezVous.Liste_echantillons_donnes != null)
                 {
-                    echantillonDonneDAO.Create(echantillonDonne);
+                    foreach (EchantillonDonne echantillonDonne in rendezVous.Liste_echantillons_donnes)
+                    {
+                        echantillonDonneDAO.Create(echantillonDonne);
+                    }
                 }
 
                 command.ExecuteNonQuery();

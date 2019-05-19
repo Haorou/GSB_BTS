@@ -6,7 +6,7 @@
 
 @{
 <div class="container">
-    <h2>Bienvenue @ViewBag.Employe.Prenom @ViewBag.Employe.Nom</h2>
+    <h2 id="employe" data-id="@ViewBag.Employe.Id">Bienvenue @ViewBag.Employe.Prenom @ViewBag.Employe.Nom</h2>
     <p>Consultation de vos Rendez vous</p>
     <table class="table table-hover">
         <thead>
@@ -21,7 +21,7 @@
                     <button type="submit" class="btn btn-warning" data-toggle="modal" data-target="#eraseRDV"><span class="glyphicon glyphicon-trash"></span>Supprimer</button>
                 </td>
                 <td>
-                    <a type="button" class="btn btn-link" href="/Commercial/Etablissement" ><span class="glyphicon glyphicon-home"></span>Etablissements</a>
+                    <a type="button" class="btn btn-link" href="~/Commercial/Etablissement" ><span class="glyphicon glyphicon-home"></span>Etablissements</a>
                 </td>
             </tr>
             <tr>
@@ -140,7 +140,7 @@
 </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-success" data-action="modify"><span class="glyphicon glyphicon-ok"></span>Envoyer</button>
+                    <button type="button" id="send_RDV" class="btn btn-success" data-action="modify"><span class="glyphicon glyphicon-ok"></span>Envoyer</button>
                     <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-list-alt"></span>Fiche Frais</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
                 </div>
@@ -166,8 +166,8 @@
 
                         $.ajax({
                             type: "POST",
-                            // url: "http://localhost:51921/Commercial/AjaxReceiver", /* marche chez juju l'autre non*/
-                            url: "~/Commercial/AjaxReceiver", 
+                            url: "http://localhost:51921/Commercial/AjaxReceiver",
+                            // url: "~/Commercial/AjaxReceiver", 
                             data: 'table=' + "rendez_vous" + '&id=' + id_rdv,
                         }).then(function (response) {
                             var JsonResponse = JSON.parse(response);
@@ -203,6 +203,32 @@
                     $('#time_rdv').val(dateAmericanFormat.substring(11, 16));
                     $('#motif_rdv').val("Choisir un motif");
                     $('#indice_confiance').val(1);
+                }
+
+            });
+
+
+            $('#send_RDV').click(function () {
+                var date = $('#date_rdv').val();
+                var time = $('#time_rdv').val();
+                var motif = $('#motif_rdv').val();
+                var indice = $('#indice_confiance').val();
+                var id_praticien = $('#select_praticien').val();
+                var id_employe = $('#employe').data('id');
+
+                try
+                {                
+                    $.ajax({
+                        type: "POST",
+                        url: "http://localhost:51921/Commercial/AjaxRDV",
+                        // url: "~/Commercial/AjaxRDV", 
+                        data: "id=" + 0 + "&date=" + date + "&time=" + time + "&motif=" + motif + "&indice=" + indice + "&id_employe=" + id_employe + "&id_praticien=" + id_praticien,
+                    }).then(function (response) {
+                        console.log(response);
+                        });
+                }
+                catch (ex) {
+                    alert("catch Ajax Error" + ex);
                 }
 
             });

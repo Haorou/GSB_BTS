@@ -61,6 +61,40 @@ namespace GSB.Controllers
 
             return response;
         }
+
+        public string AjaxRDV(int id, string date, string time, string motif, int indice, int id_employe, int id_praticien)
+        {
+            Debug.WriteLine("id = " + id);
+            if (id == 0)
+            {
+                RendezVousDAO rendezVousManager = new RendezVousDAO();
+                PraticienDAO praticienManager = new PraticienDAO();
+                EmployeDAO employeManager = new EmployeDAO();
+
+                RendezVous newRDV = new RendezVous();
+                newRDV.Date_rdv = new DateTime(Convert.ToInt32(date.Substring(0, 4)),
+                                               Convert.ToInt32(date.Substring(5, 2)),
+                                               Convert.ToInt32(date.Substring(8)), 
+                                               Convert.ToInt32(time.Substring(0,2)),
+                                               Convert.ToInt32(time.Substring(3)),
+                                               00);
+                newRDV.Date_bilan = DateTime.Now;
+                newRDV.Indice_confiance = indice;
+                newRDV.Motif_rdv = (RendezVous.Rdv)Enum.Parse(typeof(RendezVous.Rdv), motif);
+                newRDV.Praticien = praticienManager.Read(id_praticien);
+                newRDV.Employe = employeManager.Read(id_employe);
+
+                rendezVousManager.Create(newRDV);
+            }
+            else
+            {
+
+            }
+
+            return "success";
+        }
+
+
     }
    
 }
