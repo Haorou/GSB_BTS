@@ -75,7 +75,6 @@
                     <form>
                         <div class="container">
                             <div class="row">
-
                                 <div class='col-sm-6'>
                                     <div class="form-group" style="display:flex; flex-direction: row; align-items: center;">
                                         <label for="example-date-input" class="col-2 col-form-label">Date</label>
@@ -121,23 +120,26 @@
                                 }
                             </select>
                         </div>
-                        <div class='col-sm-8'>
-                            <div class="form-group">
-                                <label for="datetimepicker_rdv" class="col-form-label">Date bilan:</label>
-                                <div class='input-group date' id='datetimepicker2'>
-                                    <input type='date' class="form-control" id="datetimepicker_rdv" />
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
+                        <div class="form-group">
+                            <div class='col-sm-8'>
+                                <div class="form-group">
+                                    <label for="datetimepicker_rdv" class="col-form-label">Date bilan:</label>
+                                    <div class='input-group date' id='datetimepicker2'>
+                                        <input type='date' class="form-control" id="datetimepicker_rdv" />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        
-                    </form>
+
+</form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Envoyer</button>
+                    <button type="button" class="btn btn-success" data-action="modify"><span class="glyphicon glyphicon-ok"></span>Envoyer</button>
+                    <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-list-alt"></span>Fiche Frais</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
                 </div>
             </div>
         </div>
@@ -172,7 +174,7 @@
                             var date = new Date(parseInt(milli));
                             var dateAmericanFormat = date.toISOString();
 
-                            $('#date_rdv').val(dateAmericanFormat.substring(0, 10));
+                            $('#date_rdv').alert(dateAmericanFormat.substring(0, 10));
                             $('#time_rdv').val(dateAmericanFormat.substring(14, 19));
                             $('#motif_rdv').val(JsonResponse.Motif_rdv);
                             $('#indice_confiance').val(JsonResponse.Indice_confiance);

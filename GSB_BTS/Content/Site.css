@@ -12,6 +12,10 @@
     margin-right: 5px;
 }
 
+label{
+    margin: 5px;
+}
+
 /********************************************/
 /*                                          */
 /*              Page HOME                   */
@@ -20,16 +24,31 @@
 .home_connexion_container {
     width: 50%;
 }
-
 #home_connexion_label {
     padding: 10px;
 }
+
 /********************************************/
 /*                                          */
 /*              Page Commercial             */
 /*                                          */
 /********************************************/
+..modal-title{
+    text-align: center;
+    font-size: 20px;
+}
 
+.modal-content {
+    display: flex;
+    flex-direction: column;
+}
+    .modal-footer {
+        display: flex;
+        flex-direction: row;
+        }
+        .modal-footer .btn{
+            margin-top : 5px;
+        }
 
 /********************************************/
 /*                                          */
