@@ -163,7 +163,8 @@
 
                         $.ajax({
                             type: "POST",
-                            url: "~/Commercial/AjaxReceiver",
+                            // url: "http://localhost:51921/Commercial/AjaxReceiver", /* marche chez juju l'autre non*/
+                            url: "~/Commercial/AjaxReceiver", 
                             data: 'table=' + "rendez_vous" + '&id=' + id_rdv,
                         }).then(function (response) {
                             var JsonResponse = JSON.parse(response);
@@ -174,7 +175,7 @@
                             var date = new Date(parseInt(milli));
                             var dateAmericanFormat = date.toISOString();
 
-                            $('#date_rdv').alert(dateAmericanFormat.substring(0, 10));
+                            $('#date_rdv').val(dateAmericanFormat.substring(0, 10));
                             $('#time_rdv').val(dateAmericanFormat.substring(14, 19));
                             $('#motif_rdv').val(JsonResponse.Motif_rdv);
                             $('#indice_confiance').val(JsonResponse.Indice_confiance);
@@ -196,7 +197,7 @@
                     var dateAmericanFormat = date.toISOString();
 
                     $('#date_rdv').val(dateAmericanFormat.substring(0, 10));
-                    $('#time_rdv').val(dateAmericanFormat.substring(14, 19));
+                    $('#time_rdv').val(dateAmericanFormat.substring(11, 16));
                     $('#motif_rdv').val("Choisir un motif");
                     $('#indice_confiance').val(1);
                 }
