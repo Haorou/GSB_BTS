@@ -48,7 +48,7 @@ namespace GSB.Controllers
             return View();
         }
 
-        public string AjaxReceiver(string table, int id)
+        public string AjaxReader(string table, int id)
         {
             string response = "";
             if (table.Equals("rendez_vous"))
@@ -62,9 +62,9 @@ namespace GSB.Controllers
             return response;
         }
 
-        public void AjaxRDV(int? id, string date, string time, string motif, int indice, int id_employe, int id_praticien)
+        public void AjaxAddModifyRDV(int? id, string date, string time, string motif, int indice, int id_employe, int id_praticien)
         {
-            if (id == null)
+            if (id == null) // ADD
             {
                 RendezVousDAO rendezVousManager = new RendezVousDAO();
                 PraticienDAO praticienManager = new PraticienDAO();
@@ -86,9 +86,37 @@ namespace GSB.Controllers
 
                 rendezVousManager.Create(newRDV);
             }
-            else
+            else // MODIFY
             {
+                RendezVousDAO rendezVousManager = new RendezVousDAO();
+                PraticienDAO praticienManager = new PraticienDAO();
+                EmployeDAO employeManager = new EmployeDAO();
 
+                RendezVous newRDV = rendezVousManager.Read((int)id);
+
+                newRDV.Date_rdv = new DateTime(Convert.ToInt32(date.Substring(0, 4)),
+                                               Convert.ToInt32(date.Substring(5, 2)),
+                                               Convert.ToInt32(date.Substring(8)),
+                                               Convert.ToInt32(time.Substring(0, 2)),
+                                               Convert.ToInt32(time.Substring(3)),
+                                               00);
+
+                newRDV.Date_bilan = newRDV.Date_rdv.AddDays(7);
+                newRDV.Indice_confiance = indice;
+                newRDV.Motif_rdv = (RendezVous.Rdv)Enum.Parse(typeof(RendezVous.Rdv), motif);
+                newRDV.Praticien = praticienManager.Read(id_praticien);
+                newRDV.Employe = employeManager.Read(id_employe);
+
+                rendezVousManager.Update(newRDV);
+            }
+        }
+
+        public void AjaxDelete(string table, int id)
+        {
+            if(table.Equals("rendez_vous"))
+            {
+                RendezVousDAO rendezVousManager = new RendezVousDAO();
+                rendezVousManager.Delete(rendezVousManager.Read(id));
             }
         }
 

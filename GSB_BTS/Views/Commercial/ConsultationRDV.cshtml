@@ -18,7 +18,7 @@
                     <button type="submit" class="btn btn-success buttonModal" data-toggle="modal" data-target="#RDVModal" data-action="modify"><span class="glyphicon glyphicon-edit"></span>Modifier</button>
                 </td>
                 <td>
-                    <button type="submit" class="btn btn-warning" data-toggle="modal" data-target="#eraseRDV"><span class="glyphicon glyphicon-trash"></span>Supprimer</button>
+                    <button type="submit" class="btn btn-warning" id="eraseRDV" data-toggle="modal"><span class="glyphicon glyphicon-trash"></span>Supprimer</button>
                 </td>
                 <td>
                     <a type="button" class="btn btn-link" href="~/Commercial/Etablissement" ><span class="glyphicon glyphicon-home"></span>Etablissements</a>
@@ -162,12 +162,13 @@
 
                 if (action === 'modify' && id_rdv != null)
                 {
+                    $('#send_RDV').data('action', 'modify');
                     try {
 
                         $.ajax({
                             type: "POST",
-                            url: "http://localhost:51921/Commercial/AjaxReceiver",
-                            // url: "~/Commercial/AjaxReceiver", 
+                            url: "http://localhost:51921/Commercial/AjaxReader",
+                            // url: "~/Commercial/AjaxReader",
                             data: 'table=' + "rendez_vous" + '&id=' + id_rdv,
                         }).then(function (response) {
                             var JsonResponse = JSON.parse(response);
@@ -193,6 +194,8 @@
                 }
                 else if (action === 'add')
                 {
+                    $('#send_RDV').data('action', 'add');
+
                     $("#select_praticien").val("Choisir un praticien");
                     modal.find('.modal-title').text('Nouveau rendez-vous');
 
@@ -216,22 +219,60 @@
                 var id_praticien = $('#select_praticien').val();
                 var id_employe = $('#employe').data('id');
 
-                try
-                {                
-                    $.ajax({
-                        type: "POST",
-                        url: "http://localhost:51921/Commercial/AjaxRDV",
-                        // url: "~/Commercial/AjaxRDV", 
-                        data: "id=" + '' + "&date=" + date + "&time=" + time + "&motif=" + motif + "&indice=" + indice + "&id_employe=" + id_employe + "&id_praticien=" + id_praticien,
-                    }).then(function () {
-                        location.reload();
+                var action = $('#send_RDV').data('action');
+                console.log(action);
+
+                if (action == 'add')
+                {
+                    try {
+                        $.ajax({
+                            type: "POST",
+                            url: "http://localhost:51921/Commercial/AjaxAddModifyRDV",
+                            // url: "~/Commercial/AjaxAddRDV", 
+                            data: "id=" + '' + "&date=" + date + "&time=" + time + "&motif=" + motif + "&indice=" + indice + "&id_employe=" + id_employe + "&id_praticien=" + id_praticien,
+                        }).then(function () {
+                            location.reload();
                         });
+                    }
+                    catch (ex) {
+                        alert("catch Ajax Error" + ex);
+                    }
                 }
-                catch (ex) {
-                    alert("catch Ajax Error" + ex);
+                else if (action == 'modify')
+                {
+                    var id_rdv = $("input[name='rdv_radio']:checked").data('id');
+                    try {
+                        $.ajax({
+                            type: "POST",
+                            url: "http://localhost:51921/Commercial/AjaxAddModifyRDV",
+                            // url: "~/Commercial/AjaxAddRDV", 
+                            data: "id=" + id_rdv + "&date=" + date + "&time=" + time + "&motif=" + motif + "&indice=" + indice + "&id_employe=" + id_employe + "&id_praticien=" + id_praticien,
+                        }).then(function () {
+                            location.reload();
+                        });
+                    }
+                    catch (ex) {
+                        alert("catch Ajax Error" + ex);
+                    }
                 }
 
+
             });
+
+            $('#eraseRDV').click(function () {
+                var id_rdv = $("input[name='rdv_radio']:checked").data('id');
+                if (id_rdv != null) {
+                    $.ajax({
+                        type: "POST",
+                        url: "http://localhost:51921/Commercial/AjaxDelete",
+                        // url: "~/Commercial/AjaxDelete",
+                        data: "table=" + 'rendez_vous' + "&id=" + id_rdv,
+                    }).then(function () {
+                        location.reload();
+                    });
+                }
+            });
+
 
 
             $(function () {

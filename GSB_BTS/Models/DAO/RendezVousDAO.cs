@@ -83,10 +83,19 @@ namespace GSB.Models.DAO
             {
                 command = manager.CreateCommand();
                 command.CommandText = "UPDATE rendez_vous " +
-                                      "SET date_rdv = @date_rdv" +
-                                      "WHERE rendezVous.id_rdv = @id";
-                command.Parameters.AddWithValue("@id", rendezVous.Id_rdv);
-                command.Parameters.AddWithValue("@date_rdv", rendezVous.Date_rdv);                
+                                      "SET date_rdv = @date_rdv, " +
+                                      "id_praticien = @id_praticien, " +
+                                      "indice_confiance = @indice_confiance, " +
+                                      "date_bilan = @date_bilan, " +
+                                      "motif_rdv = @motif_rdv " +
+                                      "WHERE id_rdv = @id_rdv";
+
+                command.Parameters.AddWithValue("@date_rdv", rendezVous.Date_rdv);
+                command.Parameters.AddWithValue("@id_praticien", rendezVous.Praticien.Id);
+                command.Parameters.AddWithValue("@indice_confiance", rendezVous.Indice_confiance);
+                command.Parameters.AddWithValue("@date_bilan", rendezVous.Date_bilan);
+                command.Parameters.AddWithValue("@motif_rdv", rendezVous.Motif_rdv.ToString());
+                command.Parameters.AddWithValue("@id_rdv", rendezVous.Id_rdv);
 
                 command.ExecuteNonQuery();
                 CloseConnection();
