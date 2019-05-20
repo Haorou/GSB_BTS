@@ -20,7 +20,7 @@ namespace GSB.Controllers
             {
                 RendezVousDAO rendezVousDAO = new RendezVousDAO();
                 PraticienDAO praticienDAO = new PraticienDAO();
-                List<RendezVous> mesRDV = rendezVousDAO.ReadAllFromCommercialID(ViewBag.Employe.Id);
+                List<RendezVous> mesRDV = rendezVousDAO.ReadRDVFuturFromCommercialID(ViewBag.Employe.Id);
                 List<Praticien> mesPraticiens = praticienDAO.ReadAll();
 
                 ViewBag.MesRDV = mesRDV;
