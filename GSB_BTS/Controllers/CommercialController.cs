@@ -78,7 +78,8 @@ namespace GSB.Controllers
                                                Convert.ToInt32(time.Substring(0,2)),
                                                Convert.ToInt32(time.Substring(3)),
                                                00);
-                newRDV.Date_bilan = DateTime.Now;
+               
+                newRDV.Date_bilan = newRDV.Date_rdv.AddDays(7);
                 newRDV.Indice_confiance = indice;
                 newRDV.Motif_rdv = (RendezVous.Rdv)Enum.Parse(typeof(RendezVous.Rdv), motif);
                 newRDV.Praticien = praticienManager.Read(id_praticien);
