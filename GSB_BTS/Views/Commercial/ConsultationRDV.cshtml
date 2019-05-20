@@ -224,7 +224,7 @@
                         // url: "~/Commercial/AjaxRDV", 
                         data: "id=" + 0 + "&date=" + date + "&time=" + time + "&motif=" + motif + "&indice=" + indice + "&id_employe=" + id_employe + "&id_praticien=" + id_praticien,
                     }).then(function (response) {
-                        console.log(response);
+                        location.reload();
                         });
                 }
                 catch (ex) {
