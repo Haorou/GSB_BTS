@@ -64,12 +64,12 @@ namespace GSB.Controllers
 
         public void AjaxAddModifyRDV(int? id, string date, string time, string motif, int indice, int id_employe, int id_praticien)
         {
+            RendezVousDAO rendezVousManager = new RendezVousDAO();
+            PraticienDAO praticienManager = new PraticienDAO();
+            EmployeDAO employeManager = new EmployeDAO();
+
             if (id == null) // ADD
             {
-                RendezVousDAO rendezVousManager = new RendezVousDAO();
-                PraticienDAO praticienManager = new PraticienDAO();
-                EmployeDAO employeManager = new EmployeDAO();
-
                 RendezVous newRDV = new RendezVous();
                 newRDV.Date_rdv = new DateTime(Convert.ToInt32(date.Substring(0, 4)),
                                                Convert.ToInt32(date.Substring(5, 2)),
@@ -88,10 +88,6 @@ namespace GSB.Controllers
             }
             else // MODIFY
             {
-                RendezVousDAO rendezVousManager = new RendezVousDAO();
-                PraticienDAO praticienManager = new PraticienDAO();
-                EmployeDAO employeManager = new EmployeDAO();
-
                 RendezVous newRDV = rendezVousManager.Read((int)id);
 
                 newRDV.Date_rdv = new DateTime(Convert.ToInt32(date.Substring(0, 4)),
