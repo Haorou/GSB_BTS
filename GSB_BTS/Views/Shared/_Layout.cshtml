@@ -32,11 +32,12 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
 
-                    @*TODO if commercial else comptable*@                   
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Commercial" asp-action="ConsultationRDV">Consult</a></li>
-                    <li><a asp-area="" asp-controller="Comptable" asp-action="Comptable">Fiche Frais</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Connexion">Connexion</a></li>
+                    @*TODO if commercial else comptable*@
+                   
+                    <li><a href="Index/Home">Accueil</a></li>
+                    <li><a href="Commercial/ConsultationRDV">Consult</a></li>
+                    <li><a href="Comptable/Comptable">Fiche Frais</a></li>
+                    <li><a href="Home/Connexion">Connexion</a></li>
                 </ul>
             </div>
         </div>

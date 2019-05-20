@@ -2,11 +2,11 @@
     ViewData["Title"] = "ConsultationRDV";
 }
 
-<h2>Comptable</h2>
+<h2>Espace Commercial</h2>
 
 @{
 <div class="container">
-    <h2>Bienvenue @ViewBag.Employe.Prenom @ViewBag.Employe.Nom</h2>
+    <h2 id="employe" data-id="@ViewBag.Employe.Id">Bienvenue @ViewBag.Employe.Prenom @ViewBag.Employe.Nom</h2>
     <p>Consultation de vos Rendez vous</p>
     <table class="table table-hover">
         <thead>
@@ -18,18 +18,21 @@
                     <button type="submit" class="btn btn-success buttonModal" data-toggle="modal" data-target="#RDVModal" data-action="modify"><span class="glyphicon glyphicon-edit"></span>Modifier</button>
                 </td>
                 <td>
-                    <button type="submit" class="btn btn-warning" data-toggle="modal" data-target="#eraseRDV"><span class="glyphicon glyphicon-trash"></span>Supprimer</button>
+                    <button type="submit" class="btn btn-warning" id="eraseRDV" data-toggle="modal"><span class="glyphicon glyphicon-trash"></span>Supprimer</button>
+                </td>
+                <td>
+                    <a type="button" class="btn btn-link" href="~/Commercial/Etablissement" ><span class="glyphicon glyphicon-home"></span>Etablissements</a>
                 </td>
             </tr>
             <tr>
-                <th>Choix</th>
-                <th>Praticien</th>
-                <th>Date RDV</th>
-                <th>Heure RDV</th>
-                <th>Motif du rendez-vous</th>
-                <th>Indice de Confiance</th>
-                <th>Date Bilan</th>
-                <th>Enchantillons donnés</th>
+                <th class="modal_RDV_form">Choix</th>
+                <th class="modal_RDV_form">Praticien</th>
+                <th class="modal_RDV_form">Date RDV</th>
+                <th class="modal_RDV_form">Heure RDV</th>
+                <th class="modal_RDV_form">Motif du rendez-vous</th>
+                <th class="modal_RDV_form">Indice de Confiance</th>
+                <th class="modal_RDV_form">Date Bilan</th>
+                <th class="modal_RDV_form">Enchantillons donnés</th>
             </tr>
         </thead>
         <tbody>
@@ -46,16 +49,16 @@
                     var dateBilan = rdvs[index].Date_bilan.ToShortDateString();
 
                     <tr>
-                        <th>
+                        <th class="modal_RDV_form">
                             <input @{ string select = index == 0 ? "checked" : ""; } type="radio" aria-label="" name="rdv_radio" value="@rdvs[index].Id_rdv" data-id="@rdvs[index].Id_rdv">
                         </th>
-                        <th>@rdvs[index].Praticien.Nom</th>
-                        <th>@dateRDV</th>
-                        <th>@heureRDV</th>
-                        <th>@rdvs[index].Motif_rdv</th>
-                        <th>@rdvs[index].Indice_confiance</th>
-                        <th>@dateBilan</th>
-                        <th>@rdvs[index].Liste_echantillons_donnes.Count</th>
+                        <th class="modal_RDV_form">@rdvs[index].Praticien.Nom</th>
+                        <th class="modal_RDV_form">@dateRDV</th>
+                        <th class="modal_RDV_form">@heureRDV</th>
+                        <th class="modal_RDV_form">@rdvs[index].Motif_rdv</th>
+                        <th class="modal_RDV_form">@rdvs[index].Indice_confiance</th>
+                        <th class="modal_RDV_form">@dateBilan</th>
+                        <th class="modal_RDV_form">@rdvs[index].Liste_echantillons_donnes.Count</th>
                     </tr>
                 }
             }
@@ -75,7 +78,7 @@
                     <form>
                         <div class="container">
                             <div class="row">
-                                <div class='col-sm-6'>
+                                <div class='col-sm-6' id="col-sm-6_RDV">
                                     <div class="form-group" style="display:flex; flex-direction: row; align-items: center;">
                                         <label for="example-date-input" class="col-2 col-form-label">Date</label>
                                         <input class="form-control" type="date" value="" id="date_rdv">
@@ -121,7 +124,7 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <div class='col-sm-8'>
+                            <div class='col-sm-8' id="col-sm-8_RDV">
                                 <div class="form-group">
                                     <label for="datetimepicker_rdv" class="col-form-label">Date bilan:</label>
                                     <div class='input-group date' id='datetimepicker2'>
@@ -137,7 +140,7 @@
 </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-success" data-action="modify"><span class="glyphicon glyphicon-ok"></span>Envoyer</button>
+                    <button type="button" id="send_RDV" class="btn btn-success" data-action="modify"><span class="glyphicon glyphicon-ok"></span>Envoyer</button>
                     <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-list-alt"></span>Fiche Frais</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
                 </div>
@@ -159,11 +162,13 @@
 
                 if (action === 'modify' && id_rdv != null)
                 {
+                    $('#send_RDV').data('action', 'modify');
                     try {
 
                         $.ajax({
                             type: "POST",
-                            url: "~/Commercial/AjaxReceiver",
+                            url: "http://localhost:51921/Commercial/AjaxReader",
+                            // url: "~/Commercial/AjaxReader",
                             data: 'table=' + "rendez_vous" + '&id=' + id_rdv,
                         }).then(function (response) {
                             var JsonResponse = JSON.parse(response);
@@ -174,7 +179,7 @@
                             var date = new Date(parseInt(milli));
                             var dateAmericanFormat = date.toISOString();
 
-                            $('#date_rdv').alert(dateAmericanFormat.substring(0, 10));
+                            $('#date_rdv').val(dateAmericanFormat.substring(0, 10));
                             $('#time_rdv').val(dateAmericanFormat.substring(14, 19));
                             $('#motif_rdv').val(JsonResponse.Motif_rdv);
                             $('#indice_confiance').val(JsonResponse.Indice_confiance);
@@ -189,6 +194,8 @@
                 }
                 else if (action === 'add')
                 {
+                    $('#send_RDV').data('action', 'add');
+
                     $("#select_praticien").val("Choisir un praticien");
                     modal.find('.modal-title').text('Nouveau rendez-vous');
 
@@ -196,12 +203,76 @@
                     var dateAmericanFormat = date.toISOString();
 
                     $('#date_rdv').val(dateAmericanFormat.substring(0, 10));
-                    $('#time_rdv').val(dateAmericanFormat.substring(14, 19));
+                    $('#time_rdv').val(dateAmericanFormat.substring(11, 16));
                     $('#motif_rdv').val("Choisir un motif");
                     $('#indice_confiance').val(1);
                 }
 
             });
+
+
+            $('#send_RDV').click(function () {
+                var date = $('#date_rdv').val();
+                var time = $('#time_rdv').val();
+                var motif = $('#motif_rdv').val();
+                var indice = $('#indice_confiance').val();
+                var id_praticien = $('#select_praticien').val();
+                var id_employe = $('#employe').data('id');
+
+                var action = $('#send_RDV').data('action');
+                console.log(action);
+
+                if (action == 'add')
+                {
+                    try {
+                        $.ajax({
+                            type: "POST",
+                            url: "http://localhost:51921/Commercial/AjaxAddModifyRDV",
+                            // url: "~/Commercial/AjaxAddRDV", 
+                            data: "id=" + '' + "&date=" + date + "&time=" + time + "&motif=" + motif + "&indice=" + indice + "&id_employe=" + id_employe + "&id_praticien=" + id_praticien,
+                        }).then(function () {
+                            location.reload();
+                        });
+                    }
+                    catch (ex) {
+                        alert("catch Ajax Error" + ex);
+                    }
+                }
+                else if (action == 'modify')
+                {
+                    var id_rdv = $("input[name='rdv_radio']:checked").data('id');
+                    try {
+                        $.ajax({
+                            type: "POST",
+                            url: "http://localhost:51921/Commercial/AjaxAddModifyRDV",
+                            // url: "~/Commercial/AjaxAddRDV", 
+                            data: "id=" + id_rdv + "&date=" + date + "&time=" + time + "&motif=" + motif + "&indice=" + indice + "&id_employe=" + id_employe + "&id_praticien=" + id_praticien,
+                        }).then(function () {
+                            location.reload();
+                        });
+                    }
+                    catch (ex) {
+                        alert("catch Ajax Error" + ex);
+                    }
+                }
+
+
+            });
+
+            $('#eraseRDV').click(function () {
+                var id_rdv = $("input[name='rdv_radio']:checked").data('id');
+                if (id_rdv != null) {
+                    $.ajax({
+                        type: "POST",
+                        url: "http://localhost:51921/Commercial/AjaxDelete",
+                        // url: "~/Commercial/AjaxDelete",
+                        data: "table=" + 'rendez_vous' + "&id=" + id_rdv,
+                    }).then(function () {
+                        location.reload();
+                    });
+                }
+            });
+
 
 
             $(function () {
