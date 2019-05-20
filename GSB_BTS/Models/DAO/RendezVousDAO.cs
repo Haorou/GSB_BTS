@@ -193,6 +193,80 @@ namespace GSB.Models.DAO
         }
 
 
+        public List<RendezVous> ReadRDVFuturFromCommercialID(int id_commercial)
+        {
+            List<RendezVous> liste_rdv = new List<RendezVous>();
+            if (OpenConnection())
+            {
+                RendezVous rdv;
+                EmployeDAO employeManager = new EmployeDAO();
+                PraticienDAO praticienManager = new PraticienDAO();
+                EchantillonDonneDAO echantillonDonneManager = new EchantillonDonneDAO();
+
+                command = manager.CreateCommand();
+                command.CommandText = "SELECT * FROM rendez_vous WHERE id_commercial = @id_commercial AND date_rdv >= NOW()";
+
+                command.Parameters.AddWithValue("@id_commercial", id_commercial);
+
+                dataReader = command.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+                    rdv = new RendezVous();
+                    rdv.Id_rdv = (int)dataReader["id_rdv"];
+                    rdv.Employe = employeManager.Read((int)dataReader["id_commercial"]);
+                    rdv.Praticien = praticienManager.Read((int)dataReader["id_praticien"]);
+                    rdv.Date_rdv = (DateTime)dataReader["date_rdv"];
+                    rdv.Date_bilan = (DateTime)dataReader["date_bilan"];
+                    rdv.Motif_rdv = (RendezVous.Rdv)Enum.Parse(typeof(RendezVous.Rdv), (string)dataReader["motif_rdv"]);
+                    rdv.Indice_confiance = (int)dataReader["indice_confiance"];
+                    rdv.Liste_echantillons_donnes = echantillonDonneManager.ReadAllFromRendezVous(rdv);
+                    liste_rdv.Add(rdv);
+                }
+                dataReader.Close();
+                command.ExecuteNonQuery();
+                CloseConnection();
+            }
+            return liste_rdv;
+
+        }
+        public List<RendezVous> ReadRDVHistoFromCommercialID(int id_commercial)
+        {
+            List<RendezVous> liste_rdv = new List<RendezVous>();
+            if (OpenConnection())
+            {
+                RendezVous rdv;
+                EmployeDAO employeManager = new EmployeDAO();
+                PraticienDAO praticienManager = new PraticienDAO();
+                EchantillonDonneDAO echantillonDonneManager = new EchantillonDonneDAO();
+
+                command = manager.CreateCommand();
+                command.CommandText = "SELECT * FROM rendez_vous WHERE id_commercial = @id_commercial AND date_rdv < NOW()";
+
+                command.Parameters.AddWithValue("@id_commercial", id_commercial);
+
+                dataReader = command.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+                    rdv = new RendezVous();
+                    rdv.Id_rdv = (int)dataReader["id_rdv"];
+                    rdv.Employe = employeManager.Read((int)dataReader["id_commercial"]);
+                    rdv.Praticien = praticienManager.Read((int)dataReader["id_praticien"]);
+                    rdv.Date_rdv = (DateTime)dataReader["date_rdv"];
+                    rdv.Date_bilan = (DateTime)dataReader["date_bilan"];
+                    rdv.Motif_rdv = (RendezVous.Rdv)Enum.Parse(typeof(RendezVous.Rdv), (string)dataReader["motif_rdv"]);
+                    rdv.Indice_confiance = (int)dataReader["indice_confiance"];
+                    rdv.Liste_echantillons_donnes = echantillonDonneManager.ReadAllFromRendezVous(rdv);
+                    liste_rdv.Add(rdv);
+                }
+                dataReader.Close();
+                command.ExecuteNonQuery();
+                CloseConnection();
+            }
+            return liste_rdv;
+        }
+
 
     }
 }
