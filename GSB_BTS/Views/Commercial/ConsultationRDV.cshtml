@@ -222,8 +222,8 @@
                         type: "POST",
                         url: "http://localhost:51921/Commercial/AjaxRDV",
                         // url: "~/Commercial/AjaxRDV", 
-                        data: "id=" + 0 + "&date=" + date + "&time=" + time + "&motif=" + motif + "&indice=" + indice + "&id_employe=" + id_employe + "&id_praticien=" + id_praticien,
-                    }).then(function (response) {
+                        data: "id=" + '' + "&date=" + date + "&time=" + time + "&motif=" + motif + "&indice=" + indice + "&id_employe=" + id_employe + "&id_praticien=" + id_praticien,
+                    }).then(function () {
                         location.reload();
                         });
                 }

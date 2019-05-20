@@ -62,10 +62,9 @@ namespace GSB.Controllers
             return response;
         }
 
-        public string AjaxRDV(int id, string date, string time, string motif, int indice, int id_employe, int id_praticien)
+        public void AjaxRDV(int? id, string date, string time, string motif, int indice, int id_employe, int id_praticien)
         {
-            Debug.WriteLine("id = " + id);
-            if (id == 0)
+            if (id == null)
             {
                 RendezVousDAO rendezVousManager = new RendezVousDAO();
                 PraticienDAO praticienManager = new PraticienDAO();
@@ -91,8 +90,6 @@ namespace GSB.Controllers
             {
 
             }
-
-            return "success";
         }
 
 
