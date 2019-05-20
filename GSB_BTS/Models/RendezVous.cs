@@ -28,7 +28,6 @@ namespace GSB.Models
         public int Indice_confiance { get => indice_confiance; set => indice_confiance = value; }
         public Rdv Motif_rdv { get => motif_rdv; set => motif_rdv = value; }
         public List<EchantillonDonne> Liste_echantillons_donnes { get => liste_echantillons_donnes; set => liste_echantillons_donnes = value; }
-        public Quand Rdv_quand { get => rdv_quand; set => rdv_quand = value; }
         public RendezVous() { }
 
         public RendezVous(int id_rdv, Employe employe, Praticien praticien, DateTime date_rdv, DateTime date_bilan,Rdv motif_rdv, int indice_confiance, List<EchantillonDonne> liste_echantillons_donnes)
