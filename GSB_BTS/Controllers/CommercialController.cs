@@ -68,41 +68,29 @@ namespace GSB.Controllers
             PraticienDAO praticienManager = new PraticienDAO();
             EmployeDAO employeManager = new EmployeDAO();
 
+            RendezVous newRDV = id == null ? new RendezVous() : rendezVousManager.Read((int)id);
+
+            Debug.WriteLine(time);
+
+            newRDV.Date_rdv = new DateTime(Convert.ToInt32(date.Substring(0, 4)),
+                               Convert.ToInt32(date.Substring(5, 2)),
+                               Convert.ToInt32(date.Substring(8)),
+                               Convert.ToInt32(time.Substring(0, 2)),
+                               Convert.ToInt32(time.Substring(3)),
+                               00);
+
+            newRDV.Date_bilan = newRDV.Date_rdv.AddDays(7);
+            newRDV.Indice_confiance = indice;
+            newRDV.Motif_rdv = (RendezVous.Rdv)Enum.Parse(typeof(RendezVous.Rdv), motif);
+            newRDV.Praticien = praticienManager.Read(id_praticien);
+            newRDV.Employe = employeManager.Read(id_employe);
+
             if (id == null) // ADD
             {
-                RendezVous newRDV = new RendezVous();
-                newRDV.Date_rdv = new DateTime(Convert.ToInt32(date.Substring(0, 4)),
-                                               Convert.ToInt32(date.Substring(5, 2)),
-                                               Convert.ToInt32(date.Substring(8)), 
-                                               Convert.ToInt32(time.Substring(0,2)),
-                                               Convert.ToInt32(time.Substring(3)),
-                                               00);
-               
-                newRDV.Date_bilan = newRDV.Date_rdv.AddDays(7);
-                newRDV.Indice_confiance = indice;
-                newRDV.Motif_rdv = (RendezVous.Rdv)Enum.Parse(typeof(RendezVous.Rdv), motif);
-                newRDV.Praticien = praticienManager.Read(id_praticien);
-                newRDV.Employe = employeManager.Read(id_employe);
-
                 rendezVousManager.Create(newRDV);
             }
             else // MODIFY
             {
-                RendezVous newRDV = rendezVousManager.Read((int)id);
-
-                newRDV.Date_rdv = new DateTime(Convert.ToInt32(date.Substring(0, 4)),
-                                               Convert.ToInt32(date.Substring(5, 2)),
-                                               Convert.ToInt32(date.Substring(8)),
-                                               Convert.ToInt32(time.Substring(0, 2)),
-                                               Convert.ToInt32(time.Substring(3)),
-                                               00);
-
-                newRDV.Date_bilan = newRDV.Date_rdv.AddDays(7);
-                newRDV.Indice_confiance = indice;
-                newRDV.Motif_rdv = (RendezVous.Rdv)Enum.Parse(typeof(RendezVous.Rdv), motif);
-                newRDV.Praticien = praticienManager.Read(id_praticien);
-                newRDV.Employe = employeManager.Read(id_employe);
-
                 rendezVousManager.Update(newRDV);
             }
         }

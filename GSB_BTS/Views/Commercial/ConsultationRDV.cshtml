@@ -40,8 +40,6 @@
                 var rdvs = ViewBag.MesRDV;
                 int tailleRDV = rdvs.Count;
 
-
-
                 for (int index = 0; index < tailleRDV; index++)
                 {
                     var dateRDV = rdvs[index].Date_rdv.ToShortDateString();
@@ -81,9 +79,9 @@
                                 <div class='col-sm-6' id="col-sm-6_RDV">
                                     <div class="form-group" style="display:flex; flex-direction: row; align-items: center;">
                                         <label for="example-date-input" class="col-2 col-form-label">Date</label>
-                                        <input class="form-control" type="date" value="" id="date_rdv">
+                                        <input class="form-control" type="date" value="" id="date_rdv" required>
                                         <label for="example-date-input" class="col-2 col-form-label">Heure</label>
-                                        <input class="form-control" type="time" value="" id="time_rdv">
+                                        <input class="form-control" type="time" value="" id="time_rdv" required>
                                     </div>
                                 </div>
                             </div>
@@ -180,7 +178,7 @@
                             var dateAmericanFormat = date.toISOString();
 
                             $('#date_rdv').val(dateAmericanFormat.substring(0, 10));
-                            $('#time_rdv').val(dateAmericanFormat.substring(14, 19));
+                            $('#time_rdv').val(dateAmericanFormat.substring(11, 16));
                             $('#motif_rdv').val(JsonResponse.Motif_rdv);
                             $('#indice_confiance').val(JsonResponse.Indice_confiance);
                         });
@@ -220,7 +218,6 @@
                 var id_employe = $('#employe').data('id');
 
                 var action = $('#send_RDV').data('action');
-                console.log(action);
 
                 if (action == 'add')
                 {
@@ -228,7 +225,7 @@
                         $.ajax({
                             type: "POST",
                             url: "http://localhost:51921/Commercial/AjaxAddModifyRDV",
-                            // url: "~/Commercial/AjaxAddRDV", 
+                            // url: "~/Commercial/AjaxAddModifyRDV", 
                             data: "id=" + '' + "&date=" + date + "&time=" + time + "&motif=" + motif + "&indice=" + indice + "&id_employe=" + id_employe + "&id_praticien=" + id_praticien,
                         }).then(function () {
                             location.reload();
@@ -245,7 +242,7 @@
                         $.ajax({
                             type: "POST",
                             url: "http://localhost:51921/Commercial/AjaxAddModifyRDV",
-                            // url: "~/Commercial/AjaxAddRDV", 
+                            // url: "~/Commercial/AjaxAddModifyRDV", 
                             data: "id=" + id_rdv + "&date=" + date + "&time=" + time + "&motif=" + motif + "&indice=" + indice + "&id_employe=" + id_employe + "&id_praticien=" + id_praticien,
                         }).then(function () {
                             location.reload();
@@ -255,8 +252,6 @@
                         alert("catch Ajax Error" + ex);
                     }
                 }
-
-
             });
 
             $('#eraseRDV').click(function () {
@@ -273,11 +268,6 @@
                 }
             });
 
-
-
-            $(function () {
-               // $('#datetimepicker1').datetimepicker();
-            });
         </script>
     }
     }
