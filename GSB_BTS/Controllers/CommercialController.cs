@@ -61,6 +61,7 @@ namespace GSB.Controllers
                 response = serializer.Serialize(rendezVous);
             }
 
+            Debug.WriteLine(response);
             return response;
         }
 
@@ -72,7 +73,7 @@ namespace GSB.Controllers
 
             RendezVous newRDV = id == null ? new RendezVous() : rendezVousManager.Read((int)id);
 
-            Debug.WriteLine(time);
+            Debug.WriteLine("Debug.Time = > " + time);
 
             newRDV.Date_rdv = new DateTime(Convert.ToInt32(date.Substring(0, 4)),
                                Convert.ToInt32(date.Substring(5, 2)),

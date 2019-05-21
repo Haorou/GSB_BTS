@@ -197,41 +197,45 @@
     @section scripts {
         <script type="text/javascript">
 
-            $('.buttonModal').click(function () {
-                var action = $(this).data('action');
-                var modal = $('#RDVModal');
-                var id_rdv = $("input[name='rdv_futurs_radio']:checked").data('id');
+            $('.buttonModal').click(function () { // Bouton Ajouter / Modifier Click
+                var action = $(this).data('action'); // data-action="modify" OU "add"
+                var modal = $('#RDVModal'); // ModalHTML du RDV
+                var id_rdv = $("input[name='rdv_futurs_radio']:checked").data('id'); // Bouton radio -> date-id="X"
 
-                if (action === 'modify' && id_rdv != null)
+                if (action === 'modify')
                 {
-                    $('#send_RDV').data('action', 'modify');
+                    $('#send_RDV').data('action', 'modify'); // Permet de changer le rôle du bouton "Ajouter" au sein du modal
                     try {
 
-                        $.ajax({
+                        $.ajax({ // Plusieurs éléments sont attendus pour une requête Ajax : TYPE / URL / DATA
                             type: "POST",
                             url: "http://localhost:51921/Commercial/AjaxReader",
                             // url: "~/Commercial/AjaxReader",
                             data: 'table=' + "rendez_vous" + '&id=' + id_rdv,
-                        }).then(function (response) {
+                        }).then(function (response) { // Then fonctionne uniquement après que la fonction C# est renvoyé quelque chose
                             var JsonResponse = JSON.parse(response);
 
                             $("#select_praticien").val(JsonResponse.Praticien.Id);
+                            $("#select_praticien").attr('disabled', true); // Ajoute Readonly "fixe la valeur" a un Input - Ici select_praticien
 
                             var milli = JsonResponse.Date_rdv.replace(/\/Date\((-?\d+)\)\//, '$1');
                             var date = new Date(parseInt(milli));
                             var dateAmericanFormat = date.toISOString();
 
+                            console.log(dateAmericanFormat.substring(0, 10));
+
                             $('#date_rdv').val(dateAmericanFormat.substring(0, 10));
                             $('#time_rdv').val(dateAmericanFormat.substring(11, 16));
                             $('#motif_rdv').val(JsonResponse.Motif_rdv);
                             $('#indice_confiance').val(JsonResponse.Indice_confiance);
+
+                            modal.find('.modal-title').text('Rendez-Vous avec ' + JsonResponse.Praticien.Nom);
                         });
                     }
                     catch (ex) {
                         alert("catch Ajax Error" + ex);
                     }
 
-                    modal.find('.modal-title').text('Rendez-Vous n°' + id_rdv);
                     modal.find('.modal-body input').val(id_rdv);
                 }
                 else if (action === 'add')
@@ -240,6 +244,7 @@
 
                     $("#select_praticien").val("Choisir un praticien");
                     modal.find('.modal-title').text('Nouveau rendez-vous');
+                    $("#select_praticien").attr('disabled', false); 
 
                     var date = new Date($.now());
                     var dateAmericanFormat = date.toISOString();
