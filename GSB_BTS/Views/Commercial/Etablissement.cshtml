@@ -35,7 +35,7 @@
             {
             <tr>
                 <th class="modal_RDV_form">
-                    <input @{ string select=index = =0 ? "checked" : "" ; } type="radio" aria-label="" name="bat_radio" value="@bat[index].Etablissement" data-id="@bat[index].Etablissement">
+                    <input checked type="radio" aria-label="" name="bat_radio" value="@bat[index].Etablissement" data-id="@bat[index].Etablissement">
                 </th>
                 <th class="modal_RDV_form">@bat[index].Etablissement</th>
                 <th class="modal_RDV_form">@bat[index].Adresse</th>
