@@ -139,7 +139,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" id="send_RDV" class="btn btn-success" data-action="modify"><span class="glyphicon glyphicon-ok"></span>Envoyer</button>
-                    <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-list-alt"></span>Fiche Frais</button>
+                    <button id="bouton_FF" type="button" class="btn btn-primary" style="display: none;"><span class="glyphicon glyphicon-list-alt"></span>Fiche Frais</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
                 </div>
             </div>
@@ -157,6 +157,7 @@
                 var action = $(this).data('action');
                 var modal = $('#RDVModal');
                 var id_rdv = $("input[name='rdv_radio']:checked").data('id');
+                var bouton_FF = $('#bouton_FF');
 
                 if (action === 'modify' && id_rdv != null)
                 {
@@ -170,6 +171,8 @@
                             data: 'table=' + "rendez_vous" + '&id=' + id_rdv,
                         }).then(function (response) {
                             var JsonResponse = JSON.parse(response);
+
+                            bouton_FF.css('display', 'block');
 
                             $("#select_praticien").val(JsonResponse.Praticien.Id);
 
@@ -199,6 +202,8 @@
 
                     var date = new Date($.now());
                     var dateAmericanFormat = date.toISOString();
+
+                    bouton_FF.css('display', 'none');
 
                     $('#date_rdv').val(dateAmericanFormat.substring(0, 10));
                     $('#time_rdv').val(dateAmericanFormat.substring(11, 16));
@@ -269,6 +274,6 @@
             });
 
         </script>
-    }
-    }
+      }
+}
 
