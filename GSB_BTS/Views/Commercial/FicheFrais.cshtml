@@ -1,0 +1,65 @@
+﻿
+@{
+    ViewBag.Title = "FicheFrais";
+}
+
+<h2>FicheFrais</h2>
+
+<div class="container">
+    <h2 id="employe" data-id="@ViewBag.Employe.Id">Bienvenue @ViewBag.Employe.Prenom @ViewBag.Employe.Nom</h2>
+    <p>Consultation de vos Rendez-Vous</p>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <td>
+                    <button type="submit" class="btn btn-primary buttonModal" data-toggle="modal" data-target="#RDVModal" data-action="add"><span class="glyphicon glyphicon-plus-sign"></span>Ajouter</button>
+                </td>
+                <td>
+                    <button type="submit" class="btn btn-success buttonModal" data-toggle="modal" data-target="#RDVModal" data-action="modify"><span class="glyphicon glyphicon-edit"></span>Modifier</button>
+                </td>
+                <td>
+                    <button type="submit" class="btn btn-warning" id="eraseRDV" data-toggle="modal"><span class="glyphicon glyphicon-trash"></span>Supprimer</button>
+                </td>
+                <td>
+                    <a type="button" class="btn btn-link" href="~/Commercial/Etablissement"><span class="glyphicon glyphicon-home"></span>Etablissements</a>
+                </td>
+            </tr>
+            <tr>
+                <th class="modal_RDV_form">Choix</th>
+                <th class="modal_RDV_form">Praticien</th>
+                <th class="modal_RDV_form">Date RDV</th>
+                <th class="modal_RDV_form">Heure RDV</th>
+                <th class="modal_RDV_form">Motif du rendez-vous</th>
+                <th class="modal_RDV_form">Indice de Confiance</th>
+                <th class="modal_RDV_form">Date Bilan</th>
+                <th class="modal_RDV_form">Enchantillons donnés</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var futursRDVs = ViewBag.FutursRDV;
+                int tailleFutursRDVs = futursRDVs.Count;
+
+                for (int index = 0; index < tailleFutursRDVs; index++)
+                {
+                    var dateRDV = futursRDVs[index].Date_rdv.ToShortDateString();
+                    var heureRDV = futursRDVs[index].Date_rdv.ToShortTimeString();
+                    var dateBilan = futursRDVs[index].Date_bilan.ToShortDateString();
+
+                    <tr>
+                        <th class="modal_RDV_form">
+                            <input checked type="radio" aria-label="" name="rdv_futurs_radio" value="@futursRDVs[index].Id_rdv" data-id="@futursRDVs[index].Id_rdv">
+                        </th>
+                        <th class="modal_RDV_form">@futursRDVs[index].Praticien.Nom</th>
+                        <th class="modal_RDV_form">@dateRDV</th>
+                        <th class="modal_RDV_form">@heureRDV</th>
+                        <th class="modal_RDV_form">@futursRDVs[index].Motif_rdv</th>
+                        <th class="modal_RDV_form">@futursRDVs[index].Indice_confiance</th>
+                        <th class="modal_RDV_form">@dateBilan</th>
+                        <th class="modal_RDV_form">@futursRDVs[index].Liste_echantillons_donnes.Count</th>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+

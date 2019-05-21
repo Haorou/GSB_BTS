@@ -52,8 +52,7 @@
                 if (id_rdv != null) {
                     $.ajax({
                         type: "POST",
-                        url: "http://localhost:51921/Commercial/AjaxDelete",
-                        // url: "~/Commercial/AjaxDelete",
+                        url: "/Commercial/AjaxDelete",
                         data: "table=" + 'rendez_vous' + "&id=" + id_rdv,
                     }).then(function () {
                         location.reload();
