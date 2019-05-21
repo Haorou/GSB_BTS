@@ -1,0 +1,315 @@
+﻿
+@{
+    ViewBag.Title = "Echantillon";
+}
+
+<h2>Echantillon</h2>
+
+
+<div class="container">
+    <h2 id="employe" data-id="@ViewBag.Employe.Id">Bienvenue @ViewBag.Employe.Prenom @ViewBag.Employe.Nom</h2>
+    <p>Rendez-Vous</p>
+    <table class="table table-hover">
+        <thead>
+            @*<tr>
+                <td>
+                    <button type="submit" class="btn btn-primary buttonModal" data-toggle="modal" data-target="#RDVModal" data-action="add"><span class="glyphicon glyphicon-plus-sign"></span>Ajouter</button>
+                </td>
+                <td>
+                    <button type="submit" class="btn btn-success buttonModal" data-toggle="modal" data-target="#RDVModal" data-action="modify"><span class="glyphicon glyphicon-edit"></span>Modifier</button>
+                </td>
+                <td>
+                    <button type="submit" class="btn btn-warning" id="eraseRDV" data-toggle="modal"><span class="glyphicon glyphicon-trash"></span>Supprimer</button>
+                </td>
+                <td>
+                    <a type="button" class="btn btn-link" href="/Commercial/Etablissement"><span class="glyphicon glyphicon-home"></span>Etablissements</a>
+                </td>
+            </tr>*@
+            @*<tr>
+                <th class="modal_RDV_form">Choix</th>
+                <th class="modal_RDV_form">Praticien</th>
+                <th class="modal_RDV_form">Date RDV</th>
+                <th class="modal_RDV_form">Heure RDV</th>
+                <th class="modal_RDV_form">Motif du rendez-vous</th>
+                <th class="modal_RDV_form">Indice de Confiance</th>
+                <th class="modal_RDV_form">Date Bilan</th>
+                <th class="modal_RDV_form">Enchantillons donnés</th>
+            </tr>*@
+        </thead>
+        <tbody>
+            @{
+                var futursRDVs = ViewBag.FutursRDV;
+                int tailleFutursRDVs = futursRDVs.Count;
+
+                for (int index = 0; index < tailleFutursRDVs; index++)
+                {
+                    var dateRDV = futursRDVs[index].Date_rdv.ToShortDateString();
+                    var heureRDV = futursRDVs[index].Date_rdv.ToShortTimeString();
+                    var dateBilan = futursRDVs[index].Date_bilan.ToShortDateString();
+
+                    <tr>
+                        <th class="modal_RDV_form">
+                            <input checked type="radio" aria-label="" name="rdv_futurs_radio" value="@futursRDVs[index].Id_rdv" data-id="@futursRDVs[index].Id_rdv">
+                        </th>
+                        <th class="modal_RDV_form">@futursRDVs[index].Praticien.Nom</th>
+                        <th class="modal_RDV_form">@dateRDV</th>
+                        <th class="modal_RDV_form">@heureRDV</th>
+                        <th class="modal_RDV_form">@futursRDVs[index].Motif_rdv</th>
+                        <th class="modal_RDV_form">@futursRDVs[index].Indice_confiance</th>
+                        <th class="modal_RDV_form">@dateBilan</th>
+                        <th class="modal_RDV_form">@futursRDVs[index].Liste_echantillons_donnes.Count</th>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+    <p>Historique de vos Rendez-Vous</p>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th class="modal_RDV_form">Fiche Frais</th>
+                <th class="modal_RDV_form">Praticien</th>
+                <th class="modal_RDV_form">Date RDV</th>
+                <th class="modal_RDV_form">Heure RDV</th>
+                <th class="modal_RDV_form">Motif du rendez-vous</th>
+                <th class="modal_RDV_form">Indice de Confiance</th>
+                <th class="modal_RDV_form">Date Bilan</th>
+                <th class="modal_RDV_form">Enchantillons donnés</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var passesRDVs = ViewBag.PassesRDV;
+                int taillePassesRDVs = passesRDVs.Count;
+
+                for (int index = 0; index < taillePassesRDVs; index++)
+                {
+                    var dateRDV = passesRDVs[index].Date_rdv.ToShortDateString();
+                    var heureRDV = passesRDVs[index].Date_rdv.ToShortTimeString();
+                    var dateBilan = passesRDVs[index].Date_bilan.ToShortDateString();
+
+                    <tr>
+                        <th class="modal_RDV_form">
+                            <a type="button" class="btn btn-primary" href="/Commercial/FicheFrais"><span class="glyphicon glyphicon-list-alt"></span></a>
+                        </th>
+                        <th class="modal_RDV_form">@passesRDVs[index].Praticien.Nom</th>
+                        <th class="modal_RDV_form">@dateRDV</th>
+                        <th class="modal_RDV_form">@heureRDV</th>
+                        <th class="modal_RDV_form">@passesRDVs[index].Motif_rdv</th>
+                        <th class="modal_RDV_form">@passesRDVs[index].Indice_confiance</th>
+                        <th class="modal_RDV_form">@dateBilan</th>
+                        <th class="modal_RDV_form">@passesRDVs[index].Liste_echantillons_donnes.Count</th>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+
+    <div class="modal fade" id="RDVModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Compte Rendu</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="container">
+                            <div class="row">
+                                <div class='col-sm-6' id="col-sm-6_RDV">
+                                    <div class="form-group" style="display:flex; flex-direction: row; align-items: center;">
+                                        <label for="example-date-input" class="col-2 col-form-label">Date</label>
+                                        <input class="form-control" type="date" value="" id="date_rdv" required>
+                                        <label for="example-date-input" class="col-2 col-form-label">Heure</label>
+                                        <input class="form-control" type="time" value="" id="time_rdv" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="praticien" class="col-form-label">Praticien:</label>
+                            <select class="browser-default custom-select" id="select_praticien">
+                                <option value="Choisir un praticien" selected>Choisir un praticien</option>
+                                @{
+                                    foreach (var praticien in ViewBag.MesPraticiens)
+                                    {
+                                        <option value="@praticien.Id">@praticien.Nom @praticien.Prenom</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="text" class="col-form-label">Motif du RDV:</label>
+                            <select class="browser-default custom-select" id="motif_rdv">
+                                <option value="Choisir un motif" selected>Choisir un motif</option>
+                                <option value="0">reprise_contact</option>
+                                <option value="1">nouveaux_medicaments</option>
+                                <option value="2">suivi</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="text" class="col-form-label">Indice de confiance:</label>
+                            <select class="browser-default custom-select" id="indice_confiance">
+                                <option selected>Choisir un indice</option>
+                                @{
+                                    for (int i = 1; i < 6; i++)
+                                    {
+                                        <option value="@i">@i</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class='col-sm-8' id="col-sm-8_RDV">
+                                <div class="form-group">
+                                    <label for="datetimepicker_rdv" class="col-form-label">Date bilan:</label>
+                                    <div class='input-group date' id='datetimepicker2'>
+                                        <input type='date' class="form-control" id="datetimepicker_rdv" />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="send_RDV" class="btn btn-success" data-action="modify"><span class="glyphicon glyphicon-ok"></span>Envoyer</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+@section scripts {
+    <script type="text/javascript">
+
+            $('.buttonModal').click(function () { // Bouton Ajouter / Modifier Click
+                var action = $(this).data('action'); // data-action="modify" OU "add"
+                var modal = $('#RDVModal'); // ModalHTML du RDV
+                var id_rdv = $("input[name='rdv_futurs_radio']:checked").data('id'); // Bouton radio -> date-id="X"
+
+                if (action === 'modify')
+                {
+                    $('#send_RDV').data('action', 'modify'); // Permet de changer le rôle du bouton "Ajouter" au sein du modal
+                    try {
+
+                        $.ajax({ // Plusieurs éléments sont attendus pour une requête Ajax : TYPE / URL / DATA
+                            type: "POST",
+                            url: "/Commercial/AjaxReader",
+                            data: 'table=' + "rendez_vous" + '&id=' + id_rdv,
+                        }).then(function (response) { // Then fonctionne uniquement après que la fonction C# est renvoyé quelque chose
+                            var JsonResponse = JSON.parse(response);
+
+                            $("#select_praticien").val(JsonResponse.Praticien.Id);
+                            $("#select_praticien").attr('disabled', true); // Ajoute Readonly "fixe la valeur" a un Input - Ici select_praticien
+
+                            var milli = JsonResponse.Date_rdv.replace(/\/Date\((-?\d+)\)\//, '$1');
+                            var date = new Date(parseInt(milli));
+
+                            var dateAmericanFormat = date.toISOString();
+                            var timeLocalFormat = date.toLocaleTimeString();
+
+                            $('#date_rdv').val(dateAmericanFormat.substring(0, 10));
+                            $('#time_rdv').val(timeLocalFormat.substring(0, 5));
+                            $('#motif_rdv').val(JsonResponse.Motif_rdv);
+                            $('#indice_confiance').val(JsonResponse.Indice_confiance);
+
+                            modal.find('.modal-title').text('Rendez-Vous avec ' + JsonResponse.Praticien.Nom);
+                        });
+                    }
+                    catch (ex) {
+                        alert("catch Ajax Error" + ex);
+                    }
+
+                    modal.find('.modal-body input').val(id_rdv);
+                }
+                else if (action === 'add')
+                {
+                    $('#send_RDV').data('action', 'add');
+
+                    $("#select_praticien").val("Choisir un praticien");
+                    modal.find('.modal-title').text('Nouveau rendez-vous');
+                    $("#select_praticien").attr('disabled', false);
+
+                    var date = new Date($.now());
+                    var dateAmericanFormat = date.toISOString();
+                    var timeLocalFormat = date.toLocaleTimeString();
+
+                    $('#date_rdv').val(dateAmericanFormat.substring(0, 10));
+                    $('#time_rdv').val(timeLocalFormat.substring(0, 5));
+                    $('#motif_rdv').val("Choisir un motif");
+                    $('#indice_confiance').val(1);
+                }
+
+            });
+
+
+            $('#send_RDV').click(function () {
+                var date = $('#date_rdv').val();
+                var time = $('#time_rdv').val();
+                var motif = $('#motif_rdv').val();
+                var indice = $('#indice_confiance').val();
+                var id_praticien = $('#select_praticien').val();
+                var id_employe = $('#employe').data('id');
+
+                var action = $('#send_RDV').data('action');
+
+                if (action == 'add')
+                {
+                    try {
+                        $.ajax({
+                            type: "POST",
+                            url: "/Commercial/AjaxAddModifyRDV",
+                            data: "id=" + '' + "&date=" + date + "&time=" + time + "&motif=" + motif + "&indice=" + indice + "&id_employe=" + id_employe + "&id_praticien=" + id_praticien,
+                        }).then(function () {
+                            location.reload();
+                        });
+                    }
+                    catch (ex) {
+                        alert("catch Ajax Error" + ex);
+                    }
+                }
+                else if (action == 'modify')
+                {
+                    var id_rdv = $("input[name='rdv_futurs_radio']:checked").data('id');
+                    try {
+                        $.ajax({
+                            type: "POST",
+                            url: "/Commercial/AjaxAddModifyRDV",
+                            data: "id=" + id_rdv + "&date=" + date + "&time=" + time + "&motif=" + motif + "&indice=" + indice + "&id_employe=" + id_employe + "&id_praticien=" + id_praticien,
+                        }).then(function () {
+                            location.reload();
+                        });
+                    }
+                    catch (ex) {
+                        alert("catch Ajax Error" + ex);
+                    }
+                }
+            });
+
+            $('#eraseRDV').click(function () {
+                var id_rdv = $("input[name='rdv_futurs_radio']:checked").data('id');
+                if (id_rdv != null) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Commercial/AjaxDelete",
+                        data: "table=" + 'rendez_vous' + "&id=" + id_rdv,
+                    }).then(function () {
+                        location.reload();
+                    });
+                }
+            });
+
+    </script>
+
+}

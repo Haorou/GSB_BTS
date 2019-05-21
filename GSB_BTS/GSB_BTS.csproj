@@ -253,6 +253,7 @@
     <Content Include="Views\Commercial\_modalRDV.cshtml" />
     <Content Include="Views\Commercial\FicheFrais.cshtml" />
     <Content Include="Views\Commercial\Etablissement.cshtml" />
+    <Content Include="Views\Commercial\Echantillon.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
