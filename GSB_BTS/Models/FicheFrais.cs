@@ -18,7 +18,7 @@ namespace GSB.Models
         public Employe Commercial_visiteur { get => commercial_visiteur; set => commercial_visiteur = value; }
         public Employe Comptable { get => comptable; set => comptable = value; }
         public DateTime Date_fiche { get => date_fiche; set => date_fiche = value; }
-        public DateTime? Date_modification { get => date_modification; set => date_modification = value; }
+        public DateTime? Date_modification { get => date_modification; set => date_modification = value; } // Le "?" à côté du type signifie que le DateTime peut être "null"
         public List<LigneFrais> Liste_lignes_frais { get => liste_lignes_frais; set => liste_lignes_frais = value; }
 
         public FicheFrais() { }

@@ -50,6 +50,23 @@ namespace GSB.Controllers
             return View();
         }
 
+        public ActionResult FicheFrais()
+        {
+
+            Employe employe = (Employe)Session["Employe"];
+            PersonneDAO personneDAO = new PersonneDAO();
+            LigneFraisDAO ligneFraisDAO = new LigneFraisDAO();
+            List<LigneFrais> mesLignesFrais = ligneFraisDAO.ReadAllFromID(employe.Id);
+
+            ViewBag.MesFichesFrais = mesLignesFrais;
+            ViewBag.Employe = (Employe)Session["Employe"];
+
+            Debug.WriteLine("==================================="+employe.Id);
+            Debug.WriteLine("==================================="+mesLignesFrais[0].Id + " === count === " + mesLignesFrais.Count);
+
+            return View();
+        }
+
         public string AjaxReader(string table, int id)
         {
             string response = "";

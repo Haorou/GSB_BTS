@@ -59,7 +59,7 @@ namespace GSB.Models.DAO
             if (OpenConnection())
             {
                 command = manager.CreateCommand();
-                command.CommandText = "SELECT id_personne, etablissement, adresse FROM personne p JOIN praticien prat ON prat.id_praticien = p.id_personne ";
+                command.CommandText = "SELECT distinct etablissement, adresse FROM personne p JOIN praticien prat ON prat.id_praticien = p.id_personne ";
 
 
                 // Lecture des résultats
@@ -68,7 +68,6 @@ namespace GSB.Models.DAO
                 while (dataReader.Read())
                 {
                     personne = new Personne();
-                    personne.Id = (int)dataReader["id_personne"];
                     personne.Etablissement = (string)dataReader["etablissement"];
                     personne.Adresse = (string)dataReader["adresse"];
                     liste_etablissement.Add(personne);

@@ -97,6 +97,35 @@ namespace GSB.Models.DAO
             return liste_ficheFrais;
         }
 
+        public FicheFrais ReadFromIdCommercialVisiteur(int id_commercial_visiteur)
+        {
+            FicheFrais ficheFrais = null;
+            if (OpenConnection())
+            {
+                ficheFrais = new FicheFrais();
+
+                command = manager.CreateCommand();
+                command.CommandText = "SELECT * " +
+                                      "FROM fiche_frais " +
+                                      "WHERE id_commercial_visiteur = @id_commercial_visiteur";
+                command.Parameters.AddWithValue("@id_commercial_visiteur", id_commercial_visiteur);
+
+                // Lecture des résultats
+                dataReader = command.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+                    ficheFrais.Id_fiche_frais = (int)dataReader["id_fiche_frais"];
+                    ficheFrais.Date_fiche = (DateTime)dataReader["date_fiche"];
+                    ficheFrais.Date_modification = dataReader["date_modification"].ToString() == "" ? null : (DateTime?)dataReader["date_modification"];
+                }
+
+                dataReader.Close();
+                CloseConnection();
+            }
+            return ficheFrais;
+        }
+
         public List<FicheFrais> ReadAllFromEmploye(Employe employe)
         {
             List<FicheFrais> liste_ficheFrais = new List<FicheFrais>();

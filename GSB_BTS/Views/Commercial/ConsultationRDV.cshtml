@@ -20,7 +20,7 @@
                     <button type="submit" class="btn btn-warning" id="eraseRDV" data-toggle="modal"><span class="glyphicon glyphicon-trash"></span>Supprimer</button>
                 </td>
                 <td>
-                    <a type="button" class="btn btn-link" href="~/Commercial/Etablissement"><span class="glyphicon glyphicon-home"></span>Etablissements</a>
+                    <a type="button" class="btn btn-link" href="/Commercial/Etablissement"><span class="glyphicon glyphicon-home"></span>Etablissements</a>
                 </td>
             </tr>
             <tr>
@@ -66,11 +66,6 @@
     <table class="table table-hover">
         <thead>
             <tr>
-                <td>
-                    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-list-alt"></span>Fiche Frais</button>
-                </td>
-            </tr>
-            <tr>
                 <th class="modal_RDV_form">Fiche Frais</th>
                 <th class="modal_RDV_form">Praticien</th>
                 <th class="modal_RDV_form">Date RDV</th>
@@ -94,7 +89,7 @@
 
                     <tr>
                         <th class="modal_RDV_form">
-                            <button type="submit" class="btn btn-primary" data-target="Commercial/FicheFrais"><span class="glyphicon glyphicon-list-alt"></span></button>
+                            <a type="button" class="btn btn-primary" href="/Commercial/FicheFrais"><span class="glyphicon glyphicon-list-alt"></span></a>
                         </th>
                         <th class="modal_RDV_form">@passesRDVs[index].Praticien.Nom</th>
                         <th class="modal_RDV_form">@dateRDV</th>
