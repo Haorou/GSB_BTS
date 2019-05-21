@@ -43,7 +43,8 @@ namespace GSB.Models.DAO
             {
                 command = manager.CreateCommand();
                 command.CommandText = "SELECT * " +
-                                      "FROM etablissement";
+                                      "FROM etablissement " +
+                                      "WHERE nom NOT LIKE 'GSB%'";
 
                 // Lecture des résultats
                 dataReader = command.ExecuteReader();

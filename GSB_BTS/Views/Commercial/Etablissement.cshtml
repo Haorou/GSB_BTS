@@ -111,9 +111,9 @@
                             $('#liste-praticiens').append(html);
                         })
 
-                        $('#etablissement-nom-input').val(JsonResponse[0].Etablissement);
+                        $('#etablissement-nom-input').val(JsonResponse[0].Etablissement.Nom);
                         $('#etablissement-nom-input').attr('readonly', true);
-                        $('#example-adresse-input').val(JsonResponse[0].Adresse);
+                        $('#example-adresse-input').val(JsonResponse[0].Etablissement.Adresse);
                         $('#example-adresse-input').attr('readonly', true);
 
                     });
