@@ -209,8 +209,7 @@
 
                         $.ajax({ // Plusieurs éléments sont attendus pour une requête Ajax : TYPE / URL / DATA
                             type: "POST",
-                            url: "http://localhost:51921/Commercial/AjaxReader",
-                            // url: "~/Commercial/AjaxReader",
+                            url: "/Commercial/AjaxReader",
                             data: 'table=' + "rendez_vous" + '&id=' + id_rdv,
                         }).then(function (response) { // Then fonctionne uniquement après que la fonction C# est renvoyé quelque chose
                             var JsonResponse = JSON.parse(response);
@@ -220,12 +219,12 @@
 
                             var milli = JsonResponse.Date_rdv.replace(/\/Date\((-?\d+)\)\//, '$1');
                             var date = new Date(parseInt(milli));
-                            var dateAmericanFormat = date.toISOString();
 
-                            console.log(dateAmericanFormat.substring(0, 10));
+                            var dateAmericanFormat = date.toISOString();
+                            var timeLocalFormat = date.toLocaleTimeString();
 
                             $('#date_rdv').val(dateAmericanFormat.substring(0, 10));
-                            $('#time_rdv').val(dateAmericanFormat.substring(11, 16));
+                            $('#time_rdv').val(timeLocalFormat.substring(0, 5));
                             $('#motif_rdv').val(JsonResponse.Motif_rdv);
                             $('#indice_confiance').val(JsonResponse.Indice_confiance);
 
@@ -248,9 +247,10 @@
 
                     var date = new Date($.now());
                     var dateAmericanFormat = date.toISOString();
+                    var timeLocalFormat = date.toLocaleTimeString();
 
                     $('#date_rdv').val(dateAmericanFormat.substring(0, 10));
-                    $('#time_rdv').val(dateAmericanFormat.substring(11, 16));
+                    $('#time_rdv').val(timeLocalFormat.substring(0, 5));
                     $('#motif_rdv').val("Choisir un motif");
                     $('#indice_confiance').val(1);
                 }
@@ -273,8 +273,7 @@
                     try {
                         $.ajax({
                             type: "POST",
-                            url: "http://localhost:51921/Commercial/AjaxAddModifyRDV",
-                            // url: "~/Commercial/AjaxAddModifyRDV", 
+                            url: "/Commercial/AjaxAddModifyRDV",
                             data: "id=" + '' + "&date=" + date + "&time=" + time + "&motif=" + motif + "&indice=" + indice + "&id_employe=" + id_employe + "&id_praticien=" + id_praticien,
                         }).then(function () {
                             location.reload();
@@ -290,8 +289,7 @@
                     try {
                         $.ajax({
                             type: "POST",
-                            url: "http://localhost:51921/Commercial/AjaxAddModifyRDV",
-                            // url: "~/Commercial/AjaxAddRDV", 
+                            url: "/Commercial/AjaxAddModifyRDV",
                             data: "id=" + id_rdv + "&date=" + date + "&time=" + time + "&motif=" + motif + "&indice=" + indice + "&id_employe=" + id_employe + "&id_praticien=" + id_praticien,
                         }).then(function () {
                             location.reload();
