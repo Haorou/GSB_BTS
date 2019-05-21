@@ -40,9 +40,10 @@ namespace GSB.Controllers
 
         public ActionResult Etablissement()
         {
-            EtablissementDAO etablissementManager = new EtablissementDAO();
+            PraticienDAO praticienDAO = new PraticienDAO();
+            EtablissementDAO etablissementDAO = new EtablissementDAO();
 
-            List<Etablissement> mesEtablissement = etablissementManager.ReadAll();
+            List<Etablissement> mesEtablissement = etablissementDAO.ReadAll();
 
             ViewBag.MesEtablissement = mesEtablissement;
 
@@ -76,13 +77,8 @@ namespace GSB.Controllers
                 JavaScriptSerializer serializer = new JavaScriptSerializer();
                 response = serializer.Serialize(rendezVous);
             }
-            else if(table.Equals("etablissement"))
-            {
-                PraticienDAO praticienManager = new PraticienDAO();
-                List<Praticien> PraticiensInEtablissement = praticienManager.ReadAllPraticiensInEtablissement(id);
-                JavaScriptSerializer serializer = new JavaScriptSerializer();
-                response = serializer.Serialize(PraticiensInEtablissement);
-            }
+
+            Debug.WriteLine(response);
             return response;
         }
 
