@@ -12,6 +12,11 @@
         <thead>
             <tr>
                 <td>
+                    <button type="submit" class="btn btn-warning" name="retour" onclick="history.go(-1)">
+                        <span class="glyphicon glyphicon-backward"></span> Retour
+                    </button>
+                </td>
+                <td>
                     <button type="submit" class="btn btn-primary buttonModal" data-toggle="modal" data-target="#RDVModal" data-action="add"><span class="glyphicon glyphicon-plus-sign"></span>Ajouter</button>
                 </td>
                 <td>
@@ -19,9 +24,6 @@
                 </td>
                 <td>
                     <button type="submit" class="btn btn-warning" id="eraseRDV" data-toggle="modal"><span class="glyphicon glyphicon-trash"></span>Supprimer</button>
-                </td>
-                <td>
-                    <a type="button" class="btn btn-link" href="~/Commercial/Etablissement"><span class="glyphicon glyphicon-home"></span>Etablissements</a>
                 </td>
             </tr>
             <tr>
