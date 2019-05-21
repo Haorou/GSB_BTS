@@ -62,7 +62,7 @@
         </tbody>
     </table>
 
-    <p>Historique de vos Rendez-Vous</p>
+    <p<p>Historique de vos Rendez-Vous</p>
     <table class="table table-hover">
         <thead>
             <tr>
@@ -71,7 +71,7 @@
                 </td>
             </tr>
             <tr>
-                <th class="modal_RDV_form">Choix</th>
+                <th class="modal_RDV_form">Fiche Frais</th>
                 <th class="modal_RDV_form">Praticien</th>
                 <th class="modal_RDV_form">Date RDV</th>
                 <th class="modal_RDV_form">Heure RDV</th>
@@ -94,7 +94,7 @@
 
                     <tr>
                         <th class="modal_RDV_form">
-                            <input checked type="radio" aria-label="" name="rdv_passes_radio" value="@passesRDVs[index].Id_rdv" data-id="@passesRDVs[index].Id_rdv">
+                            <button type="submit" class="btn btn-primary" data-target="Commercial/FicheFrais"><span class="glyphicon glyphicon-list-alt"></span></button>
                         </th>
                         <th class="modal_RDV_form">@passesRDVs[index].Praticien.Nom</th>
                         <th class="modal_RDV_form">@dateRDV</th>
@@ -186,7 +186,6 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" id="send_RDV" class="btn btn-success" data-action="modify"><span class="glyphicon glyphicon-ok"></span>Envoyer</button>
-                    <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-list-alt"></span>Fiche Frais</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
                 </div>
             </div>
