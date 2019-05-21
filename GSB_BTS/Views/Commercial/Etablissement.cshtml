@@ -15,7 +15,7 @@
                     </button>
                 </td>
                 <td>
-                    <button type="submit" class="btn btn-success buttonModal" data-toggle="modal" data-target="" data-action="seeDoc"><span class="glyphicon glyphicon-edit"></span>Voir Praticiens</button>
+                    <button type="submit" class="btn btn-success buttonModal" data-toggle="modal" data-target="#EtablissementModal" data-action="seeDoc"><span class="glyphicon glyphicon-edit"></span>Voir Praticiens</button>
                 </td>
             </tr>
             <tr>
@@ -26,38 +26,103 @@
         </thead>
         <tbody>
             @{
-            var bat = ViewBag.MesEtablissement;
-            int tailleBat = bat.Count;
+                var bat = ViewBag.MesEtablissement;
+                int tailleBat = bat.Count;
 
 
 
-            for (int index = 0; index < tailleBat; index++)
-            {
-            <tr>
-                <th class="modal_RDV_form">
-                    <input checked type="radio" aria-label="" name="bat_radio" value="@bat[index].Etablissement" data-id="@bat[index].Etablissement">
-                </th>
-                <th class="modal_RDV_form">@bat[index].Etablissement</th>
-                <th class="modal_RDV_form">@bat[index].Adresse</th>
-            </tr>
-            }
+                for (int index = 0; index < tailleBat; index++)
+                {
+                    <tr>
+                        <th class="modal_RDV_form">
+                            <input checked type="radio" aria-label="" name="bat_radio" data-id="@bat[index].Id">
+                        </th>
+                        <th class="modal_RDV_form">@bat[index].Etablissement</th>
+                        <th class="modal_RDV_form">@bat[index].Adresse</th>
+                    </tr>
+                }
             }
         </tbody>
     </table>
+
+    <div class="modal fade" id="EtablissementModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Etablissement</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="container">
+                            <div class="row">
+                                <div class='col-sm-6' id="col-sm-6_RDV">
+                                    <div class="form-group" style="display:flex; flex-direction: row; align-items: center;">
+                                        <label for="etablissement-nom-input" class="col-2 col-form-label">Nom</label>
+                                        <input class="form-control" type="text" value="" id="etablissement-nom-input" required>
+                                        <label for="example-adresse-input" class="col-2 col-form-label">Adresse</label>
+                                        <input class="form-control" type="text" value="" id="example-adresse-input" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-10">
+                                <select class="custom-select" size="15" id="liste-praticiens" style="width:565px">
+                                </select>
+                            </div>
+                        </div>
+
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="add_praticien" class="btn btn-success" data-action="add"><span class="glyphicon glyphicon-ok"></span>Ajouter un praticien</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 </div>
+
+
+
     @section scripts {
         <script type="text/javascript">
-            $('#seeDoc').click(function () {
-                var id_etablissemenb = $("input[name='rdv_radio']:checked").data('id');
-                if (id_rdv != null) {
+            $('.buttonModal').click(function () {
+                var id_etablissement = $("input[name='bat_radio']:checked").data('id');
+
+                try {
                     $.ajax({
                         type: "POST",
-                        url: "/Commercial/AjaxDelete",
-                        data: "table=" + 'rendez_vous' + "&id=" + id_rdv,
-                    }).then(function () {
-                        location.reload();
+                        url: "/Commercial/AjaxReader",
+                        data: "table=" + 'etablissement' + "&id=" + id_etablissement,
+                    }).then(function (response) {
+                        var JsonResponse = JSON.parse(response);
+
+                        $('#liste-praticiens').empty();
+                        var html;
+
+                        $.each(JsonResponse, function (key, value) {
+                            html = "<option>" + value.Fonction + " " + value.Specialite + " - " + value.Nom + " " + value.Prenom + "</option>";
+                            $('#liste-praticiens').append(html);
+                        })
+
+                        $('#etablissement-nom-input').val(JsonResponse[0].Etablissement);
+                        $('#etablissement-nom-input').attr('readonly', true);
+                        $('#example-adresse-input').val(JsonResponse[0].Adresse);
+                        $('#example-adresse-input').attr('readonly', true);
+
                     });
+                } catch (ex) {
+                    alert("catch Ajax Error" + ex);
                 }
+            
             });
         </script>
     }
