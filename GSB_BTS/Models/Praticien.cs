@@ -18,8 +18,8 @@ namespace GSB.Models
         public Praticien() { }
 
         public Praticien(string fonction, string specialite, DateTime date_derniere_entrevue,
-            int id, string nom, string prenom, string adresse, string email, string telephone, string etablissement) :
-            base(id, nom, prenom, adresse, email, telephone, etablissement)
+            int id, string nom, string prenom, string email, string telephone, Etablissement etablissement) :
+            base(id, nom, prenom, email, telephone, etablissement)
         {
             this.Fonction = fonction;
             this.Specialite = specialite;

@@ -22,16 +22,15 @@ namespace GSB.Models.DAO
 
                 // Lecture des résultats
                 dataReader = command.ExecuteReader();
-
+                EtablissementDAO etablissementManager = new EtablissementDAO();
                 while (dataReader.Read())
                 {
                     employe = new Employe((int)dataReader["id_personne"],
                                             (string)dataReader["nom"],
                                             (string)dataReader["prenom"],
-                                            (string)dataReader["adresse"],
                                             (string)dataReader["email"],
                                             (string)dataReader["telephone"],
-                                            (string)dataReader["etablissement"],
+                                            etablissementManager.Read((int)dataReader["id_etablissement"]),
                                             (string)dataReader["login"],
                                             (string)dataReader["mot_de_passe"],
                                             (Employe.TypeEmploye)Enum.Parse(typeof(Employe.TypeEmploye), 
@@ -55,17 +54,16 @@ namespace GSB.Models.DAO
                                       "ON p.id_personne = e.id_employe";
                 // Lecture des résultats
                 dataReader = command.ExecuteReader();
-
+                EtablissementDAO etablissementManager = new EtablissementDAO();
                 liste_employes = new List<Employe>();
                 while (dataReader.Read())
                 {
                     liste_employes.Add(new Employe((int)dataReader["id_personne"],
                                     (string)dataReader["nom"],
                                     (string)dataReader["prenom"],
-                                    (string)dataReader["adresse"],
                                     (string)dataReader["email"],
                                     (string)dataReader["telephone"],
-                                    (string)dataReader["etablissement"],
+                                    etablissementManager.Read((int)dataReader["id_etablissement"]),
                                     (string)dataReader["login"],
                                     (string)dataReader["mot_de_passe"],
                                     (Employe.TypeEmploye)Enum.Parse(typeof(Employe.TypeEmploye),
@@ -145,6 +143,7 @@ namespace GSB.Models.DAO
                 command.Parameters.AddWithValue("@login", login);
                 command.Parameters.AddWithValue("@mot_de_passe", password);
 
+                EtablissementDAO etablissementManager = new EtablissementDAO();
                 // Lecture des résultats
                 dataReader = command.ExecuteReader();
 
@@ -153,10 +152,9 @@ namespace GSB.Models.DAO
                     employe = new Employe((int)dataReader["id_personne"],
                                             (string)dataReader["nom"],
                                             (string)dataReader["prenom"],
-                                            (string)dataReader["adresse"],
                                             (string)dataReader["email"],
                                             (string)dataReader["telephone"],
-                                            (string)dataReader["etablissement"],
+                                            etablissementManager.Read((int)dataReader["id_etablissement"]),
                                             (string)dataReader["login"],
                                             (string)dataReader["mot_de_passe"],
                                             (Employe.TypeEmploye)Enum.Parse(typeof(Employe.TypeEmploye),

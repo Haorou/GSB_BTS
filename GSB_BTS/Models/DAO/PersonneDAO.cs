@@ -10,6 +10,7 @@ namespace GSB.Models.DAO
             List<Personne> liste_personnes = new List<Personne>();
             if (OpenConnection())
             {
+                EtablissementDAO etablissementManager = new EtablissementDAO();
                 command = manager.CreateCommand();
                 command.CommandText = "SELECT * FROM personne";             
 
@@ -22,10 +23,9 @@ namespace GSB.Models.DAO
                     liste_personnes.Add(new Personne((int)dataReader["id_personne"],
                                 (string)dataReader["nom"],
                                 (string)dataReader["prenom"],
-                                (string)dataReader["adresse"],
                                 (string)dataReader["email"],
                                 (string)dataReader["telephone"],
-                                (string)dataReader["etablissement"]));
+                                etablissementManager.Read((int)dataReader["id_etablissement"])));
                 }
                 dataReader.Close();
                 CloseConnection();
@@ -40,14 +40,13 @@ namespace GSB.Models.DAO
             {
                 command = manager.CreateCommand();
                 command.CommandText = "UPDATE personne " +
-                                      "SET nom=@nom, prenom=@prenom, adresse=@adresse, email=@email, etablissement=@etablissement " +
+                                      "SET nom=@nom, prenom=@prenom, adresse=@adresse, email=@email, id_etablissement=@id_etablissement " +
                                       "WHERE personne.id_personne=@id";
                 command.Parameters.AddWithValue("@id", personne.Id);
                 command.Parameters.AddWithValue("@nom", personne.Nom);
                 command.Parameters.AddWithValue("@prenom", personne.Prenom);
-                command.Parameters.AddWithValue("@adresse", personne.Adresse);
                 command.Parameters.AddWithValue("@email", personne.Email);
-                command.Parameters.AddWithValue("@etablissement", personne.Etablissement);
+                command.Parameters.AddWithValue("@id_etablissement", personne.Etablissement.Id);
 
                 CloseConnection();
             }

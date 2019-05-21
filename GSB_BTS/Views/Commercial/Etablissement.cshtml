@@ -21,7 +21,7 @@
             <tr>
                 <td class="modal_RDV_form">Choix</td>
                 <td class="modal_RDV_form">Etablissement</td>
-                <td class="modal_RDV_form">Adresse RDV</td>
+                <td class="modal_RDV_form">Adresse</td>
             </tr>
         </thead>
         <tbody>
@@ -29,15 +29,13 @@
                 var bat = ViewBag.MesEtablissement;
                 int tailleBat = bat.Count;
 
-
-
                 for (int index = 0; index < tailleBat; index++)
                 {
                     <tr>
                         <th class="modal_RDV_form">
                             <input checked type="radio" aria-label="" name="bat_radio" data-id="@bat[index].Id">
                         </th>
-                        <th class="modal_RDV_form">@bat[index].Etablissement</th>
+                        <th class="modal_RDV_form">@bat[index].Nom</th>
                         <th class="modal_RDV_form">@bat[index].Adresse</th>
                     </tr>
                 }
@@ -49,7 +47,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Etablissement</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Gestion des praticiens</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
