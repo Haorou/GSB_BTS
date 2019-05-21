@@ -18,9 +18,9 @@ namespace GSB.Models
 
         public Employe() { }
 
-        public Employe(int id, string nom, string prenom, string adresse, string email,
-            string telephone, string etablissement, string login, string mot_de_passe, TypeEmploye type) :
-            base(id, nom, prenom, adresse, email, telephone, etablissement)
+        public Employe(int id, string nom, string prenom, string email,
+            string telephone, Etablissement etablissement, string login, string mot_de_passe, TypeEmploye type) :
+            base(id, nom, prenom, email, telephone, etablissement)
         {
             this.Login = login;
             this.Mot_de_passe = mot_de_passe;

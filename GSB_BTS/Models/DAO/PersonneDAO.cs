@@ -10,6 +10,7 @@ namespace GSB.Models.DAO
             List<Personne> liste_personnes = new List<Personne>();
             if (OpenConnection())
             {
+                EtablissementDAO etablissementManager = new EtablissementDAO();
                 command = manager.CreateCommand();
                 command.CommandText = "SELECT * FROM personne";             
 
@@ -22,10 +23,9 @@ namespace GSB.Models.DAO
                     liste_personnes.Add(new Personne((int)dataReader["id_personne"],
                                 (string)dataReader["nom"],
                                 (string)dataReader["prenom"],
-                                (string)dataReader["adresse"],
                                 (string)dataReader["email"],
                                 (string)dataReader["telephone"],
-                                (string)dataReader["etablissement"]));
+                                etablissementManager.Read((int)dataReader["id_etablissement"])));
                 }
                 dataReader.Close();
                 CloseConnection();
@@ -34,65 +34,19 @@ namespace GSB.Models.DAO
             return liste_personnes;
         }
 
-        /*public void Create(string nom, string prenom, string adresse, string email, string etablissement)
-        {
-            if (OpenConnection())
-            {
-                command = manager.CreateCommand();
-                command.CommandText = "INSERT INTO personne "+
-                                      "(nom, prenom, adresse, email, etablissement) "+
-                                      "VALUES (@nom, @prenom, @adresse, @email, @etablissement)";
-                command.Parameters.AddWithValue("@nom", nom);
-                command.Parameters.AddWithValue("@prenom", prenom);
-                command.Parameters.AddWithValue("@adresse", adresse);
-                command.Parameters.AddWithValue("@email", email);
-                command.Parameters.AddWithValue("@etablissement", etablissement);
-
-                CloseConnection();
-            }
-        }*/
-
-        public List<Personne> ReadEtablissement()
-        {
-            List<Personne> liste_etablissement = new List<Personne>();
-            Personne personne;
-            if (OpenConnection())
-            {
-                command = manager.CreateCommand();
-                command.CommandText = "SELECT distinct etablissement, adresse FROM personne p JOIN praticien prat ON prat.id_praticien = p.id_personne ";
-
-
-                // Lecture des résultats
-                dataReader = command.ExecuteReader();
-
-                while (dataReader.Read())
-                {
-                    personne = new Personne();
-                    personne.Etablissement = (string)dataReader["etablissement"];
-                    personne.Adresse = (string)dataReader["adresse"];
-                    liste_etablissement.Add(personne);
-                }
-                dataReader.Close();
-                CloseConnection();
-            }
-
-            return liste_etablissement;
-        }
-
         public void Update(Personne personne)
         {
             if (OpenConnection())
             {
                 command = manager.CreateCommand();
                 command.CommandText = "UPDATE personne " +
-                                      "SET nom=@nom, prenom=@prenom, adresse=@adresse, email=@email, etablissement=@etablissement " +
+                                      "SET nom=@nom, prenom=@prenom, adresse=@adresse, email=@email, id_etablissement=@id_etablissement " +
                                       "WHERE personne.id_personne=@id";
                 command.Parameters.AddWithValue("@id", personne.Id);
                 command.Parameters.AddWithValue("@nom", personne.Nom);
                 command.Parameters.AddWithValue("@prenom", personne.Prenom);
-                command.Parameters.AddWithValue("@adresse", personne.Adresse);
                 command.Parameters.AddWithValue("@email", personne.Email);
-                command.Parameters.AddWithValue("@etablissement", personne.Etablissement);
+                command.Parameters.AddWithValue("@id_etablissement", personne.Etablissement.Id);
 
                 CloseConnection();
             }

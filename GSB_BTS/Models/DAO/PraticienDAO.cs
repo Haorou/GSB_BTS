@@ -18,6 +18,7 @@ namespace GSB.Models.DAO
                     "WHERE personne.id_personne = @id";
                 command.Parameters.AddWithValue("@id", id);
 
+                EtablissementDAO etablissementManager = new EtablissementDAO();
                 // Lecture des résultats
                 dataReader = command.ExecuteReader();
                 
@@ -29,10 +30,9 @@ namespace GSB.Models.DAO
                                               (int)dataReader["id_praticien"],
                                               (string)dataReader["nom"],
                                               (string)dataReader["prenom"],
-                                              (string)dataReader["adresse"],
                                               (string)dataReader["email"],
                                               (string)dataReader["telephone"],
-                                              (string)dataReader["etablissement"]);
+                                               etablissementManager.Read((int)dataReader["id_etablissement"]));
                     Debug.WriteLine(praticien);
                 }
                 dataReader.Close();
@@ -49,8 +49,44 @@ namespace GSB.Models.DAO
                 command = manager.CreateCommand();
                 command.CommandText = "SELECT * " +
                     "FROM personne INNER JOIN praticien " +
-                    "ON praticien.id_praticien = personne.id_personne ";                  
-                
+                    "ON praticien.id_praticien = personne.id_personne ";
+
+                EtablissementDAO etablissementManager = new EtablissementDAO();
+                // Lecture des résultats
+                dataReader = command.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+                    mesPraticiens.Add(new Praticien((string)dataReader["fonction"],
+                                (string)dataReader["specialite"],
+                                (DateTime)dataReader["date_derniere_entrevue"],
+                                (int)dataReader["id_praticien"],
+                                (string)dataReader["nom"],
+                                (string)dataReader["prenom"],
+                                (string)dataReader["email"],
+                                (string)dataReader["telephone"],
+                                etablissementManager.Read((int)dataReader["id_etablissement"])));
+                }
+                dataReader.Close();
+                CloseConnection();
+            }
+
+            return mesPraticiens;
+        }
+
+        public List<Praticien> ReadAllPraticiensInEtablissement(int id_etablissement)
+        {
+            List<Praticien> mesPraticiens = new List<Praticien>();
+            if (OpenConnection())
+            {
+                EtablissementDAO etablissementManager = new EtablissementDAO();
+                command = manager.CreateCommand();
+                command.CommandText = "SELECT * " +
+                    "FROM personne INNER JOIN praticien " +
+                    "ON praticien.id_praticien = personne.id_personne " +
+                    "WHERE id_etablissement = @id_etablissement";
+
+                command.Parameters.AddWithValue("@id_etablissement", id_etablissement);
 
                 // Lecture des résultats
                 dataReader = command.ExecuteReader();
@@ -63,10 +99,9 @@ namespace GSB.Models.DAO
                                 (int)dataReader["id_praticien"],
                                 (string)dataReader["nom"],
                                 (string)dataReader["prenom"],
-                                (string)dataReader["adresse"],
                                 (string)dataReader["email"],
                                 (string)dataReader["telephone"],
-                                (string)dataReader["etablissement"]));
+                                etablissementManager.Read((int)dataReader["id_etablissement"])));
                 }
                 dataReader.Close();
                 CloseConnection();
