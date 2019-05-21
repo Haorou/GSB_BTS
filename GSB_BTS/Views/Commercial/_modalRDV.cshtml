@@ -1,0 +1,203 @@
+﻿<div class="modal fade" id="RDVModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Compte Rendu</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="container">
+                        <div class="row">
+                            <div class='col-sm-6' id="col-sm-6_RDV">
+                                <div class="form-group" style="display:flex; flex-direction: row; align-items: center;">
+                                    <label for="example-date-input" class="col-2 col-form-label">Date</label>
+                                    <input class="form-control" type="date" value="" id="date_rdv" required>
+                                    <label for="example-date-input" class="col-2 col-form-label">Heure</label>
+                                    <input class="form-control" type="time" value="" id="time_rdv" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="praticien" class="col-form-label">Praticien:</label>
+                        <select class="browser-default custom-select" id="select_praticien">
+                            <option value="Choisir un praticien" selected>Choisir un praticien</option>
+                            @{
+                                foreach (var praticien in ViewBag.MesPraticiens)
+                                {
+                                    <option value="@praticien.Id">@praticien.Nom @praticien.Prenom</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="text" class="col-form-label">Motif du RDV:</label>
+                        <select class="browser-default custom-select" id="motif_rdv">
+                            <option value="Choisir un motif" selected>Choisir un motif</option>
+                            <option value="0">reprise_contact</option>
+                            <option value="1">nouveaux_medicaments</option>
+                            <option value="2">suivi</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="text" class="col-form-label">Indice de confiance:</label>
+                        <select class="browser-default custom-select" id="indice_confiance">
+                            <option selected>Choisir un indice</option>
+                            @{
+                                for (int i = 1; i < 6; i++)
+                                {
+                                    <option value="@i">@i</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <div class='col-sm-8' id="col-sm-8_RDV">
+                            <div class="form-group">
+                                <label for="datetimepicker_rdv" class="col-form-label">Date bilan:</label>
+                                <div class='input-group date' id='datetimepicker2'>
+                                    <input type='date' class="form-control" id="datetimepicker_rdv" />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="send_RDV" class="btn btn-success" data-action="modify"><span class="glyphicon glyphicon-ok"></span>Envoyer</button>
+                <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-list-alt"></span>Fiche Frais</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+
+            $('.buttonModal').click(function () {
+                var action = $(this).data('action');
+                var modal = $('#RDVModal');
+                var id_rdv = $("input[name='rdv_radio']:checked").data('id');
+
+                if (action === 'modify' && id_rdv != null)
+                {
+                    $('#send_RDV').data('action', 'modify');
+                    try {
+
+                        $.ajax({
+                            type: "POST",
+                            url: "http://localhost:51921/Commercial/AjaxReader",
+                            // url: "~/Commercial/AjaxReader",
+                            data: 'table=' + "rendez_vous" + '&id=' + id_rdv,
+                        }).then(function (response) {
+                            var JsonResponse = JSON.parse(response);
+
+                            $("#select_praticien").val(JsonResponse.Praticien.Id);
+
+                            var milli = JsonResponse.Date_rdv.replace(/\/Date\((-?\d+)\)\//, '$1');
+                            var date = new Date(parseInt(milli));
+                            var dateAmericanFormat = date.toISOString();
+
+                            $('#date_rdv').val(dateAmericanFormat.substring(0, 10));
+                            $('#time_rdv').val(dateAmericanFormat.substring(11, 16));
+                            $('#motif_rdv').val(JsonResponse.Motif_rdv);
+                            $('#indice_confiance').val(JsonResponse.Indice_confiance);
+                        });
+                    }
+                    catch (ex) {
+                        alert("catch Ajax Error" + ex);
+                    }
+
+                    modal.find('.modal-title').text('Rendez-Vous n°' + id_rdv);
+                    modal.find('.modal-body input').val(id_rdv);
+                }
+                else if (action === 'add')
+                {
+                    $('#send_RDV').data('action', 'add');
+
+                    $("#select_praticien").val("Choisir un praticien");
+                    modal.find('.modal-title').text('Nouveau rendez-vous');
+
+                    var date = new Date($.now());
+                    var dateAmericanFormat = date.toISOString();
+
+                    $('#date_rdv').val(dateAmericanFormat.substring(0, 10));
+                    $('#time_rdv').val(dateAmericanFormat.substring(11, 16));
+                    $('#motif_rdv').val("Choisir un motif");
+                    $('#indice_confiance').val(1);
+                }
+
+            });
+
+
+            $('#send_RDV').click(function () {
+                var date = $('#date_rdv').val();
+                var time = $('#time_rdv').val();
+                var motif = $('#motif_rdv').val();
+                var indice = $('#indice_confiance').val();
+                var id_praticien = $('#select_praticien').val();
+                var id_employe = $('#employe').data('id');
+
+                var action = $('#send_RDV').data('action');
+
+                if (action == 'add')
+                {
+                    try {
+                        $.ajax({
+                            type: "POST",
+                            url: "http://localhost:51921/Commercial/AjaxAddModifyRDV",
+                            // url: "~/Commercial/AjaxAddModifyRDV",
+                            data: "id=" + '' + "&date=" + date + "&time=" + time + "&motif=" + motif + "&indice=" + indice + "&id_employe=" + id_employe + "&id_praticien=" + id_praticien,
+                        }).then(function () {
+                            location.reload();
+                        });
+                    }
+                    catch (ex) {
+                        alert("catch Ajax Error" + ex);
+                    }
+                }
+                else if (action == 'modify')
+                {
+                    var id_rdv = $("input[name='rdv_radio']:checked").data('id');
+                    try {
+                        $.ajax({
+                            type: "POST",
+                            url: "http://localhost:51921/Commercial/AjaxAddModifyRDV",
+                            // url: "~/Commercial/AjaxAddModifyRDV",
+                            data: "id=" + id_rdv + "&date=" + date + "&time=" + time + "&motif=" + motif + "&indice=" + indice + "&id_employe=" + id_employe + "&id_praticien=" + id_praticien,
+                        }).then(function () {
+                            location.reload();
+                        });
+                    }
+                    catch (ex) {
+                        alert("catch Ajax Error" + ex);
+                    }
+                }
+            });
+
+            $('#eraseRDV').click(function () {
+                var id_rdv = $("input[name='rdv_radio']:checked").data('id');
+                if (id_rdv != null) {
+                    $.ajax({
+                        type: "POST",
+                        url: "http://localhost:51921/Commercial/AjaxDelete",
+                        // url: "~/Commercial/AjaxDelete",
+                        data: "table=" + 'rendez_vous' + "&id=" + id_rdv,
+                    }).then(function () {
+                        location.reload();
+                    });
+                }
+            });
+
+    </script>
+}

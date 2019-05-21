@@ -20,10 +20,12 @@ namespace GSB.Controllers
             {
                 RendezVousDAO rendezVousDAO = new RendezVousDAO();
                 PraticienDAO praticienDAO = new PraticienDAO();
-                List<RendezVous> mesRDV = rendezVousDAO.ReadRDVFuturFromCommercialID(ViewBag.Employe.Id);
+                List<RendezVous> futursRDV = rendezVousDAO.ReadRDVFuturFromCommercialID(ViewBag.Employe.Id);
+                List<RendezVous> passesRDV = rendezVousDAO.ReadRDVHistoFromCommercialID(ViewBag.Employe.Id);
                 List<Praticien> mesPraticiens = praticienDAO.ReadAll();
 
-                ViewBag.MesRDV = mesRDV;
+                ViewBag.FutursRDV = futursRDV;
+                ViewBag.PassesRDV = passesRDV;
                 ViewBag.MesPraticiens = mesPraticiens;
 
                 ViewData["Message"] = "Page de Consultation de vos Rendez-vous.";
