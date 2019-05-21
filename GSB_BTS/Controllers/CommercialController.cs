@@ -50,6 +50,13 @@ namespace GSB.Controllers
             return View();
         }
 
+        public ActionResult Echantillon()
+        {
+            
+
+            return View();
+        }
+
         public ActionResult FicheFrais()
         {
 
