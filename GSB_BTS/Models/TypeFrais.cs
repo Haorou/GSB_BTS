@@ -9,16 +9,18 @@ namespace GSB.Models
     {
         public enum Frais { Hébergement, Restauration, Transport }
 
-        public Frais typeFraisCommercial { get => typeFraisCommercial; set => typeFraisCommercial = value; }
+        private Frais typeFraisCommercial;
+
+        public Frais TypeFraisCommercial { get => typeFraisCommercial; set => typeFraisCommercial = value; }
 
         public TypeFrais()
         {
 
         }
 
-        public TypeFrais(Frais type)
+        public TypeFrais(Frais typeFraisCommercial)
         {
-            this.typeFraisCommercial = type;
+            this.typeFraisCommercial = typeFraisCommercial;
         }
     }
 }

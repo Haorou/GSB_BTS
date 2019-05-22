@@ -16,6 +16,7 @@ namespace GSB.Models.DAO
                 ficheFrais = new FicheFrais();
                 LigneFraisDAO ligneFraisManager = new LigneFraisDAO();
                 EmployeDAO employeManager = new EmployeDAO();
+                RendezVousDAO rendezVousManager = new RendezVousDAO();
                 command = manager.CreateCommand();
                 command.CommandText = "SELECT * " +
                                       "FROM fiche_frais " +
@@ -30,6 +31,7 @@ namespace GSB.Models.DAO
                     ficheFrais.Id_fiche_frais = (int)dataReader["id_fiche_frais"];
                     ficheFrais.Comptable = dataReader["id_comptable"].ToString() == "" ? null : employeManager.Read((int)dataReader["id_comptable"]);
                     ficheFrais.Commercial_visiteur = employeManager.Read((int)dataReader["id_commercial_visiteur"]);
+                    ficheFrais.Rdv = rendezVousManager.Read((int)dataReader["id_rdv"]);
                     ficheFrais.Date_fiche = (DateTime)dataReader["date_fiche"];
                     ficheFrais.Date_modification = dataReader["date_modification"].ToString() == "" ? null : (DateTime?)dataReader["date_modification"];
                     ficheFrais.Liste_lignes_frais = ligneFraisManager.ReadAllFromFicheFrais(ficheFrais, isSerializeRead);
@@ -49,11 +51,12 @@ namespace GSB.Models.DAO
             {
                 command = manager.CreateCommand();
                 command.CommandText = "INSERT INTO fiche_frais " +
-                                      "(id_comptable, id_commercial_visiteur, date_fiche, date_modification) " +
-                                      "VALUES (@id_comptable, @id_commercial_visiteur,  @date_fiche, @date_modification)";
+                                      "(id_comptable, id_commercial_visiteur,id_rdv, date_fiche, date_modification) " +
+                                      "VALUES (@id_comptable, @id_commercial_visiteur, @id_rdv,  @date_fiche, @date_modification)";
 
                 command.Parameters.AddWithValue("@id_comptable", ficheFrais.Comptable);
                 command.Parameters.AddWithValue("@id_commercial_visiteur", ficheFrais.Commercial_visiteur);
+                command.Parameters.AddWithValue("@id_rdv", ficheFrais.Rdv);
                 command.Parameters.AddWithValue("@date_fiche", ficheFrais.Date_fiche);
                 command.Parameters.AddWithValue("@date_modification", ficheFrais.Date_modification);
 
@@ -71,6 +74,7 @@ namespace GSB.Models.DAO
             {
                 FicheFrais ficheFrais;
                 EmployeDAO employeManager = new EmployeDAO();
+                RendezVousDAO rendezVousManager = new RendezVousDAO();
                 LigneFraisDAO ligneFraisManager = new LigneFraisDAO();
                 command = manager.CreateCommand();
                 command.CommandText = "SELECT * FROM fiche_frais";
@@ -84,6 +88,7 @@ namespace GSB.Models.DAO
                     ficheFrais.Id_fiche_frais = (int)dataReader["id_fiche_frais"];
                     ficheFrais.Commercial_visiteur = employeManager.Read((int)dataReader["id_commercial_visiteur"]);
                     ficheFrais.Comptable = dataReader["id_comptable"].ToString() == "" ? null : employeManager.Read((int)dataReader["id_comptable"]);
+                    ficheFrais.Rdv = rendezVousManager.Read((int)dataReader["id_rdv"]);
                     ficheFrais.Date_fiche = (DateTime)dataReader["date_fiche"];
                     ficheFrais.Date_modification = dataReader["date_modification"].ToString() == "" ? null : (DateTime?)dataReader["date_modification"];
                     ficheFrais.Liste_lignes_frais = ligneFraisManager.ReadAllFromFicheFrais(ficheFrais, false);
@@ -197,7 +202,7 @@ namespace GSB.Models.DAO
             {
                 command = manager.CreateCommand();
                 command.CommandText = "UPDATE fiche_frais " +
-                                      "SET id_comptable=@id_comptable, id_commercial_visiteur=@id_commercial_visiteur, date_fiche=@date_fiche, date_modification=@date_modification " +
+                                      "SET id_comptable=@id_comptable, id_commercial_visiteur=@id_commercial_visiteur, id_rdv=@id_rdv,  date_fiche=@date_fiche, date_modification=@date_modification " +
                                       "WHERE fiche_frais.id_fiche_frais = @id_fiche_frais";
 
                 command.Parameters.AddWithValue("@id_fiche_frais", ficheFrais.Id_fiche_frais);

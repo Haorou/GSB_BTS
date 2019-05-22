@@ -72,7 +72,7 @@ namespace GSB.Controllers
             return View();
         }
 
-        public ActionResult FicheFrais()
+        public ActionResult FicheFrais(int id_rdv)
         {
 
             Employe employe = (Employe)Session["Employe"];
@@ -81,7 +81,7 @@ namespace GSB.Controllers
             LigneFraisDAO ligneFraisDAO = new LigneFraisDAO();
             TypeFraisDAO typeFraisDAO = new TypeFraisDAO();
 
-            List<LigneFrais> mesLignesFrais = ligneFraisDAO.ReadAllFromID(employe.Id);
+            List<LigneFrais> mesLignesFrais = ligneFraisDAO.ReadAllFromID(employe.Id, id_rdv);
             List<TypeFrais> mesTypesFrais = typeFraisDAO.ReadAll();
 
             ViewBag.MesFichesFrais = mesLignesFrais;
