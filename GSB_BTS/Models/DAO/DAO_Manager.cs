@@ -15,7 +15,7 @@ namespace GSB.Models.DAO
             if(manager == null)
             {
                 string host = "localhost";
-                int port = 3306;
+                int port = 3308;
                 string database = "gsb";
                 string username = "root";
                 string password = "";

@@ -18,7 +18,7 @@
                     <button type="submit" class="btn btn-success buttonModal" data-toggle="modal" data-target="#EtablissementPraticienModal" data-action="EtablissementPraticienModal"><span class="glyphicon glyphicon-edit"></span>Voir Praticiens</button>
                 </td>
                 <td>
-                    <button type="submit" class="btn btn-success buttonModal" data-toggle="modal" data-target="#AddPraticienModal" data-action="AddPraticienModal"><span class="glyphicon glyphicon-edit"></span>Ajouter Etablissement</button>
+                    <button type="submit" class="btn btn-success buttonModal" data-toggle="modal" data-target="#AddEtablissementModal" data-action="AddEtablissementModal"><span class="glyphicon glyphicon-edit"></span>Ajouter Etablissement</button>
                 </td>
             </tr>
             <tr>
@@ -83,7 +83,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="add_praticien" class="btn btn-success" data-action="add"><span class="glyphicon glyphicon-ok"></span>Ajouter un praticien</button>
+                    <button type="button" id="access_modal_praticien" class="btn btn-success"  data-toggle="modal" data-target="#AddPraticienModal" data-action="add"><span class="glyphicon glyphicon-ok"></span>Ajouter un praticien</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
                 </div>
             </div>
@@ -92,7 +92,7 @@
 
 <!--      MODAL  =  OFFRE LES INPUTS POUR AJOUTER UN ETABLISSEMENT     -->
 
-    <div class="modal fade" id="AddPraticienModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="AddEtablissementModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -108,9 +108,9 @@
                                 <div class='col-sm-6' id="col-sm-6_RDV">
                                     <div class="form-group" style="display:flex; flex-direction: row; align-items: center;">
                                         <label for="etablissement-add-nom-input" class="col-2 col-form-label">Nom</label>
-                                        <input class="form-control" type="text" value="" id="etablissement-add-nom-input" required>
+                                        <input class="form-control" type="text" value="" id="etablissement-nom-input" required>
                                         <label for="etablissement-add-adresse-input" class="col-2 col-form-label">Adresse</label>
-                                        <input class="form-control" type="text" value="" id="etablissement-add-adresse-input" required>
+                                        <input class="form-control" type="text" value="" id="etablissement-adresse-input" required>
                                     </div>
                                 </div>
                             </div>
@@ -124,7 +124,66 @@
             </div>
         </div>
     </div>
+
+<!--      MODAL  =  OFFRE LES INPUTS POUR AJOUTER UN PRATICIEN     -->
+
+    <div class="modal fade" id="AddPraticienModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Gestion des praticiens</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="container">
+
+                            <div class="row">
+                                <div class='col-sm-6' id="col-sm-6_RDV">
+                                    <div class="form-group" style="display:flex; flex-direction: row; align-items: center;">
+                                        <label for="fonction-praticien" class="col-2 col-form-label">Fonction</label>
+                                        <input class="form-control" type="text" value="" id="fonction-praticien" required>
+                                        <label for="specialite-praticien" class="col-2 col-form-label">Specialité</label>
+                                        <input class="form-control" type="text" value="" id="specialite-praticien" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class='col-sm-6' id="col-sm-6_RDV">
+                                    <div class="form-group" style="display:flex; flex-direction: row; align-items: center;">
+                                        <label for="nom-praticien" class="col-2 col-form-label">Nom</label>
+                                        <input class="form-control" type="text" value="" id="nom-praticien" required>
+                                        <label for="prenom-praticien" class="col-2 col-form-label">Prénom</label>
+                                        <input class="form-control" type="text" value="" id="prenom-praticien" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class='col-sm-6' id="col-sm-6_RDV">
+                                    <div class="form-group" style="display:flex; flex-direction: row; align-items: center;">
+                                        <label for="telephone-praticien" class="col-2 col-form-label">Téléphone</label>
+                                        <input class="form-control" type="text" value="" id="telephone-praticien" required>
+                                        <label for="email-praticien" class="col-2 col-form-label">Email</label>
+                                        <input class="form-control" type="text" value="" id="email-praticien" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="add_praticien" class="btn btn-success" data-action="add"><span class="glyphicon glyphicon-ok"></span>Ajouter le praticien</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
 
     @section scripts {
         <script type="text/javascript">
@@ -195,26 +254,14 @@
               
             });
 
-            $('add_praticien').click(function () {
-                var nom = $('#etablissement-add-nom-input').val();
-                var adresse = $('#example-add-adresse-input').val();
+            $('#access_modal_praticien').click(function () {
+                $('#EtablissementPraticienModal').modal('hide');
+            });
 
-                if (nom != "" && adresse != "") {
-                    try {
-                        $.ajax({
-                            type: "POST",
-                            url: "/Commercial/AjaxAddPraticien",
-                            data: "nom=" + nom + "&adresse=" + adresse,
-                        }).then(function () {
-                            location.reload();
-                        });
-                    } catch (ex) {
-                        alert("catch Ajax Error" + ex);
-                    }
-                }
-                
+            $('#add_praticien').click(function () {
 
             });
+            
 
         </script>
     }
