@@ -160,6 +160,24 @@ namespace GSB.Controllers
             }
         }
 
+        public void AjaxAddPraticienToEtablissement(string specialite, string fonction, string nom, string prenom, 
+                                                    string telephone, string email, int id_etablissement)
+        {
+            PraticienDAO praticienManager = new PraticienDAO();
+            EtablissementDAO etablissementManager = new EtablissementDAO();
+
+            Praticien praticien = new Praticien();
+            praticien.Specialite = specialite;
+            praticien.Fonction = fonction;
+            praticien.Nom = nom;
+            praticien.Prenom = prenom;
+            praticien.Telephone = telephone;
+            praticien.Email = email;
+            praticien.Etablissement = etablissementManager.Read(id_etablissement);
+
+            praticienManager.Create(praticien);
+        }
+
         public void AjaxAddEtablissement(string nom, string adresse)
         {
             Etablissement etablissement = new Etablissement();

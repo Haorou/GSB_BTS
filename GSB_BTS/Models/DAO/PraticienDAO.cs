@@ -117,9 +117,22 @@ namespace GSB.Models.DAO
             if (OpenConnection())
             {
                 command = manager.CreateCommand();
+
+                command.CommandText = "INSERT INTO personne " +
+                      "(nom, prenom, email, telephone, id_etablissement) " +
+                      "VALUES (@nom, @prenom, @email, @telephone, @id_etablissement)";
+                command.Parameters.AddWithValue("@nom", praticien.Nom);
+                command.Parameters.AddWithValue("@prenom", praticien.Prenom);
+                command.Parameters.AddWithValue("@email", praticien.Email);
+                command.Parameters.AddWithValue("@telephone", praticien.Telephone);
+                command.Parameters.AddWithValue("@id_etablissement", praticien.Etablissement.Id);
+
+                command.ExecuteNonQuery();
+
                 command.CommandText = "INSERT INTO praticien " +
-                                      "(fonction, specialite, date_derniere_entrevue) " +
-                                      "VALUES (@fonction, @specialite, @date_derniere_entrevue)";
+                                      "(id_praticien, fonction, specialite, date_derniere_entrevue) " +
+                                      "VALUES (@id_praticien, @fonction, @specialite, @date_derniere_entrevue)";
+                command.Parameters.AddWithValue("@id_praticien", command.LastInsertedId);
                 command.Parameters.AddWithValue("@fonction", praticien.Fonction);
                 command.Parameters.AddWithValue("@specialite", praticien.Specialite);
                 command.Parameters.AddWithValue("@date_derniere_entrevue", praticien.Date_derniere_entrevue);
