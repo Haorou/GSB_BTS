@@ -79,6 +79,7 @@ namespace GSB.Models.DAO
             List<Praticien> mesPraticiens = new List<Praticien>();
             if (OpenConnection())
             {
+                Praticien praticien;
                 EtablissementDAO etablissementManager = new EtablissementDAO();
                 command = manager.CreateCommand();
                 command.CommandText = "SELECT * " +
@@ -93,15 +94,16 @@ namespace GSB.Models.DAO
 
                 while (dataReader.Read())
                 {
-                    mesPraticiens.Add(new Praticien((string)dataReader["fonction"],
-                                (string)dataReader["specialite"],
-                                (DateTime)dataReader["date_derniere_entrevue"],
-                                (int)dataReader["id_praticien"],
-                                (string)dataReader["nom"],
-                                (string)dataReader["prenom"],
-                                (string)dataReader["email"],
-                                (string)dataReader["telephone"],
-                                etablissementManager.Read((int)dataReader["id_etablissement"])));
+                    praticien = new Praticien();
+                    praticien.Fonction = (string)dataReader["fonction"];
+                    praticien.Specialite = (string)dataReader["specialite"];
+                    praticien.Date_derniere_entrevue = (DateTime)dataReader["date_derniere_entrevue"];
+                    praticien.Id = (int)dataReader["id_praticien"];
+                    praticien.Nom = (string)dataReader["nom"];
+                    praticien.Prenom = (string)dataReader["prenom"];
+                    praticien.Email = (string)dataReader["email"];
+                    praticien.Telephone = (string)dataReader["telephone"];
+                    mesPraticiens.Add(praticien); 
                 }
                 dataReader.Close();
                 CloseConnection();

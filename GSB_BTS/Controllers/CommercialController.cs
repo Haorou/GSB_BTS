@@ -97,6 +97,7 @@ namespace GSB.Controllers
         public string AjaxReader(string table, int id)
         {
             string response = "";
+            string response1 = "";
             if (table.Equals("rendez_vous"))
             {
                 RendezVousDAO rendezVousManager = new RendezVousDAO();
@@ -107,12 +108,22 @@ namespace GSB.Controllers
             else if (table.Equals("etablissement"))
             {
                 PraticienDAO praticienManager = new PraticienDAO();
-                List<Praticien> PraticiensInEtablissement = praticienManager.ReadAllPraticiensInEtablissement(id);
+                EtablissementDAO etablissementManager = new EtablissementDAO();
+
+                Etablissement etablissement = etablissementManager.Read(id);
+
+                Praticien praticien = new Praticien();
+                praticien.Etablissement = etablissement;
+
+                List<Praticien> PraticiensInEtablissement = new List<Praticien>();
+                PraticiensInEtablissement.Add(praticien);
+                PraticiensInEtablissement.AddRange(praticienManager.ReadAllPraticiensInEtablissement(id));
+                
                 JavaScriptSerializer serializer = new JavaScriptSerializer();
                 response = serializer.Serialize(PraticiensInEtablissement);
+
             }
 
-            Debug.WriteLine(response);
             return response;
         }
 

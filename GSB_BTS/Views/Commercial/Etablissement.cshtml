@@ -46,6 +46,8 @@
         </tbody>
     </table>
 
+ <!--      MODAL  =  AFFICHE LES PRATICIENS RELATIFS A L'ETABLISSEMENT SELECTIONNE     -->
+
     <div class="modal fade" id="EtablissementPraticienModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -88,8 +90,7 @@
         </div>
     </div>
 
-
-
+<!--      MODAL  =  OFFRE LES INPUTS POUR AJOUTER UN ETABLISSEMENT     -->
 
     <div class="modal fade" id="AddPraticienModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -145,8 +146,11 @@
                             $('#liste-praticiens').empty();
 
                             $.each(JsonResponse, function (key, value) {
-                                html = "<option>" + value.Fonction + " " + value.Specialite + " - " + value.Nom + " " + value.Prenom + "</option>";
-                                $('#liste-praticiens').append(html);
+                                if (key != 0)
+                                {
+                                    html = "<option>" + value.Fonction + " " + value.Specialite + " - " + value.Nom + " " + value.Prenom + "</option>";
+                                    $('#liste-praticiens').append(html);
+                                }
                             })
 
                             $('#etablissement-nom-input').val(JsonResponse[0].Etablissement.Nom);
@@ -176,6 +180,19 @@
                         alert("catch Ajax Error" + ex);
                     }
                 }
+                  
+                if (nom == "") {
+                    $('#etablissement-add-nom-input').css('border-color', 'red');
+                } else {
+                    $('#etablissement-add-nom-input').css('border-color', '');
+                }
+
+                if (adresse == "") {
+                    $('#etablissement-add-adresse-input').css('border-color', 'red');
+                } else {
+                    $('#etablissement-add-adresse-input').css('border-color', '');
+                }
+              
             });
 
             $('add_praticien').click(function () {
@@ -195,6 +212,8 @@
                         alert("catch Ajax Error" + ex);
                     }
                 }
+                
+
             });
 
         </script>
