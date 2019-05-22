@@ -76,15 +76,20 @@ namespace GSB.Controllers
         {
 
             Employe employe = (Employe)Session["Employe"];
+
             PersonneDAO personneDAO = new PersonneDAO();
             LigneFraisDAO ligneFraisDAO = new LigneFraisDAO();
+            TypeFraisDAO typeFraisDAO = new TypeFraisDAO();
+
             List<LigneFrais> mesLignesFrais = ligneFraisDAO.ReadAllFromID(employe.Id);
+            List<TypeFrais> mesTypesFrais = typeFraisDAO.ReadAll();
 
             ViewBag.MesFichesFrais = mesLignesFrais;
+            ViewBag.MesTypesFrais = mesTypesFrais;
             ViewBag.Employe = (Employe)Session["Employe"];
 
-            Debug.WriteLine("==================================="+employe.Id);
-            Debug.WriteLine("==================================="+mesLignesFrais[0].Id + " === count === " + mesLignesFrais.Count);
+            //Debug.WriteLine("==================================="+employe.Id);
+            //Debug.WriteLine("==================================="+mesLignesFrais[0].Id + " === count === " + mesLignesFrais.Count);
 
             return View();
         }

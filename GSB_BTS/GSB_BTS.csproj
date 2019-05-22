@@ -142,6 +142,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\DAO\TypeFraisDAO.cs" />
     <Compile Include="Models\Etablissement.cs" />
     <Compile Include="Models\DAO\EtablissementDAO.cs" />
     <Compile Include="Models\DAO\DAO_Manager.cs" />
@@ -164,6 +165,7 @@
     <Compile Include="Models\Praticien.cs" />
     <Compile Include="Models\Produit.cs" />
     <Compile Include="Models\RendezVous.cs" />
+    <Compile Include="Models\TypeFrais.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
