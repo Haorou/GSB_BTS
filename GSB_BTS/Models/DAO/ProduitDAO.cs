@@ -29,8 +29,6 @@ namespace GSB.Models.DAO
                     produit.Nom = (string)dataReader["nom"];
                     produit.Notice = (string)dataReader["notice"];
                     produit.Libelle = (string)dataReader["libelle"];
-
-                    Debug.WriteLine(produit);
                 }
                 dataReader.Close();
                 CloseConnection();

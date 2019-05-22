@@ -74,7 +74,7 @@ namespace GSB.Models.DAO
                 while (dataReader.Read())
                 {
                     liste_echantillons_donnes.Add(new EchantillonDonne((int)dataReader["quantite"],
-                                                                        echantillonManager.Read((int)dataReader["id_echantillon"]),
+                                                                        echantillonManager.Read((int)dataReader["id_echantillon"], true),
                                                                         rendezVous));
                 }
                 dataReader.Close();

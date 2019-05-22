@@ -26,7 +26,7 @@ namespace GSB.Models.DAO
 
                 while (dataReader.Read())
                 {
-                    typeFrais = (TypeFrais.Frais)Enum.Parse(typeof(TypeFrais.Frais), (string)dataReader["type"]);
+                    typeFrais = new TypeFrais( (TypeFrais.Frais)Enum.Parse(typeof(TypeFrais.Frais), (string)dataReader["type"] ));
 
                     List_TypeFrais.Add(typeFrais);
 

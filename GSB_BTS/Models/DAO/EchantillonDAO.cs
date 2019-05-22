@@ -7,7 +7,7 @@ namespace GSB.Models.DAO
 {
     public class EchantillonDAO : DAO_Manager
     {
-        public Echantillon Read(int id_echantillon)
+        public Echantillon Read(int id_echantillon, bool isReadFromEchantillonDonnes)
         {
             Echantillon echantillon = new Echantillon();
 
@@ -33,7 +33,10 @@ namespace GSB.Models.DAO
                     echantillon.Libelle = (string)dataReader["libelle"];
                     echantillon.Concentration = (int)dataReader["concentration"];
                     echantillon.Produit = produitManager.Read((int)dataReader["id_produit"]);
-                    echantillon.Liste_echantillons_donnes = enchantillonDonneManager.ReadAllFromEchantillon(echantillon);
+                    if(!isReadFromEchantillonDonnes)
+                    {
+                        echantillon.Liste_echantillons_donnes = enchantillonDonneManager.ReadAllFromEchantillon(echantillon);
+                    }
                 }
                 dataReader.Close();
                 CloseConnection();
