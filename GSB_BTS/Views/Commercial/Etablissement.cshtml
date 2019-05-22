@@ -15,7 +15,10 @@
                     </button>
                 </td>
                 <td>
-                    <button type="submit" class="btn btn-success buttonModal" data-toggle="modal" data-target="#EtablissementModal" data-action="seeDoc"><span class="glyphicon glyphicon-edit"></span>Voir Praticiens</button>
+                    <button type="submit" class="btn btn-success buttonModal" data-toggle="modal" data-target="#EtablissementPraticienModal" data-action="EtablissementPraticienModal"><span class="glyphicon glyphicon-edit"></span>Voir Praticiens</button>
+                </td>
+                <td>
+                    <button type="submit" class="btn btn-success buttonModal" data-toggle="modal" data-target="#AddPraticienModal" data-action="AddPraticienModal"><span class="glyphicon glyphicon-edit"></span>Ajouter Etablissement</button>
                 </td>
             </tr>
             <tr>
@@ -43,7 +46,7 @@
         </tbody>
     </table>
 
-    <div class="modal fade" id="EtablissementModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="EtablissementPraticienModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -59,9 +62,9 @@
                                 <div class='col-sm-6' id="col-sm-6_RDV">
                                     <div class="form-group" style="display:flex; flex-direction: row; align-items: center;">
                                         <label for="etablissement-nom-input" class="col-2 col-form-label">Nom</label>
-                                        <input class="form-control" type="text" value="" id="etablissement-nom-input" required>
-                                        <label for="example-adresse-input" class="col-2 col-form-label">Adresse</label>
-                                        <input class="form-control" type="text" value="" id="example-adresse-input" required>
+                                        <input class="form-control" type="text" value="" id="etablissement-nom-input" required readonly>
+                                        <label for="etablissement-adresse-input" class="col-2 col-form-label">Adresse</label>
+                                        <input class="form-control" type="text" value="" id="etablissement-adresse-input" required readonly>
                                     </div>
                                 </div>
                             </div>
@@ -86,42 +89,114 @@
     </div>
 
 
+
+
+    <div class="modal fade" id="AddPraticienModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Gestion des établissements</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="container">
+                            <div class="row">
+                                <div class='col-sm-6' id="col-sm-6_RDV">
+                                    <div class="form-group" style="display:flex; flex-direction: row; align-items: center;">
+                                        <label for="etablissement-add-nom-input" class="col-2 col-form-label">Nom</label>
+                                        <input class="form-control" type="text" value="" id="etablissement-add-nom-input" required>
+                                        <label for="etablissement-add-adresse-input" class="col-2 col-form-label">Adresse</label>
+                                        <input class="form-control" type="text" value="" id="etablissement-add-adresse-input" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="add_etablissement" class="btn btn-success" data-action="add"><span class="glyphicon glyphicon-ok"></span>Ajouter etablissement</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
-
 
     @section scripts {
         <script type="text/javascript">
             $('.buttonModal').click(function () {
-                var id_etablissement = $("input[name='bat_radio']:checked").data('id');
+                var action = $(this).data('action');
 
-                try {
-                    $.ajax({
-                        type: "POST",
-                        url: "/Commercial/AjaxReader",
-                        data: "table=" + 'etablissement' + "&id=" + id_etablissement,
-                    }).then(function (response) {
-                        var JsonResponse = JSON.parse(response);
+                if (action == "EtablissementPraticienModal") {
+                    var id_etablissement = $("input[name='bat_radio']:checked").data('id');
 
-                        $('#liste-praticiens').empty();
-                        var html;
+                    try {
+                        $.ajax({
+                            type: "POST",
+                            url: "/Commercial/AjaxReader",
+                            data: "table=" + 'etablissement' + "&id=" + id_etablissement,
+                        }).then(function (response) {
+                            var JsonResponse = JSON.parse(response);
 
-                        $.each(JsonResponse, function (key, value) {
-                            html = "<option>" + value.Fonction + " " + value.Specialite + " - " + value.Nom + " " + value.Prenom + "</option>";
-                            $('#liste-praticiens').append(html);
-                        })
+                            var html;
+                            $('#liste-praticiens').empty();
 
-                        $('#etablissement-nom-input').val(JsonResponse[0].Etablissement.Nom);
-                        $('#etablissement-nom-input').attr('readonly', true);
-                        $('#example-adresse-input').val(JsonResponse[0].Etablissement.Adresse);
-                        $('#example-adresse-input').attr('readonly', true);
+                            $.each(JsonResponse, function (key, value) {
+                                html = "<option>" + value.Fonction + " " + value.Specialite + " - " + value.Nom + " " + value.Prenom + "</option>";
+                                $('#liste-praticiens').append(html);
+                            })
 
-                    });
-                } catch (ex) {
-                    alert("catch Ajax Error" + ex);
+                            $('#etablissement-nom-input').val(JsonResponse[0].Etablissement.Nom);
+                            $('#etablissement-adresse-input').val(JsonResponse[0].Etablissement.Adresse);
+                        });
+                    } catch (ex) {
+                        alert("catch Ajax Error" + ex);
+                    }
                 }
-            
             });
+
+
+            $('#add_etablissement').click(function () {
+                var nom = $('#etablissement-add-nom-input').val();
+                var adresse = $('#etablissement-add-adresse-input').val();
+
+                if (nom != "" && adresse != "") {
+                    try {
+                        $.ajax({
+                            type: "POST",
+                            url: "/Commercial/AjaxAddEtablissement",
+                            data: "nom=" + nom + "&adresse=" + adresse,
+                        }).then(function () {
+                            location.reload();
+                        });
+                    } catch (ex) {
+                        alert("catch Ajax Error" + ex);
+                    }
+                }
+            });
+
+            $('add_praticien').click(function () {
+                var nom = $('#etablissement-add-nom-input').val();
+                var adresse = $('#example-add-adresse-input').val();
+
+                if (nom != "" && adresse != "") {
+                    try {
+                        $.ajax({
+                            type: "POST",
+                            url: "/Commercial/AjaxAddPraticien",
+                            data: "nom=" + nom + "&adresse=" + adresse,
+                        }).then(function () {
+                            location.reload();
+                        });
+                    } catch (ex) {
+                        alert("catch Ajax Error" + ex);
+                    }
+                }
+            });
+
         </script>
     }
 }

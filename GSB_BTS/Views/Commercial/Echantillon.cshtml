@@ -7,8 +7,8 @@
 
 
 <div class="container">
-    @*<h2 id="employe" data-id="@ViewBag.Employe.Id">Bienvenue @ViewBag.Employe.Prenom @ViewBag.Employe.Nom</h2>*@
-    <p>Rendez-Vous</p>
+    <h2 id="employe" data-id="@ViewBag.Employe.Id">Bienvenue @ViewBag.Employe.Prenom @ViewBag.Employe.Nom</h2>
+    <p>Rendez-Vous selectionne</p>
     <table class="table table-hover">
         <thead>
             <tr>
@@ -24,9 +24,26 @@
           
         </tbody>
     </table>
-    <p>Liste echantillons donnees</p>
+    <h2>Liste echantillons donnees</h2>
+
     <table class="table table-hover">
         <thead>
+            <tr>
+                <td>
+                    <button type="submit" class="btn btn-warning" name="retour" onclick="history.go(-1)">
+                        <span class="glyphicon glyphicon-backward"></span> Retour
+                    </button>
+                </td>
+                <td>
+                    <button type="submit" class="btn btn-primary buttonModal" data-toggle="modal" data-target="#RDVModal" data-action="add"><span class="glyphicon glyphicon-plus-sign"></span>Ajouter</button>
+                </td>
+                <td>
+                    <button type="submit" class="btn btn-success buttonModal" data-toggle="modal" data-target="#RDVModal" data-action="modify"><span class="glyphicon glyphicon-edit"></span>Modifier</button>
+                </td>
+                <td>
+                    <button type="submit" class="btn btn-warning" id="eraseRDV" data-toggle="modal"><span class="glyphicon glyphicon-trash"></span>Supprimer</button>
+                </td>
+            </tr>
             <tr>
                 <th class="modal_RDV_form">Famille</th>
                 <th class="modal_RDV_form">nom</th>
@@ -42,7 +59,7 @@
 
 
 
-    <div class="modal fade" id="RDVModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="EDModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">

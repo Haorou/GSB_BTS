@@ -40,19 +40,33 @@ namespace GSB.Controllers
 
         public ActionResult Etablissement()
         {
-            PraticienDAO praticienDAO = new PraticienDAO();
-            EtablissementDAO etablissementDAO = new EtablissementDAO();
+            ViewBag.Employe = (Employe)Session["Employe"];
 
-            List<Etablissement> mesEtablissement = etablissementDAO.ReadAll();
+            if (ViewBag.Employe != null)
+            {
+                EtablissementDAO etablissementDAO = new EtablissementDAO();
 
-            ViewBag.MesEtablissement = mesEtablissement;
+                List<Etablissement> mesEtablissement = etablissementDAO.ReadAll();
 
-            return View();
+                ViewBag.MesEtablissement = mesEtablissement;
+
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         public ActionResult Echantillon()
         {
-            
+            Employe employe = (Employe)Session["Employe"];
+            EchantillonDAO echantillonDAO = new EchantillonDAO();
+            ProduitDAO produitDAO = new ProduitDAO();
+
+            List<Produit> mesProduits = produitDAO.ReadAll();
+
+            ViewBag.Echantillon = mesProduits;
 
             return View();
         }
@@ -88,6 +102,13 @@ namespace GSB.Controllers
                 RendezVous rendezVous = rendezVousManager.Read(id);
                 JavaScriptSerializer serializer = new JavaScriptSerializer();
                 response = serializer.Serialize(rendezVous);
+            }
+            else if (table.Equals("etablissement"))
+            {
+                PraticienDAO praticienManager = new PraticienDAO();
+                List<Praticien> PraticiensInEtablissement = praticienManager.ReadAllPraticiensInEtablissement(id);
+                JavaScriptSerializer serializer = new JavaScriptSerializer();
+                response = serializer.Serialize(PraticiensInEtablissement);
             }
 
             Debug.WriteLine(response);
@@ -125,6 +146,16 @@ namespace GSB.Controllers
             {
                 rendezVousManager.Update(newRDV);
             }
+        }
+
+        public void AjaxAddEtablissement(string nom, string adresse)
+        {
+            Etablissement etablissement = new Etablissement();
+            EtablissementDAO etablissementManager = new EtablissementDAO();
+
+            etablissement.Nom = nom;
+            etablissement.Adresse = adresse;
+            etablissementManager.Create(etablissement);
         }
 
         public void AjaxDelete(string table, int id)
