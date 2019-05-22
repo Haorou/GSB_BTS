@@ -40,13 +40,22 @@ namespace GSB.Controllers
 
         public ActionResult Etablissement()
         {
-            EtablissementDAO etablissementDAO = new EtablissementDAO();
+            ViewBag.Employe = (Employe)Session["Employe"];
 
-            List<Etablissement> mesEtablissement = etablissementDAO.ReadAll();
+            if (ViewBag.Employe != null)
+            {
+                EtablissementDAO etablissementDAO = new EtablissementDAO();
 
-            ViewBag.MesEtablissement = mesEtablissement;
+                List<Etablissement> mesEtablissement = etablissementDAO.ReadAll();
 
-            return View();
+                ViewBag.MesEtablissement = mesEtablissement;
+
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         public ActionResult Echantillon()
@@ -132,6 +141,16 @@ namespace GSB.Controllers
             {
                 rendezVousManager.Update(newRDV);
             }
+        }
+
+        public void AjaxAddEtablissement(string nom, string adresse)
+        {
+            Etablissement etablissement = new Etablissement();
+            EtablissementDAO etablissementManager = new EtablissementDAO();
+
+            etablissement.Nom = nom;
+            etablissement.Adresse = adresse;
+            etablissementManager.Create(etablissement);
         }
 
         public void AjaxDelete(string table, int id)
