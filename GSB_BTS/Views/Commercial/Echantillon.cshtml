@@ -8,11 +8,11 @@
 
 <div class="container">
     <h2 id="employe" data-id="@ViewBag.Employe.Id">Bienvenue @ViewBag.Employe.Prenom @ViewBag.Employe.Nom</h2>
-    <p>Rendez-Vous selectionne</p>
+    <p>@ViewBag.Employe.Nom : vous avez donné :</p>
     <table class="table table-hover">
         <thead>
             <tr>
-                <th class="modal_RDV_form">Praticien</th>
+                <th class="modal_RDV_form">Praticien : @</th>
                 <th class="modal_RDV_form">Date RDV</th>
                 <th class="modal_RDV_form">Heure RDV</th>
                 <th class="modal_RDV_form">Date Bilan</th>
@@ -63,43 +63,25 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Compte Rendu</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Echantillons Données</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <form>
-                        <div class="container">
-                            <div class="row">
-                                <div class='col-sm-6' id="col-sm-6_RDV">
-                                    <div class="form-group" style="display:flex; flex-direction: row; align-items: center;">
-                                        <label for="example-date-input" class="col-2 col-form-label">Date</label>
-                                        <input class="form-control" type="date" value="" id="date_rdv" required>
-                                        <label for="example-date-input" class="col-2 col-form-label">Heure</label>
-                                        <input class="form-control" type="time" value="" id="time_rdv" required>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                         <div class="form-group">
-                            <label for="praticien" class="col-form-label">Praticien:</label>
-                            <select class="browser-default custom-select" id="select_praticien">
-                                <option value="Choisir un praticien" selected>Choisir un praticien</option>
-                              
+                            <label for="famille" class="col-form-label">Famille:</label>
+                            <select class="browser-default custom-select" id="select_famille">
+                                <option value="Choisir une famille" selected>Choisir une famille</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="text" class="col-form-label">Motif du RDV:</label>
-                            <select class="browser-default custom-select" id="motif_rdv">
-                                <option value="Choisir un motif" selected>Choisir un motif</option>
-                                <option value="0">reprise_contact</option>
-                                <option value="1">nouveaux_medicaments</option>
-                                <option value="2">suivi</option>
+                            <label for="text" class="col-form-label">Medicament:</label>
+                            <select class="browser-default custom-select" id="medicament">
+                                <option value="Choisir un medicament" selected>Choisir un medicament</option>
                             </select>
                         </div>
-
                         <div class="form-group">
                             <label for="text" class="col-form-label">Indice de confiance:</label>
                             <select class="browser-default custom-select" id="indice_confiance">

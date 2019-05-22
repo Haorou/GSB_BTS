@@ -61,12 +61,13 @@ namespace GSB.Controllers
         public ActionResult Echantillon()
         {
             Employe employe = (Employe)Session["Employe"];
-            EchantillonDAO echantillonDAO = new EchantillonDAO();
+            EchantillonDonneDAO echantillonDAO = new EchantillonDonneDAO();
             ProduitDAO produitDAO = new ProduitDAO();
 
             List<Produit> mesProduits = produitDAO.ReadAll();
 
             ViewBag.Echantillon = mesProduits;
+            ViewBag.Employe = (Employe)Session["Employe"];
 
             return View();
         }
