@@ -44,7 +44,7 @@ namespace GSB.Models.DAO
 
         }
 
-        public List<LigneFrais> ReadAllFromID(int id_employe)
+        public List<LigneFrais> ReadAllFromID(int id_employe, int id_rdv)
         {
             List<LigneFrais> list_fiche_frais = new List<LigneFrais>();
             if (OpenConnection())
@@ -55,8 +55,10 @@ namespace GSB.Models.DAO
                 command.CommandText = "SELECT * " +
                                         "FROM fiche_frais ff " +
                                         "JOIN ligne_frais lf on ff.id_fiche_frais = lf.id_fiche_frais " +
-                                        "WHERE ff.id_commercial_visiteur= @id_employe";
+                                        "WHERE ff.id_commercial_visiteur= @id_employe "+
+                                        "AND id_rdv=@id_rdv";
                 command.Parameters.AddWithValue("@id_employe", id_employe);
+                command.Parameters.AddWithValue("@id_rdv", id_rdv);
 
                 dataReader = command.ExecuteReader();
 

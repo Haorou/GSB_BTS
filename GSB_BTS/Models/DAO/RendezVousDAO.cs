@@ -21,7 +21,8 @@ namespace GSB.Models.DAO
                 command = manager.CreateCommand();
                 command.CommandText = "SELECT * " +
                                       "FROM rendez_vous " +
-                                      "WHERE id_rdv = @id";
+                                      "WHERE id_rdv = @id "+
+                                      "ORDER BY date_rdv ASC";
                 command.Parameters.AddWithValue("@id", id_rdv);
 
                 // Lecture des résultats
