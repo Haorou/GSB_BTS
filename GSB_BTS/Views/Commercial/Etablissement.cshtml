@@ -114,9 +114,9 @@
                                 <div class='col-sm-6' id="col-sm-6_RDV">
                                     <div class="form-group" style="display:flex; flex-direction: row; align-items: center;">
                                         <label for="etablissement-add-nom-input" class="col-2 col-form-label">Nom</label>
-                                        <input class="form-control" type="text" value="" id="etablissement-nom-input" required>
+                                        <input class="form-control" type="text" value="" id="etablissement-add-nom-input" required>
                                         <label for="etablissement-add-adresse-input" class="col-2 col-form-label">Adresse</label>
-                                        <input class="form-control" type="text" value="" id="etablissement-adresse-input" required>
+                                        <input class="form-control" type="text" value="" id="etablissement-add-adresse-input" required>
                                     </div>
                                 </div>
                             </div>
@@ -197,6 +197,7 @@
 
     @section scripts {
         <script type="text/javascript">
+
             $('.buttonModal').click(function () {
                 var action = $(this).data('action');
 
@@ -250,19 +251,9 @@
                         alert("catch Ajax Error" + ex);
                     }
                 }
-                  
-                if (nom == "") {
-                    $('#etablissement-add-nom-input').css('border-color', 'red');
-                } else {
-                    $('#etablissement-add-nom-input').css('border-color', '');
-                }
 
-                if (adresse == "") {
-                    $('#etablissement-add-adresse-input').css('border-color', 'red');
-                } else {
-                    $('#etablissement-add-adresse-input').css('border-color', '');
-                }
-              
+                checkIfEmpty('#etablissement-add-adresse-input');
+                checkIfEmpty('#etablissement-add-nom-input');              
             });
 
             $('#access_modal_praticien').click(function () {
@@ -295,9 +286,22 @@
                     }
                 }
 
-
+                checkIfEmpty('#fonction-praticien');
+                checkIfEmpty('#specialite-praticien');
+                checkIfEmpty('#nom-praticien');
+                checkIfEmpty('#prenom-praticien');
+                checkIfEmpty('#telephone-praticien');
+                checkIfEmpty('#email-praticien');
             });
-            
+
+        
+            function checkIfEmpty(input_id){
+                if ($(input_id).val() == "") {
+                    $(input_id).css('border-color', 'red');
+                } else {
+                    $(input_id).css('border-color', '');
+                }
+            }
 
         </script>
     }
