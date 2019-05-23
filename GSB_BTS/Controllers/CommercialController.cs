@@ -89,12 +89,13 @@ namespace GSB.Controllers
             ViewBag.Employe = (Employe)Session["Employe"];
 
             //Debug.WriteLine("==================================="+employe.Id);
-            //Debug.WriteLine("==================================="+mesLignesFrais[0].Id + " === count === " + mesLignesFrais.Count);
+            //Debug.WriteLine("==================================="+mesLignesFrais[0].Date_engagement + " === count === " + mesLignesFrais.Count);
+            Debug.WriteLine("==================================="+ mesTypesFrais[0].TypeFraisCommercial + " === count === " + mesLignesFrais.Count);
 
             return View();
         }
 
-        public string AjaxReader(string table, int id)
+        public string AjaxReader(string table, int id, int id_rdv)
         {
             string response = "";
             string response1 = "";
@@ -121,6 +122,18 @@ namespace GSB.Controllers
                 
                 JavaScriptSerializer serializer = new JavaScriptSerializer();
                 response = serializer.Serialize(PraticiensInEtablissement);
+            }
+
+            else if (table.Equals("ligne_frais"))
+            {
+                TypeFraisDAO typeFraisDAO = new TypeFraisDAO();
+                LigneFraisDAO ligneFraisDAO = new LigneFraisDAO();
+
+                List<TypeFrais> mesTypesFrais = typeFraisDAO.ReadAll();
+                List<LigneFrais> mesLigneFrais = ligneFraisDAO.ReadAllFromID(id, id_rdv);
+
+                ViewBag.MesTypesFrais = mesTypesFrais;
+                ViewBag.MeslignesFrais = mesLigneFrais;
 
             }
 
