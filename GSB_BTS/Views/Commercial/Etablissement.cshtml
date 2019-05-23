@@ -218,7 +218,7 @@
                             $.each(JsonResponse, function (key, value) {
                                 if (key != 0)
                                 {
-                                    html = "<option>" + value.Fonction + " " + value.Specialite + " - " +
+                                    html = "<option value="+ value.Id +">" + value.Fonction + " " + value.Specialite + " - " +
                                         value.Nom + " " + value.Prenom + "</option>";
                                     $('#liste-praticiens').append(html);
                                 }

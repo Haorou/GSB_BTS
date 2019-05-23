@@ -200,7 +200,7 @@
             $('.buttonModal').click(function () { // Bouton Ajouter / Modifier Click
                 var action = $(this).data('action'); // data-action="modify" OU "add"
                 var modal = $('#RDVModal'); // ModalHTML du RDV
-                var id_rdv = $("input[name='rdv_futurs_radio']:checked").data('id'); // Bouton radio -> date-id="X"
+                var id_rdv = $("input[name='rdv_futurs_radio']:checked").data('id'); // Bouton radio -> data-id="X"
 
                 if (action === 'modify')
                 {
