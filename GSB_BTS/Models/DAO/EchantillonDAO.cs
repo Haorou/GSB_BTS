@@ -70,7 +70,7 @@ namespace GSB.Models.DAO
                     echantillon.Id_echantillon = (int)dataReader["id_echantillon"];
                     echantillon.Quantite = (int)dataReader["quantite"];
                     echantillon.Libelle = (string)dataReader["libelle"];
-                    echantillon.Concentration = (int)dataReader["contentration"];
+                    echantillon.Concentration = (int)dataReader["concentration"];
                     echantillon.Liste_echantillons_donnes = echantillonDonneManager.ReadAllFromEchantillon(echantillon);
 
                     liste_echantillons.Add(echantillon);

@@ -21,5 +21,9 @@ namespace GSB.Models
             this.Echantillon = echantillon;
             this.RendezVous = rendez_vous;
         }
+
+        public EchantillonDonne() { }
+
     }
+
 }

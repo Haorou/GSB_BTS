@@ -54,28 +54,44 @@ namespace GSB.Models.DAO
             return liste_echantillons_donnes;
         }
 
-        public List<EchantillonDonne> ReadAllFromRendezVous(RendezVous rendezVous)
+        public List<EchantillonDonne> ReadAllFromRendezVous(int id_rdv)
         {
             List<EchantillonDonne> liste_echantillons_donnes = new List<EchantillonDonne>();
             if (OpenConnection())
             {
                 EchantillonDAO echantillonManager = new EchantillonDAO();
+                Produit produit = new Produit();
+                EchantillonDonneDAO echantillonDonne = new EchantillonDonneDAO();
+
+                
+
 
                 command = manager.CreateCommand();
-                command.CommandText = "SELECT * " +
-                                      "FROM echantillon_donne " +
-                                      "WHERE id_rdv = @id_rdv";
+                command.CommandText =   "SELECT distinct * " +
+                                        "FROM produit p " +
+                                        "join echantillon e on e.id_produit = p.id_produit " +
+                                        "join echantillon_donne ed on ed.id_echantillon = e.id_echantillon " +
+                                        "where id_rdv =@id_rdv ";
 
-                command.Parameters.AddWithValue("@id_rdv", rendezVous.Id_rdv);
+
+                command.Parameters.AddWithValue("@id_rdv", id_rdv);
 
                 // Lecture des résultats
                 dataReader = command.ExecuteReader();
 
                 while (dataReader.Read())
                 {
-                    liste_echantillons_donnes.Add(new EchantillonDonne((int)dataReader["quantite"],
+                    produit.Famille = (string)dataReader["famille"];
+                    produit.Nom = (string)dataReader["nom"];
+                    echantillonDonne. = (int)dataReader["quantité"];
+                     = (int)dataReader["concentration"];
+
+
+
+                    liste_echantillons_donnes.Add(new EchantillonDonne( 
+                                                                        (int)dataReader["quantite"],
                                                                         echantillonManager.Read((int)dataReader["id_echantillon"], true),
-                                                                        rendezVous));
+                                                                        id_rdv));
                 }
                 dataReader.Close();
                 CloseConnection();

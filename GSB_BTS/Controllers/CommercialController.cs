@@ -58,15 +58,15 @@ namespace GSB.Controllers
             }
         }
 
-        public ActionResult Echantillon()
+        public ActionResult Echantillon(int id_rdv)
         {
             Employe employe = (Employe)Session["Employe"];
             EchantillonDonneDAO echantillonDAO = new EchantillonDonneDAO();
             ProduitDAO produitDAO = new ProduitDAO();
 
-            List<Produit> mesProduits = produitDAO.ReadAll();
+            List<EchantillonDonne> mesEchantillons = EchantillonDonneDAO.ReadAllFromRendezVous(id_rdv);
 
-            ViewBag.Echantillon = mesProduits;
+            ViewBag.Echantillon = mesEchantillons;
             ViewBag.Employe = (Employe)Session["Employe"];
 
             return View();
