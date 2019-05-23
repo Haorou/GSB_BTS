@@ -59,11 +59,9 @@ namespace GSB.Models.DAO
             List<EchantillonDonne> liste_echantillons_donnes = new List<EchantillonDonne>();
             if (OpenConnection())
             {
-                EchantillonDAO echantillonManager = new EchantillonDAO();
+                EchantillonDonne echantillonManager = new EchantillonDonne();
                 Produit produit = new Produit();
-                EchantillonDonneDAO echantillonDonne = new EchantillonDonneDAO();
-
-                
+                Echantillon echantillon = new Echantillon();
 
 
                 command = manager.CreateCommand();
@@ -81,17 +79,14 @@ namespace GSB.Models.DAO
 
                 while (dataReader.Read())
                 {
-                    produit.Famille = (string)dataReader["famille"];
-                    produit.Nom = (string)dataReader["nom"];
-                    echantillonDonne. = (int)dataReader["quantité"];
-                     = (int)dataReader["concentration"];
+                    echantillonManager.Echantillon.Id_echantillon = (int)dataReader["id_echantillon"];
+                    echantillonManager.Produit.Famille = (string)dataReader["famille"];
+                    echantillonManager.Produit.Nom = (string)dataReader["nom"];
+                    echantillonManager.Quantite = (int)dataReader["quantite"];
+                    echantillonManager.Echantillon.Concentration = (int)dataReader["concentration"];
+                   
 
-
-
-                    liste_echantillons_donnes.Add(new EchantillonDonne( 
-                                                                        (int)dataReader["quantite"],
-                                                                        echantillonManager.Read((int)dataReader["id_echantillon"], true),
-                                                                        id_rdv));
+                    liste_echantillons_donnes.Add(echantillonManager);
                 }
                 dataReader.Close();
                 CloseConnection();

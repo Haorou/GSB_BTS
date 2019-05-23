@@ -64,7 +64,7 @@ namespace GSB.Controllers
             EchantillonDonneDAO echantillonDAO = new EchantillonDonneDAO();
             ProduitDAO produitDAO = new ProduitDAO();
 
-            List<EchantillonDonne> mesEchantillons = EchantillonDonneDAO.ReadAllFromRendezVous(id_rdv);
+            List<EchantillonDonne> mesEchantillons = new EchantillonDonneDAO.ReadAllFromRendezVous(id_rdv);
 
             ViewBag.Echantillon = mesEchantillons;
             ViewBag.Employe = (Employe)Session["Employe"];
