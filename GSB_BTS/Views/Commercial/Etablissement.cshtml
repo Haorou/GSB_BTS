@@ -15,10 +15,14 @@
                     </button>
                 </td>
                 <td>
-                    <button type="submit" class="btn btn-success buttonModal" data-toggle="modal" data-target="#EtablissementPraticienModal" data-action="EtablissementPraticienModal"><span class="glyphicon glyphicon-edit"></span>Voir Praticiens</button>
+                    <button type="submit" class="btn btn-success buttonModal" data-toggle="modal" data-target="#EtablissementPraticienModal" data-action="EtablissementPraticienModal">
+                        <span class="glyphicon glyphicon-edit"></span>Voir Praticiens
+                    </button>
                 </td>
                 <td>
-                    <button type="submit" class="btn btn-success buttonModal" data-toggle="modal" data-target="#AddEtablissementModal" data-action="AddEtablissementModal"><span class="glyphicon glyphicon-edit"></span>Ajouter Etablissement</button>
+                    <button type="submit" class="btn btn-success buttonModal" data-toggle="modal" data-target="#AddEtablissementModal" data-action="AddEtablissementModal">
+                        <span class="glyphicon glyphicon-edit"></span>Ajouter Etablissement
+                    </button>
                 </td>
             </tr>
             <tr>
@@ -83,7 +87,9 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="access_modal_praticien" class="btn btn-success"  data-toggle="modal" data-target="#AddPraticienModal" data-action="add"><span class="glyphicon glyphicon-ok"></span>Ajouter un praticien</button>
+                    <button type="button" id="access_modal_praticien" class="btn btn-success"  data-toggle="modal" data-target="#AddPraticienModal" data-action="add">
+                        <span class="glyphicon glyphicon-ok"></span>Ajouter un praticien
+                    </button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
                 </div>
             </div>
@@ -108,9 +114,9 @@
                                 <div class='col-sm-6' id="col-sm-6_RDV">
                                     <div class="form-group" style="display:flex; flex-direction: row; align-items: center;">
                                         <label for="etablissement-add-nom-input" class="col-2 col-form-label">Nom</label>
-                                        <input class="form-control" type="text" value="" id="etablissement-nom-input" required>
+                                        <input class="form-control" type="text" value="" id="etablissement-add-nom-input" required>
                                         <label for="etablissement-add-adresse-input" class="col-2 col-form-label">Adresse</label>
-                                        <input class="form-control" type="text" value="" id="etablissement-adresse-input" required>
+                                        <input class="form-control" type="text" value="" id="etablissement-add-adresse-input" required>
                                     </div>
                                 </div>
                             </div>
@@ -118,7 +124,9 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="add_etablissement" class="btn btn-success" data-action="add"><span class="glyphicon glyphicon-ok"></span>Ajouter etablissement</button>
+                    <button type="button" id="add_etablissement" class="btn btn-success" data-action="add">
+                        <span class="glyphicon glyphicon-ok"></span>Ajouter etablissement
+                    </button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
                 </div>
             </div>
@@ -176,7 +184,9 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="add_praticien" class="btn btn-success" data-action="add"><span class="glyphicon glyphicon-ok"></span>Ajouter le praticien</button>
+                    <button type="button" id="add_praticien" class="btn btn-success" data-action="add">
+                        <span class="glyphicon glyphicon-ok"></span>Ajouter le praticien
+                    </button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
                 </div>
             </div>
@@ -187,6 +197,7 @@
 
     @section scripts {
         <script type="text/javascript">
+
             $('.buttonModal').click(function () {
                 var action = $(this).data('action');
 
@@ -207,7 +218,8 @@
                             $.each(JsonResponse, function (key, value) {
                                 if (key != 0)
                                 {
-                                    html = "<option>" + value.Fonction + " " + value.Specialite + " - " + value.Nom + " " + value.Prenom + "</option>";
+                                    html = "<option>" + value.Fonction + " " + value.Specialite + " - " +
+                                        value.Nom + " " + value.Prenom + "</option>";
                                     $('#liste-praticiens').append(html);
                                 }
                             })
@@ -239,19 +251,9 @@
                         alert("catch Ajax Error" + ex);
                     }
                 }
-                  
-                if (nom == "") {
-                    $('#etablissement-add-nom-input').css('border-color', 'red');
-                } else {
-                    $('#etablissement-add-nom-input').css('border-color', '');
-                }
 
-                if (adresse == "") {
-                    $('#etablissement-add-adresse-input').css('border-color', 'red');
-                } else {
-                    $('#etablissement-add-adresse-input').css('border-color', '');
-                }
-              
+                checkIfEmpty('#etablissement-add-adresse-input');
+                checkIfEmpty('#etablissement-add-nom-input');              
             });
 
             $('#access_modal_praticien').click(function () {
@@ -260,8 +262,46 @@
 
             $('#add_praticien').click(function () {
 
+                var fonction = $('#fonction-praticien').val();
+                var specialite = $('#specialite-praticien').val();
+                var nom = $('#nom-praticien').val();
+                var prenom = $('#prenom-praticien').val();
+                var telephone = $('#telephone-praticien').val();
+                var email = $('#email-praticien').val();
+                var id_etablissement = $("input[name='bat_radio']:checked").data('id');
+
+                if (fonction != "" && specialite != "" && nom != "" && prenom != "" &&
+                    telephone != "" && email != "" && id_etablissement != "") {
+                    try {
+                        $.ajax({
+                            type: "POST",
+                            url: "/Commercial/AjaxAddPraticienToEtablissement",
+                            data: "fonction=" + fonction + "&specialite=" + specialite + "&nom=" + nom + "&prenom=" +
+                                prenom + "&telephone=" + telephone + "&email=" + email + "&id_etablissement=" + id_etablissement,
+                        }).then(function () {
+                            location.reload();
+                        });
+                    } catch (ex) {
+                        alert("catch Ajax Error" + ex);
+                    }
+                }
+
+                checkIfEmpty('#fonction-praticien');
+                checkIfEmpty('#specialite-praticien');
+                checkIfEmpty('#nom-praticien');
+                checkIfEmpty('#prenom-praticien');
+                checkIfEmpty('#telephone-praticien');
+                checkIfEmpty('#email-praticien');
             });
-            
+
+        
+            function checkIfEmpty(input_id){
+                if ($(input_id).val() == "") {
+                    $(input_id).css('border-color', 'red');
+                } else {
+                    $(input_id).css('border-color', '');
+                }
+            }
 
         </script>
     }
