@@ -77,6 +77,21 @@ namespace GSB.Controllers
             return View();
         }
 
+        public ActionResult Produit()
+        {
+            Employe employe = (Employe)Session["Employe"];
+            ProduitDAO produitManager = new ProduitDAO();
+            List<Produit> listeProduit = new List<Produit>();
+            List<Produit> mesFamilles = produitManager.ReadFamille();
+            //List<Produit> mesNoms = produitManager.ReadNom(famille);
+
+            ViewBag.Famille = mesFamilles;
+            //ViewBag.Nom = mesNoms;
+            ViewBag.Employe = (Employe)Session["Employe"];
+            Debug.WriteLine("==================================="+mesFamilles);
+            return View();
+        }
+
         public ActionResult FicheFrais(int id_rdv)
         {
 

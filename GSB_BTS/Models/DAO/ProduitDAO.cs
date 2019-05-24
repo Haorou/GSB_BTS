@@ -136,7 +136,7 @@ namespace GSB.Models.DAO
             List<Produit> famille = new List<Produit>();
             if (OpenConnection())
             {
-                Produit produit;
+                Produit produit= null;
 
                 command = manager.CreateCommand();
                 command.CommandText = "SELECT distinct famille " +
@@ -158,7 +158,7 @@ namespace GSB.Models.DAO
             return famille;
         }
 
-        public List<Produit> ReadNom()
+        public List<Produit> ReadNom(string famille)
         {
             List<Produit> nom = new List<Produit>();
             if (OpenConnection())
@@ -167,7 +167,9 @@ namespace GSB.Models.DAO
 
                 command = manager.CreateCommand();
                 command.CommandText = "SELECT distinct nom " +
-                    "FROM produit";
+                    "FROM produit "+ 
+                    "WHERE famille=@famille";
+                command.Parameters.AddWithValue("@famille", famille);
 
                 // Lecture des résultats
                 dataReader = command.ExecuteReader();
@@ -175,7 +177,7 @@ namespace GSB.Models.DAO
                 while (dataReader.Read())
                 {
                     produit = new Produit();
-                    produit.Famille = (string)dataReader["famille"];
+                    produit.Nom = (string)dataReader["nom"];
 
                     nom.Add(produit);
                 }
