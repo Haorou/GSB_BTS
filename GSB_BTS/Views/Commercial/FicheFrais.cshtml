@@ -53,7 +53,7 @@
 
                         <tr>
                             <th class="modal_FF_form">
-                                <input checked type="radio" aria-label="" name="rdv_futurs_radio" value="@mesFichesFrais[index].FicheFrais.Id_fiche_frais" data-id="@mesFichesFrais[index].FicheFrais.Id_fiche_frais">
+                                <input checked type="radio" aria-label="" name="fichesFrais" value="@mesFichesFrais[index].FicheFrais.Id_fiche_frais" data-id="@mesFichesFrais[index].FicheFrais.Id_fiche_frais">
                             </th>
                             <th class="modal_FF_form">@dateFiche</th>
                             <th class="modal_FF_form">@dateModif</th>
@@ -237,12 +237,14 @@
                 }
             }
             else if (action == 'modify') {
-                var id_rdv = $("input[name='rdv_futurs_radio']:checked").data('id');
+                var id_rdv = $("input[name='fichesFrais']:checked").data('id');
                 try {
                     $.ajax({
                         type: "POST",
-                        url: "/Commercial/AjaxAddModifyRDV",
-                        data: "id=" + id_rdv + "&date=" + date + "&time=" + time + "&motif=" + motif + "&indice=" + indice + "&id_employe=" + id_employe + "&id_praticien=" + id_praticien,
+                        url: "/Commercial/AjaxAddModifyFF",
+                        data: "id=" + '' + "&id_fiche_frais=" + "" + "&date_engagement=" + date_engage + "&type_frais=" + type_frais +
+                            "&libelle=" + libelle + "&type_forfait=" + type_forfait + "&montant=" + montant + "&justificatif=" + justificatif +
+                            "&etat_ligne_frais=" + "en_cours",
                     }).then(function () {
                         location.reload();
                     });
@@ -254,7 +256,7 @@
         });
 
         $('#eraseRDV').click(function () {
-            var id_rdv = $("input[name='rdv_futurs_radio']:checked").data('id');
+            var id_rdv = $("input[name='fichesFrais']:checked").data('id');
             if (id_rdv != null) {
                 $.ajax({
                     type: "POST",
