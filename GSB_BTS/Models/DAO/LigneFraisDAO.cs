@@ -93,7 +93,7 @@ namespace GSB.Models.DAO
                                         "WHERE ff.id_commercial_visiteur= @id_employe "+
                                         "AND id_fiche_frais=@id_rdv";
                 command.Parameters.AddWithValue("@id_employe", id_employe);
-                command.Parameters.AddWithValue("@id_fiche_frais", id_rdv);
+                command.Parameters.AddWithValue("@id_rdv", id_rdv);
 
                 dataReader = command.ExecuteReader();
 

@@ -32,6 +32,7 @@ namespace GSB.Models.DAO
                     produit.Libelle = (string)dataReader["libelle"];
                     if(!isReadFromEchantillonDonne)
                     {
+                        Debug.WriteLine("   JE NE SUIS PAS LU ET C BIEN");
                         produit.Echantillons = echantillonManager.ReadAllFromProduit(produit);
                     }
                 }
