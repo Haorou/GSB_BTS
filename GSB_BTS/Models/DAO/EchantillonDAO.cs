@@ -36,7 +36,7 @@ namespace GSB.Models.DAO
                     echantillon.Produit = produitManager.Read((int)dataReader["id_produit"], isReadFromEchantillonDonnes);
                     if(!isReadFromEchantillonDonnes)
                     {
-                        Debug.WriteLine("   JE NE SUIS PAS LU ET C BIEN");
+                        //Debug.WriteLine("   JE NE SUIS PAS LU ET C BIEN");
                         echantillon.Liste_echantillons_donnes = enchantillonDonneManager.ReadAllFromEchantillon(echantillon);
                     }
                 }
