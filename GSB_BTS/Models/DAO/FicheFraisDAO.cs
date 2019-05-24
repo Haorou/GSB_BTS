@@ -31,7 +31,7 @@ namespace GSB.Models.DAO
                     ficheFrais.Id_fiche_frais = (int)dataReader["id_fiche_frais"];
                     ficheFrais.Comptable = dataReader["id_comptable"].ToString() == "" ? null : employeManager.Read((int)dataReader["id_comptable"]);
                     ficheFrais.Commercial_visiteur = employeManager.Read((int)dataReader["id_commercial_visiteur"]);
-                    ficheFrais.Rdv = rendezVousManager.Read((int)dataReader["id_rdv"]);
+                    ficheFrais.Rdv = rendezVousManager.Read((int)dataReader["id_rdv"], false);
                     ficheFrais.Date_fiche = (DateTime)dataReader["date_fiche"];
                     ficheFrais.Date_modification = dataReader["date_modification"].ToString() == "" ? null : (DateTime?)dataReader["date_modification"];
                     ficheFrais.Liste_lignes_frais = ligneFraisManager.ReadAllFromFicheFrais(ficheFrais, isSerializeRead);
@@ -88,7 +88,7 @@ namespace GSB.Models.DAO
                     ficheFrais.Id_fiche_frais = (int)dataReader["id_fiche_frais"];
                     ficheFrais.Commercial_visiteur = employeManager.Read((int)dataReader["id_commercial_visiteur"]);
                     ficheFrais.Comptable = dataReader["id_comptable"].ToString() == "" ? null : employeManager.Read((int)dataReader["id_comptable"]);
-                    ficheFrais.Rdv = rendezVousManager.Read((int)dataReader["id_rdv"]);
+                    ficheFrais.Rdv = rendezVousManager.Read((int)dataReader["id_rdv"], false);
                     ficheFrais.Date_fiche = (DateTime)dataReader["date_fiche"];
                     ficheFrais.Date_modification = dataReader["date_modification"].ToString() == "" ? null : (DateTime?)dataReader["date_modification"];
                     ficheFrais.Liste_lignes_frais = ligneFraisManager.ReadAllFromFicheFrais(ficheFrais, false);

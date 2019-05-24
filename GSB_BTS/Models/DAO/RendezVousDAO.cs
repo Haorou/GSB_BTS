@@ -8,7 +8,7 @@ namespace GSB.Models.DAO
 {
     public class RendezVousDAO : DAO_Manager
     {
-        public RendezVous Read(int id_rdv)
+        public RendezVous Read(int id_rdv, bool isReadFromEchantillonDonne)
         {
             RendezVous rendezVous = null;
             if (OpenConnection())
@@ -39,8 +39,11 @@ namespace GSB.Models.DAO
                     // Utilisation d'un Enum.Parse pour transformer un string en Enum
                     // Pour ce faire : (Type Enum)Enum.Parse(typeof(Type Enum), (string)variable);
                     rendezVous.Motif_rdv = (RendezVous.Rdv)Enum.Parse(typeof(RendezVous.Rdv), (string)dataReader["motif_rdv"]);
-                    rendezVous.Liste_echantillons_donnes = echantillonDonneManager.ReadAllFromRendezVous(rendezVous.Id_rdv);
-                    
+
+                    if(!isReadFromEchantillonDonne)
+                    {
+                        rendezVous.Liste_echantillons_donnes = echantillonDonneManager.ReadAllFromRendezVous(rendezVous.Id_rdv);
+                    }                    
                 }
 
                 dataReader.Close();

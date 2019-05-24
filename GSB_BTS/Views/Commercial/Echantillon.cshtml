@@ -22,22 +22,19 @@
         </thead>
         <tbody>
             @{
-                var passesRDV= ViewBag.PassesRDV ;
+                var passeRDV = ViewBag.RendezVous;
 
-                    var dateRDV = passesRDV.Date_rdv.ToShortDateString();
-                    var heureRDV = passesRDV.Date_rdv.ToShortTimeString();
-                    var dateBilan = passesRDV.Date_bilan.ToShortDateString();
+                var dateRDV = passeRDV.Date_rdv.ToShortDateString();
+                var heureRDV = passeRDV.Date_rdv.ToShortTimeString();
+                var dateBilan = passeRDV.Date_bilan.ToShortDateString();
 
-                    <tr>
-                        <th class="modal_RDV_form">
-                            <input checked type="radio" aria-label="" name="rdv_futurs_radio" value="/Commercial/Echantillon?id_rdv=@passesRDVs.Id_rdv" data-id="@passesRDVs.Id_rdv">
-                        </th>
-                        <th class="modal_RDV_form">@passesRDV.Praticien.Nom</th>
-                        <th class="modal_RDV_form">@dateRDV</th>
-                        <th class="modal_RDV_form">@heureRDV</th>
-                        <th class="modal_RDV_form">@dateBilan</th>
-                        <th class="modal_RDV_form">@passesRDV.Liste_echantillons_donnes.Count</th>
-                    </tr>
+                <tr>
+                    <th class="modal_RDV_form">@passeRDV.Praticien.Nom</th>
+                    <th class="modal_RDV_form">@dateRDV</th>
+                    <th class="modal_RDV_form">@heureRDV</th>
+                    <th class="modal_RDV_form">@dateBilan</th>
+                    <th class="modal_RDV_form">@passeRDV.Liste_echantillons_donnes.Count</th>
+                </tr>
             }
         </tbody>
     </table>
@@ -71,7 +68,7 @@
         </thead>
         <tbody>
             @{
-                var mesEchantillonDonne = ViewBag.mesEchantillonDonne;
+                var mesEchantillonDonne = ViewBag.Echantillon;
                 int tailleMesEchantillonDonne = mesEchantillonDonne.Count;
                 if (tailleMesEchantillonDonne != 0)
                 {
@@ -79,12 +76,12 @@
                     {
                         <tr>
                             <th class="modal_RDV_form">
-                                <input checked type="radio" aria-label="" name=" " value="@mesEchantillonDonne[index].FicheFrais.Id_fiche_frais" data-id="@mesEchantillonDonne[index].FicheFrais.Id_fiche_frais">
+                                <input checked type="radio" aria-label="" name=" " value="@mesEchantillonDonne[index].RendezVous.Id_rdv|@mesEchantillonDonne[index].Echantillon.Id_echantillon" data-id="@mesEchantillonDonne[index].RendezVous.Id_rdv|@mesEchantillonDonne[index].Echantillon.Id_echantillon">
                             </th>
-                            <th class="modal_RDV_form">@mesEchantillonDonne[index].Famille</th>
-                            <th class="modal_RDV_form">@mesEchantillonDonne[index].Nom</th>
+                            <th class="modal_RDV_form">@mesEchantillonDonne[index].Produit.Famille</th>
+                            <th class="modal_RDV_form">@mesEchantillonDonne[index].Produit.Nom</th>
                             <th class="modal_RDV_form">@mesEchantillonDonne[index].Quantite</th>
-                            <th class="modal_RDV_form">@mesEchantillonDonne[index].Concentration</th>
+                            <th class="modal_RDV_form">@mesEchantillonDonne[index].Echantillon.Concentration</th>
                         </tr>
                     }
 
@@ -116,6 +113,15 @@
                             <label for="famille" class="col-form-label">Famille:</label>
                             <select class="browser-default custom-select" id="select_famille">
                                 <option value="Choisir une famille" selected>Choisir une famille</option>
+                                @{
+
+                                    var mesTypeFrais = ViewBag.MesTypesFrais;
+                                    int tailleListTypeFrais = ViewBag.MesTypesFrais.Count;
+                                    foreach (var typeFrais in mesTypeFrais)
+                                    {
+                                        <option value="typeFrais">@typeFrais</option>
+                                    }
+                                }
                             </select>
                         </div>
                         <div class="form-group">
@@ -150,4 +156,4 @@
 </div>
 
 
-}
+
