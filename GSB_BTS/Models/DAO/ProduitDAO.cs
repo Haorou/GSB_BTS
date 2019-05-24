@@ -130,5 +130,59 @@ namespace GSB.Models.DAO
 
             return produits;
         }
+
+        public List<Produit> ReadFamille()
+        {
+            List<Produit> famille = new List<Produit>();
+            if (OpenConnection())
+            {
+                Produit produit;
+
+                command = manager.CreateCommand();
+                command.CommandText = "SELECT distinct famille " +
+                    "FROM produit";
+
+                // Lecture des résultats
+                dataReader = command.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+                    produit = new Produit();
+                    produit.Famille = (string)dataReader["famille"];
+
+                    famille.Add(produit);
+                }
+                dataReader.Close();
+                CloseConnection();
+            }
+            return famille;
+        }
+
+        public List<Produit> ReadNom()
+        {
+            List<Produit> nom = new List<Produit>();
+            if (OpenConnection())
+            {
+                Produit produit;
+
+                command = manager.CreateCommand();
+                command.CommandText = "SELECT distinct nom " +
+                    "FROM produit";
+
+                // Lecture des résultats
+                dataReader = command.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+                    produit = new Produit();
+                    produit.Famille = (string)dataReader["famille"];
+
+                    nom.Add(produit);
+                }
+                dataReader.Close();
+                CloseConnection();
+            }
+            return nom;
+        }
     }
 }
