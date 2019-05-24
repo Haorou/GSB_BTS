@@ -32,7 +32,7 @@ namespace GSB.Models.DAO
                     echantillon.Quantite = (int)dataReader["quantite"];
                     echantillon.Libelle = (string)dataReader["libelle"];
                     echantillon.Concentration = (int)dataReader["concentration"];
-                    echantillon.Produit = produitManager.Read((int)dataReader["id_produit"]);
+                    echantillon.Produit = produitManager.Read((int)dataReader["id_produit"], false);
                     if(!isReadFromEchantillonDonnes)
                     {
                         echantillon.Liste_echantillons_donnes = enchantillonDonneManager.ReadAllFromEchantillon(echantillon);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -77,7 +78,7 @@ namespace GSB.Models.DAO
 
                 // Lecture des résultats
                 dataReader = command.ExecuteReader();
-
+                Debug.WriteLine("ICI ");
                 while (dataReader.Read())
                 {
                     echantillonDonne.Echantillon = echantillonManager.Read((int)dataReader["id_echantillon"], true);

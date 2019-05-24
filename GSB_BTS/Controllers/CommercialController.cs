@@ -21,7 +21,11 @@ namespace GSB.Controllers
                 RendezVousDAO rendezVousDAO = new RendezVousDAO();
                 PraticienDAO praticienDAO = new PraticienDAO();
                 List<RendezVous> futursRDV = rendezVousDAO.ReadRDVFuturFromCommercialID(ViewBag.Employe.Id);
+
+                Debug.WriteLine("Debug Bug");
                 List<RendezVous> passesRDV = rendezVousDAO.ReadRDVHistoFromCommercialID(ViewBag.Employe.Id);
+                Debug.WriteLine("Fin Bug");
+
                 List<Praticien> mesPraticiens = praticienDAO.ReadAll();
 
                 ViewBag.FutursRDV = futursRDV;
@@ -78,6 +82,8 @@ namespace GSB.Controllers
 
             PersonneDAO personneDAO = new PersonneDAO();
             LigneFraisDAO ligneFraisDAO = new LigneFraisDAO();
+
+            Debug.WriteLine("===============> ID RDV : " + id_rdv);
 
             List<LigneFrais> mesLignesFrais = ligneFraisDAO.ReadAllFromID(employe.Id, id_rdv);
             List<LigneFrais.TypeFrais> mesTypesFrais = new List<LigneFrais.TypeFrais>();

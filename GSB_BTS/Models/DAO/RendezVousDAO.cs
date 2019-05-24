@@ -247,7 +247,7 @@ namespace GSB.Models.DAO
                 command.Parameters.AddWithValue("@id_commercial", id_commercial);
 
                 dataReader = command.ExecuteReader();
-
+                Debug.WriteLine("==== Je suis appellé une fois pour lire les RDV");
                 while (dataReader.Read())
                 {
                     rdv = new RendezVous();
