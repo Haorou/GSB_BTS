@@ -100,10 +100,11 @@ namespace GSB.Controllers
             }
             
 
-            ViewBag.MesFichesFrais = mesLignesFrais;
+            ViewBag.MesLignesFrais = mesLignesFrais;
             ViewBag.MesTypesFrais = mesTypesFrais;
             ViewBag.MesTypesForfaits = mesTypesForfaits;
             ViewBag.Employe = (Employe)Session["Employe"];
+            ViewBag.Id_rdv = id_rdv;
 
             //Debug.WriteLine("==================================="+employe.Id);
             //Debug.WriteLine("==================================="+mesLignesFrais[0].Date_engagement + " === count === " + mesLignesFrais.Count);
@@ -112,7 +113,7 @@ namespace GSB.Controllers
             return View();
         }
 
-        public string AjaxReader(string table, int id, int id_rdv)
+        public string AjaxReader(string table, int id)
         {
             string response = "";
             if (table.Equals("rendez_vous"))
@@ -139,21 +140,13 @@ namespace GSB.Controllers
                 JavaScriptSerializer serializer = new JavaScriptSerializer();
                 response = serializer.Serialize(PraticiensInEtablissement);
             }
-
             else if (table.Equals("ligne_frais"))
             {
                 LigneFraisDAO ligneFraisDAO = new LigneFraisDAO();
+                LigneFrais mesLigneFrais = ligneFraisDAO.Read(id);
 
-                List<LigneFrais.TypeFrais> mesTypesFrais = new List<LigneFrais.TypeFrais>();
-                foreach (LigneFrais.TypeFrais typeFrais in (LigneFrais.TypeFrais[]) Enum.GetValues(typeof(LigneFrais.TypeFrais)))
-                {
-                    mesTypesFrais.Add(typeFrais);
-                }
-                List<LigneFrais> mesLigneFrais = ligneFraisDAO.ReadAllFromID(id, id_rdv);
-
-                ViewBag.MesTypesFrais = mesTypesFrais;
-                ViewBag.MeslignesFrais = mesLigneFrais;
-
+                JavaScriptSerializer serializer = new JavaScriptSerializer();
+                response = serializer.Serialize(mesLigneFrais);
             }
 
             return response;
@@ -220,7 +213,7 @@ namespace GSB.Controllers
             etablissementManager.Create(etablissement);
         }
 
-        public void AjaxAddModifyFF(int? id_ligne_frais, int id_fiche_frais,  DateTime date_creation, string type_frais, string type_forfait, int montant, string libelle)
+        public void AjaxAddModifyFF(int? id_ligne_frais, int id_fiche_frais,  DateTime date_creation, string type_frais, string type_forfait, int montant, string libelle, int id_rdv, int id_employe)
         {
             LigneFraisDAO ligneFraisManager = new LigneFraisDAO();
             FicheFraisDAO ficheFraisManager = new FicheFraisDAO();
@@ -239,7 +232,7 @@ namespace GSB.Controllers
 
             if (id_ligne_frais == null) // ADD
             {
-                ligneFraisManager.Create(newLigneFrais);
+                ligneFraisManager.Create(id_employe, newLigneFrais, id_rdv);
             }
             else // MODIFY
             {

@@ -21,16 +21,18 @@ namespace GSB.Models.DAO
                 // Lecture des résultats
                 dataReader = command.ExecuteReader();
 
-                ligneFrais.Id = id_ligne_frais;
+                FicheFraisDAO ficheFraisDAO = new FicheFraisDAO();
+
                 while (dataReader.Read())
                 {
-                    ligneFrais.FicheFrais.Id_fiche_frais = (int)dataReader["id_fiche_frais"];
+                    ligneFrais.Id = (int)dataReader["id_ligne_frais"];
+                    ligneFrais.FicheFrais = ficheFraisDAO.Read((int)dataReader["id_fiche_frais"], false);
                     ligneFrais.Date_engagement = (DateTime)dataReader["date_engagement"];
                     ligneFrais.Frais = (LigneFrais.TypeFrais)Enum.Parse(typeof(LigneFrais.TypeFrais), (string)dataReader["type_frais"]);
                     ligneFrais.Forfait = (LigneFrais.TypeForfait)Enum.Parse(typeof(LigneFrais.TypeForfait), (string)dataReader["type_forfait"]);
                     ligneFrais.Libelle = (string)dataReader["libelle"];
                     ligneFrais.Montant = (int)dataReader["montant"];
-                    ligneFrais.EtatLigne = (LigneFrais.EtatLigneFrais)Enum.Parse(typeof(LigneFrais.EtatLigneFrais), (string)dataReader["etat_ligne_frait"]);
+                    ligneFrais.EtatLigne = (LigneFrais.EtatLigneFrais)Enum.Parse(typeof(LigneFrais.EtatLigneFrais), (string)dataReader["etat_ligne_frais"]);
                     // Utilisation d'un Enum.Parse pour transformer un string en Enum
                     // Pour ce faire : (Type Enum)Enum.Parse(typeof(Type Enum), (string)variable);
 
@@ -141,7 +143,7 @@ namespace GSB.Models.DAO
                 command = manager.CreateCommand();
                 command.CommandText = "UPDATE ligne_frais " +
                                       "SET id_fiche_frais=@id_fiche_frais, date_engagement=@date_engagement, type_frais=@type_frais, type_forfait=@type_forfait," +
-                                      " libelle=@libelle, montant=@montant, justificatif=@justificatif, etat_ligne_frais=@etat_ligne_frais" +
+                                      " libelle=@libelle, montant=@montant, etat_ligne_frais=@etat_ligne_frais" +
                                       "WHERE id_ligne_frais=@id";
                 command.Parameters.AddWithValue("@id", ligneFrais.Id);
                 command.Parameters.AddWithValue("@id_fiche_frais", ligneFrais.FicheFrais.Id_fiche_frais);
@@ -151,13 +153,12 @@ namespace GSB.Models.DAO
                 command.Parameters.AddWithValue("@libelle", ligneFrais.Libelle);
                 command.Parameters.AddWithValue("@montant", ligneFrais.Montant);
                 command.Parameters.AddWithValue("@etat_ligne_frais", ligneFrais.EtatLigne);
-                command.Parameters.AddWithValue("@justificatif", ligneFrais.Id);
 
                 CloseConnection();
             }
         }
 
-        public void Create(Employe employe, FicheFrais ficheFrais, LigneFrais ligneFrais, RendezVous rdv)
+        public void Create(int id_employe, LigneFrais ligneFrais, int id_rdv)
         {
             if (OpenConnection())
             {
@@ -166,18 +167,16 @@ namespace GSB.Models.DAO
                 command.CommandText = "INSERT INTO fiche_frais " +
                                       "(id_commercial, id_rdv, date_fiche) " +
                                       "VALUES (@id_commercial, @id_rdv, @date_fiche)";
-                command.Parameters.AddWithValue("@id_fiche_frais", command.LastInsertedId);
-                command.Parameters.AddWithValue("@id_commercial", employe.Id);
-                command.Parameters.AddWithValue("@id_rdv", rdv.Id_rdv);
+                command.Parameters.AddWithValue("@id_commercial", id_employe);
+                command.Parameters.AddWithValue("@id_rdv", id_rdv);
                 command.Parameters.AddWithValue("@date_fiche", DateTime.Now);
 
                 command.ExecuteNonQuery();
 
 
                 command.CommandText = "INSERT INTO ligne_frais " +
-                      "(id_fiche_frais, date_engagement, type_frais, type_forfait, libelle, montant, justificatif, etat_ligne_frais) " +
-                      "VALUES (@id_fiche_frais, @date_engagement, @type_frais, @type_forfait, @libelle, @montant, @justificatif, @etat_ligne_frais)";
-                command.Parameters.AddWithValue("@id", ligneFrais.Id);
+                      "(id_fiche_frais, date_engagement, type_frais, type_forfait, libelle, montant, etat_ligne_frais) " +
+                      "VALUES (@id_fiche_frais, @date_engagement, @type_frais, @type_forfait, @libelle, @montant, @etat_ligne_frais)";
                 command.Parameters.AddWithValue("@id_fiche_frais", ligneFrais.FicheFrais.Id_fiche_frais);
                 command.Parameters.AddWithValue("@date_engagement", ligneFrais.Date_engagement);
                 command.Parameters.AddWithValue("@type_frais", ligneFrais.Frais);
@@ -185,7 +184,6 @@ namespace GSB.Models.DAO
                 command.Parameters.AddWithValue("@libelle", ligneFrais.Libelle);
                 command.Parameters.AddWithValue("@montant", ligneFrais.Montant);
                 command.Parameters.AddWithValue("@etat_ligne_frais", ligneFrais.EtatLigne);
-                command.Parameters.AddWithValue("@justificatif", ligneFrais.Id);
 
                 command.ExecuteNonQuery();
 
