@@ -208,6 +208,12 @@ namespace GSB.Controllers
                 RendezVousDAO rendezVousManager = new RendezVousDAO();
                 rendezVousManager.Delete(rendezVousManager.Read(id));
             }
+
+            if(table.Equals("ligne_frais"))
+            {
+                LigneFraisDAO ligneFraisDAO = new LigneFraisDAO();
+                ligneFraisDAO.Delete(id);
+            }
         }
 
 

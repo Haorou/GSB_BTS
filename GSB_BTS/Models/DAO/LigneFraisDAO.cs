@@ -85,6 +85,19 @@ namespace GSB.Models.DAO
             return list_fiche_frais;
 
         }
+        public void Delete(int id)
+        {
+            if (OpenConnection())
+            {
+                command = manager.CreateCommand();
+                command.CommandText = "DELETE FROM ligne_frais " +
+                                      "WHERE id_ligne_frais= @id";
+                command.Parameters.AddWithValue("@id", id);
+
+                command.ExecuteNonQuery();
+                CloseConnection();
+            }
+        }
 
     }
 }
