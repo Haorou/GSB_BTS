@@ -120,6 +120,7 @@
                         <select class="browser-default custom-select" id="type_frais">
                             <option selected>Choisir un type de frais</option>
                             @{
+                               
                                 var mesTypeFrais = ViewBag.MesTypesFrais;
                                 int tailleListTypeFrais = ViewBag.MesTypesFrais.Count;
                                 foreach (var typeFrais in mesTypeFrais)

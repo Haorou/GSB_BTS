@@ -79,10 +79,13 @@ namespace GSB.Controllers
 
             PersonneDAO personneDAO = new PersonneDAO();
             LigneFraisDAO ligneFraisDAO = new LigneFraisDAO();
-            TypeFraisDAO typeFraisDAO = new TypeFraisDAO();
 
             List<LigneFrais> mesLignesFrais = ligneFraisDAO.ReadAllFromID(employe.Id, id_rdv);
-            List<TypeFrais> mesTypesFrais = typeFraisDAO.ReadAll();
+            List<LigneFrais.TypeFrais> mesTypesFrais = new List<LigneFrais.TypeFrais>();
+            foreach (LigneFrais.TypeFrais typeFrais in (LigneFrais.TypeFrais[])Enum.GetValues(typeof(LigneFrais.TypeFrais)))
+            {
+                mesTypesFrais.Add(typeFrais);
+            }
 
             ViewBag.MesFichesFrais = mesLignesFrais;
             ViewBag.MesTypesFrais = mesTypesFrais;
@@ -90,7 +93,7 @@ namespace GSB.Controllers
 
             //Debug.WriteLine("==================================="+employe.Id);
             //Debug.WriteLine("==================================="+mesLignesFrais[0].Date_engagement + " === count === " + mesLignesFrais.Count);
-            Debug.WriteLine("==================================="+ mesTypesFrais[0].TypeFraisCommercial + " === count === " + mesLignesFrais.Count);
+            Debug.WriteLine("==================================="+ mesTypesFrais[0].GetType() + " === count === " + mesLignesFrais.Count);
 
             return View();
         }
@@ -98,7 +101,6 @@ namespace GSB.Controllers
         public string AjaxReader(string table, int id, int id_rdv)
         {
             string response = "";
-            string response1 = "";
             if (table.Equals("rendez_vous"))
             {
                 RendezVousDAO rendezVousManager = new RendezVousDAO();
@@ -126,10 +128,13 @@ namespace GSB.Controllers
 
             else if (table.Equals("ligne_frais"))
             {
-                TypeFraisDAO typeFraisDAO = new TypeFraisDAO();
                 LigneFraisDAO ligneFraisDAO = new LigneFraisDAO();
 
-                List<TypeFrais> mesTypesFrais = typeFraisDAO.ReadAll();
+                List<LigneFrais.TypeFrais> mesTypesFrais = new List<LigneFrais.TypeFrais>();
+                foreach (LigneFrais.TypeFrais typeFrais in (LigneFrais.TypeFrais[]) Enum.GetValues(typeof(LigneFrais.TypeFrais)))
+                {
+                    mesTypesFrais.Add(typeFrais);
+                }
                 List<LigneFrais> mesLigneFrais = ligneFraisDAO.ReadAllFromID(id, id_rdv);
 
                 ViewBag.MesTypesFrais = mesTypesFrais;
@@ -148,7 +153,7 @@ namespace GSB.Controllers
 
             RendezVous newRDV = id == null ? new RendezVous() : rendezVousManager.Read((int)id);
 
-            Debug.WriteLine("Debug.Time = > " + time);
+            //Debug.WriteLine("Debug.Time = > " + time);
 
             newRDV.Date_rdv = new DateTime(Convert.ToInt32(date.Substring(0, 4)),
                                Convert.ToInt32(date.Substring(5, 2)),
@@ -201,13 +206,12 @@ namespace GSB.Controllers
             etablissementManager.Create(etablissement);
         }
 
-        public void AjaxAddModifyFF(int? id, string date, string time, string motif, int indice, int id_employe, int id_praticien)
+        public void AjaxAddModifyFF(int? id_fiche_frais, string date, string time, string motif, int indice, int id_employe, int id_praticien)
         {
-            RendezVousDAO rendezVousManager = new RendezVousDAO();
-            PraticienDAO praticienManager = new PraticienDAO();
-            EmployeDAO employeManager = new EmployeDAO();
+            LigneFraisDAO ligneFraisManager = new LigneFraisDAO();
+            FicheFraisDAO ficheFraisManager = new FicheFraisDAO();
 
-            RendezVous newRDV = id == null ? new RendezVous() : rendezVousManager.Read((int)id);
+            LigneFrais newligneFrais = id_fiche_frais == null ? new LigneFrais() : ligneFraisManager.Read((int)id_fiche_frais);
 
             Debug.WriteLine("Debug.Time = > " + time);
 

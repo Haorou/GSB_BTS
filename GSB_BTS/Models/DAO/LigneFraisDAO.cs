@@ -7,6 +7,41 @@ namespace GSB.Models.DAO
 {
     public class LigneFraisDAO : DAO_Manager
     {
+        public LigneFrais Read(int id_ligne_frais)
+        {
+            LigneFrais ligneFrais = new LigneFrais();
+            if (OpenConnection())
+            {
+                command = manager.CreateCommand();
+                command.CommandText = "SELECT * " +
+                                      "FROM ligne_frais " +
+                                      "WHERE id_ligne_frais = @id_ligne_frais";
+                command.Parameters.AddWithValue("@id_ligne_frais", id_ligne_frais);
+
+                // Lecture des résultats
+                dataReader = command.ExecuteReader();
+
+                ligneFrais.Id = id_ligne_frais;
+                while (dataReader.Read())
+                {
+                    ligneFrais.FicheFrais.Id_fiche_frais = (int)dataReader["id_fiche_frais"];
+                    ligneFrais.Date_engagement = (DateTime)dataReader["date_engagement"];
+                    ligneFrais.Frais = (LigneFrais.TypeFrais)Enum.Parse(typeof(LigneFrais.TypeFrais), (string)dataReader["type_frais"]);
+                    ligneFrais.Forfait = (LigneFrais.TypeForfait)Enum.Parse(typeof(LigneFrais.TypeForfait), (string)dataReader["type_forfait"]);
+                    ligneFrais.Libelle = (string)dataReader["libelle"];
+                    ligneFrais.Montant = (int)dataReader["montant"];
+                    ligneFrais.EtatLigne = (LigneFrais.EtatLigneFrais)Enum.Parse(typeof(LigneFrais.EtatLigneFrais), (string)dataReader["etat_ligne_frait"]);
+                    // Utilisation d'un Enum.Parse pour transformer un string en Enum
+                    // Pour ce faire : (Type Enum)Enum.Parse(typeof(Type Enum), (string)variable);
+
+                }
+
+                dataReader.Close();
+                CloseConnection();
+            }
+            return ligneFrais;
+        }
+
         public List<LigneFrais> ReadAllFromFicheFrais(FicheFrais ficheFrais, bool isSerializeRead)
         {
             List<LigneFrais> list_fiche_frais = new List<LigneFrais>();
