@@ -6,11 +6,12 @@ namespace GSB.Models.DAO
 {
     public class ProduitDAO : DAO_Manager
     {
-        public Produit Read(int id)
+        public Produit Read(int id, bool isReadFromEchantillonDonne)
         {
             Produit produit = new Produit();
             if (OpenConnection())
             {
+                EchantillonDAO echantillonManager = new EchantillonDAO();
 
                 command = manager.CreateCommand();
                 command.CommandText = "SELECT * " +
@@ -29,6 +30,10 @@ namespace GSB.Models.DAO
                     produit.Nom = (string)dataReader["nom"];
                     produit.Notice = (string)dataReader["notice"];
                     produit.Libelle = (string)dataReader["libelle"];
+                    if(!isReadFromEchantillonDonne)
+                    {
+                        produit.Echantillons = echantillonManager.ReadAllFromProduit(produit);
+                    }
                 }
                 dataReader.Close();
                 CloseConnection();
