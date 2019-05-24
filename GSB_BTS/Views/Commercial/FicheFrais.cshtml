@@ -6,7 +6,7 @@
 <h2>FicheFrais</h2>
 
 <div class="container">
-    <h2 id="employe" data-id="@ViewBag.Employe.Id">Fiches Frais de @ViewBag.Employe.Prenom @ViewBag.Employe.Nom</h2>
+    <h2 id="employe" data-id_rdv="@ViewBag.Id_rdv" data-id_employe="@ViewBag.Employe.Id">Fiches Frais de @ViewBag.Employe.Prenom @ViewBag.Employe.Nom</h2>
     <p>Consultation de vos Fiches frais</p>
     <table class="table table-hover">
         <thead>
@@ -40,28 +40,28 @@
         </thead>
         <tbody>
             @{
-                var mesFichesFrais = ViewBag.MesFichesFrais;
-                int tailleMesFichesFrais = mesFichesFrais.Count;
+                var MesLignesFrais = ViewBag.MesLignesFrais;
+                int tailleMesLignesFrais = MesLignesFrais.Count;
 
-                if (tailleMesFichesFrais != 0)
+                if (tailleMesLignesFrais != 0)
                 {
-                    for (int index = 0; index < tailleMesFichesFrais; index++)
+                    for (int index = 0; index < tailleMesLignesFrais; index++)
                     {
-                        var dateFiche = mesFichesFrais[index].FicheFrais.Date_fiche.ToShortDateString();
-                        var dateEngage = mesFichesFrais[index].Date_engagement.ToShortTimeString();
-                        var dateModif = mesFichesFrais[index].FicheFrais.Date_modification == null ? "" : mesFichesFrais[index].FicheFrais.Date_modification.ToShortDateString();
+                        var dateFiche = MesLignesFrais[index].FicheFrais.Date_fiche.ToShortDateString();
+                        var dateEngage = MesLignesFrais[index].Date_engagement.ToShortTimeString();
+                        var dateModif = MesLignesFrais[index].FicheFrais.Date_modification == null ? "" : MesLignesFrais[index].FicheFrais.Date_modification.ToShortDateString();
 
                         <tr>
                             <th class="modal_FF_form">
-                                <input checked type="radio" aria-label="" name="fichesFrais" value="@mesFichesFrais[index].FicheFrais.Id_fiche_frais" data-id="@mesFichesFrais[index].FicheFrais.Id_fiche_frais">
+                                <input checked type="radio" aria-label="" name="radio_ligneFrais" value="@MesLignesFrais[index].Id" data-id="@MesLignesFrais[index].Id">
                             </th>
                             <th class="modal_FF_form">@dateFiche</th>
                             <th class="modal_FF_form">@dateModif</th>
                             <th class="modal_FF_form">@dateEngage</th>
-                            <th class="modal_FF_form">@mesFichesFrais[index].Frais</th>
-                            <th class="modal_FF_form">@mesFichesFrais[index].Forfait</th>
-                            <th class="modal_FF_form">@mesFichesFrais[index].Libelle</th>
-                            <th class="modal_FF_form">@mesFichesFrais[index].Montant</th>
+                            <th class="modal_FF_form">@MesLignesFrais[index].Frais</th>
+                            <th class="modal_FF_form">@MesLignesFrais[index].Forfait</th>
+                            <th class="modal_FF_form">@MesLignesFrais[index].Libelle</th>
+                            <th class="modal_FF_form">@MesLignesFrais[index].Montant</th>
                         </tr>
                     }
 
@@ -159,7 +159,11 @@
         $('.buttonModal').click(function () { // Bouton Ajouter / Modifier Click
             var action = $(this).data('action'); // data-action="modify" OU "add"
             var modal = $('#FFModal'); // ModalHTML du RDV
-            var id_rdv = $(_GET['id_rdv']); // On récupère l'id qui est dans l'URL
+            var id_rdv = $('#employe').data('id_rdv'); // On récupère l'id qui est dans l'URL
+            var id_employe = $('#employe').data('id_employe');
+            var id_ligneFrais = $("input[name='radio_ligneFrais']:checked").data('id');
+
+            //console.log(id_ligneFrais);
 
             if (action === 'modify') {
                 $('#send_FF').data('action', 'modify'); // Permet de changer le rôle du bouton "Ajouter" au sein du modal
@@ -168,10 +172,10 @@
                     $.ajax({ // Plusieurs éléments sont attendus pour une requête Ajax : TYPE / URL / DATA
                         type: "POST",
                         url: "/Commercial/AjaxReader",
-                        data: 'table=' + "ligne_frais" + '&id=' + id_rdv,
+                        data: 'table=' + "ligne_frais" + '&id=' + id_ligneFrais,
                     }).then(function (response) { // Then fonctionne uniquement après que la fonction C# ait renvoyée quelque chose
                         var JsonResponse = JSON.parse(response);
-
+                        console.log(JsonResponse);
                         var milli = JsonResponse.Date_rdv.replace(/\/Date\((-?\d+)\)\//, '$1');
                         var date = new Date(parseInt(milli));
 
@@ -205,23 +209,28 @@
 
 
                 $("#type_forfait").val("Choisir un forfait");
+
                 $('#type_frais').val("Choisir un type de frais");
                 $('#date_creation').val(timeLocalFormat.substring(0, 5));
                 $('#montant').val(1);
                 $('#libelle').val(1);
+
             }
 
         });
 
 
         $('#send_RDV').click(function () {
+            var type_frais = $('#type_frais').val();
             var date_creation = $('#date_creation').val();
             var date_modif = $('#date_modif').val();
-            var date_engage = $('#date_engae').val();
             var type_forfait = $('#type_forfait').val();
-            var type_frais = $('#type_frais').val();
+           
             var montant = $('#montant').val();
             var libelle = $('#libelle').val();
+
+            var id_employe = $('#employe').data('id_employe');
+            var id_rdv = $('#employe').data('id_rdv');
 
             var action = $('#send_FF').data('action');
 
@@ -230,9 +239,9 @@
                     $.ajax({
                         type: "POST",
                         url: "/Commercial/AjaxAddModifyRDV",
-                        data: "id=" + '' + "&id_fiche_frais=" + "" + "&date_engagement=" + date_engage + "&type_frais=" + type_frais +
-                            "&libelle=" + libelle + "&type_forfait=" + type_forfait + "&montant=" + montant + "&justificatif=" + justificatif +
-                            "&etat_ligne_frais=" + "en_cours",
+                        data: "id=" + '' + "&id_fiche_frais=" + "" + "&date_engagement=" + "" + "&type_frais=" + type_frais +
+                            "&libelle=" + libelle + "&type_forfait=" + type_forfait + "&montant=" + montant + "&etat_ligne_frais=" + "en_cours"
+                            + "&id_rdv" + id_rdv + "&id_employe" + id_employe, 
                     }).then(function () {
                         location.reload();
                     });
