@@ -47,7 +47,7 @@ namespace GSB.Models.DAO
                 {
                     liste_echantillons_donnes.Add(new EchantillonDonne((int)dataReader["quantite"],
                                                                         echantillon,
-                                                                        rendezVousManager.Read((int)dataReader["id_rdv"]),
+                                                                        rendezVousManager.Read((int)dataReader["id_rdv"], false),
                                                                         produit));
                 }
                 dataReader.Close();
@@ -64,6 +64,7 @@ namespace GSB.Models.DAO
             {
                 EchantillonDonne echantillonDonne = new EchantillonDonne();
                 EchantillonDAO echantillonManager = new EchantillonDAO();
+                RendezVousDAO rendezVousManager = new RendezVousDAO();
                 ProduitDAO produitManager = new ProduitDAO();
 
                 command = manager.CreateCommand();
@@ -84,6 +85,7 @@ namespace GSB.Models.DAO
                     echantillonDonne.Echantillon = echantillonManager.Read((int)dataReader["id_echantillon"], true);
                     echantillonDonne.Produit = produitManager.Read((int)dataReader["id_produit"], true);
                     echantillonDonne.Quantite = (int)dataReader["quantite"];                 
+                    echantillonDonne.RendezVous = rendezVousManager.Read(id_rdv,true);
 
                     liste_echantillons_donnes.Add(echantillonDonne);
                 }

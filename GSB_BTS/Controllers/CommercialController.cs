@@ -66,10 +66,12 @@ namespace GSB.Controllers
         {
             Employe employe = (Employe)Session["Employe"];
             EchantillonDonneDAO echantillonDAO = new EchantillonDonneDAO();
-
+            RendezVousDAO rendezVousManager = new RendezVousDAO();
+            RendezVous rendezVous = rendezVousManager.Read(id_rdv, false);
             List<EchantillonDonne> mesEchantillons = echantillonDAO.ReadAllFromRendezVous(id_rdv);
 
             ViewBag.Echantillon = mesEchantillons;
+            ViewBag.RendezVous = rendezVous;
             ViewBag.Employe = (Employe)Session["Employe"];
 
             return View();
@@ -116,7 +118,7 @@ namespace GSB.Controllers
             if (table.Equals("rendez_vous"))
             {
                 RendezVousDAO rendezVousManager = new RendezVousDAO();
-                RendezVous rendezVous = rendezVousManager.Read(id);
+                RendezVous rendezVous = rendezVousManager.Read(id, false);
                 JavaScriptSerializer serializer = new JavaScriptSerializer();
                 response = serializer.Serialize(rendezVous);
             }
@@ -163,7 +165,7 @@ namespace GSB.Controllers
             PraticienDAO praticienManager = new PraticienDAO();
             EmployeDAO employeManager = new EmployeDAO();
 
-            RendezVous newRDV = id == null ? new RendezVous() : rendezVousManager.Read((int)id);
+            RendezVous newRDV = id == null ? new RendezVous() : rendezVousManager.Read((int)id,false);
 
             //Debug.WriteLine("Debug.Time = > " + time);
 
@@ -250,7 +252,7 @@ namespace GSB.Controllers
             if(table.Equals("rendez_vous"))
             {
                 RendezVousDAO rendezVousManager = new RendezVousDAO();
-                rendezVousManager.Delete(rendezVousManager.Read(id));
+                rendezVousManager.Delete(rendezVousManager.Read(id, false));
             }
 
             if(table.Equals("ligne_frais"))
