@@ -91,7 +91,7 @@ namespace GSB.Models.DAO
                                         "FROM fiche_frais ff " +
                                         "JOIN ligne_frais lf on ff.id_fiche_frais = lf.id_fiche_frais " +
                                         "WHERE ff.id_commercial_visiteur= @id_employe "+
-                                        "AND lf.id_fiche_frais=@id_rdv";
+                                        "AND ff.id_rdv=@id_rdv";
                 command.Parameters.AddWithValue("@id_employe", id_employe);
                 command.Parameters.AddWithValue("@id_rdv", id_rdv);
 
@@ -130,6 +130,66 @@ namespace GSB.Models.DAO
                 command.Parameters.AddWithValue("@id", id);
 
                 command.ExecuteNonQuery();
+                CloseConnection();
+            }
+        }
+
+        public void Update(LigneFrais ligneFrais)
+        {
+            if (OpenConnection())
+            {
+                command = manager.CreateCommand();
+                command.CommandText = "UPDATE ligne_frais " +
+                                      "SET id_fiche_frais=@id_fiche_frais, date_engagement=@date_engagement, type_frais=@type_frais, type_forfait=@type_forfait," +
+                                      " libelle=@libelle, montant=@montant, justificatif=@justificatif, etat_ligne_frais=@etat_ligne_frais" +
+                                      "WHERE id_ligne_frais=@id";
+                command.Parameters.AddWithValue("@id", ligneFrais.Id);
+                command.Parameters.AddWithValue("@id_fiche_frais", ligneFrais.FicheFrais.Id_fiche_frais);
+                command.Parameters.AddWithValue("@date_engagement", ligneFrais.Date_engagement);
+                command.Parameters.AddWithValue("@type_frais", ligneFrais.Frais);
+                command.Parameters.AddWithValue("@type_forfait", ligneFrais.Forfait);
+                command.Parameters.AddWithValue("@libelle", ligneFrais.Libelle);
+                command.Parameters.AddWithValue("@montant", ligneFrais.Montant);
+                command.Parameters.AddWithValue("@etat_ligne_frais", ligneFrais.EtatLigne);
+                command.Parameters.AddWithValue("@justificatif", ligneFrais.Id);
+
+                CloseConnection();
+            }
+        }
+
+        public void Create(Employe employe, FicheFrais ficheFrais, LigneFrais ligneFrais, RendezVous rdv)
+        {
+            if (OpenConnection())
+            {
+                command = manager.CreateCommand();
+
+                command.CommandText = "INSERT INTO fiche_frais " +
+                                      "(id_commercial, id_rdv, date_fiche) " +
+                                      "VALUES (@id_commercial, @id_rdv, @date_fiche)";
+                command.Parameters.AddWithValue("@id_fiche_frais", command.LastInsertedId);
+                command.Parameters.AddWithValue("@id_commercial", employe.Id);
+                command.Parameters.AddWithValue("@id_rdv", rdv.Id_rdv);
+                command.Parameters.AddWithValue("@date_fiche", DateTime.Now);
+
+                command.ExecuteNonQuery();
+
+
+                command.CommandText = "INSERT INTO ligne_frais " +
+                      "(id_fiche_frais, date_engagement, type_frais, type_forfait, libelle, montant, justificatif, etat_ligne_frais) " +
+                      "VALUES (@id_fiche_frais, @date_engagement, @type_frais, @type_forfait, @libelle, @montant, @justificatif, @etat_ligne_frais)";
+                command.Parameters.AddWithValue("@id", ligneFrais.Id);
+                command.Parameters.AddWithValue("@id_fiche_frais", ligneFrais.FicheFrais.Id_fiche_frais);
+                command.Parameters.AddWithValue("@date_engagement", ligneFrais.Date_engagement);
+                command.Parameters.AddWithValue("@type_frais", ligneFrais.Frais);
+                command.Parameters.AddWithValue("@type_forfait", ligneFrais.Forfait);
+                command.Parameters.AddWithValue("@libelle", ligneFrais.Libelle);
+                command.Parameters.AddWithValue("@montant", ligneFrais.Montant);
+                command.Parameters.AddWithValue("@etat_ligne_frais", ligneFrais.EtatLigne);
+                command.Parameters.AddWithValue("@justificatif", ligneFrais.Id);
+
+                command.ExecuteNonQuery();
+
+                
                 CloseConnection();
             }
         }

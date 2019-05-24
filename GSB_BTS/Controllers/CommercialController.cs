@@ -83,22 +83,29 @@ namespace GSB.Controllers
             PersonneDAO personneDAO = new PersonneDAO();
             LigneFraisDAO ligneFraisDAO = new LigneFraisDAO();
 
-            Debug.WriteLine("===============> ID RDV : " + id_rdv);
+            //Debug.WriteLine("===============> ID RDV : " + id_rdv);
 
             List<LigneFrais> mesLignesFrais = ligneFraisDAO.ReadAllFromID(employe.Id, id_rdv);
             List<LigneFrais.TypeFrais> mesTypesFrais = new List<LigneFrais.TypeFrais>();
+            List<LigneFrais.TypeForfait> mesTypesForfaits = new List<LigneFrais.TypeForfait>(); 
             foreach (LigneFrais.TypeFrais typeFrais in (LigneFrais.TypeFrais[])Enum.GetValues(typeof(LigneFrais.TypeFrais)))
             {
                 mesTypesFrais.Add(typeFrais);
             }
+            foreach (LigneFrais.TypeForfait typeForfait in (LigneFrais.TypeForfait[])Enum.GetValues(typeof(LigneFrais.TypeForfait)))
+            {
+                mesTypesForfaits.Add(typeForfait);
+            }
+            
 
             ViewBag.MesFichesFrais = mesLignesFrais;
             ViewBag.MesTypesFrais = mesTypesFrais;
+            ViewBag.MesTypesForfaits = mesTypesForfaits;
             ViewBag.Employe = (Employe)Session["Employe"];
 
             //Debug.WriteLine("==================================="+employe.Id);
             //Debug.WriteLine("==================================="+mesLignesFrais[0].Date_engagement + " === count === " + mesLignesFrais.Count);
-            Debug.WriteLine("==================================="+ mesTypesFrais[0].GetType() + " === count === " + mesLignesFrais.Count);
+            //Debug.WriteLine("==================================="+ mesTypesFrais[0].GetType() + " === count === " + mesLignesFrais.Count);
 
             return View();
         }
@@ -211,35 +218,30 @@ namespace GSB.Controllers
             etablissementManager.Create(etablissement);
         }
 
-        public void AjaxAddModifyFF(int? id_fiche_frais, string date, string time, string motif, int indice, int id_employe, int id_praticien)
+        public void AjaxAddModifyFF(int? id_ligne_frais, int id_fiche_frais,  DateTime date_creation, string type_frais, string type_forfait, int montant, string libelle)
         {
             LigneFraisDAO ligneFraisManager = new LigneFraisDAO();
             FicheFraisDAO ficheFraisManager = new FicheFraisDAO();
 
-            LigneFrais newligneFrais = id_fiche_frais == null ? new LigneFrais() : ligneFraisManager.Read((int)id_fiche_frais);
+            LigneFrais newLigneFrais = id_ligne_frais == null ? new LigneFrais() : ligneFraisManager.Read((int)id_ligne_frais);
 
-            Debug.WriteLine("Debug.Time = > " + time);
+            newLigneFrais.EtatLigne = LigneFrais.EtatLigneFrais.en_cours;
+            newLigneFrais.Forfait = (LigneFrais.TypeForfait)Enum.Parse(typeof(LigneFrais.TypeForfait), type_forfait);
+            newLigneFrais.Frais = (LigneFrais.TypeFrais)Enum.Parse(typeof(LigneFrais.TypeFrais), type_frais);
+            newLigneFrais.Montant = montant;
+            newLigneFrais.Libelle = libelle;
+            date_creation = DateTime.Now;
+            newLigneFrais.FicheFrais.Id_fiche_frais = id_fiche_frais;
 
-            // newRDV.Date_rdv = new DateTime(Convert.ToInt32(date.Substring(0, 4)),
-            // Convert.ToInt32(date.Substring(5, 2)),
-            // Convert.ToInt32(date.Substring(8)),
-            // Convert.ToInt32(time.Substring(0, 2)),
-            // Convert.ToInt32(time.Substring(3)),
-            // 00);
+            
 
-            // newRDV.Date_bilan = newRDV.Date_rdv.AddDays(7);
-            // newRDV.Indice_confiance = indice;
-            // newRDV.Motif_rdv = (RendezVous.Rdv)Enum.Parse(typeof(RendezVous.Rdv), motif);
-            // newRDV.Praticien = praticienManager.Read(id_praticien);
-            // newRDV.Employe = employeManager.Read(id_employe);
-
-            if (id_fiche_frais == null) // ADD
+            if (id_ligne_frais == null) // ADD
             {
-                // rendezVousManager.Create(newRDV);
+                ligneFraisManager.Create(newLigneFrais);
             }
             else // MODIFY
             {
-               // rendezVousManager.Update(newRDV);
+                ligneFraisManager.Update(newLigneFrais);
             }
         }
 
