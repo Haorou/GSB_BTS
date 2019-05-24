@@ -21,7 +21,11 @@ namespace GSB.Controllers
                 RendezVousDAO rendezVousDAO = new RendezVousDAO();
                 PraticienDAO praticienDAO = new PraticienDAO();
                 List<RendezVous> futursRDV = rendezVousDAO.ReadRDVFuturFromCommercialID(ViewBag.Employe.Id);
+
+                Debug.WriteLine("Debug Bug");
                 List<RendezVous> passesRDV = rendezVousDAO.ReadRDVHistoFromCommercialID(ViewBag.Employe.Id);
+                Debug.WriteLine("Fin Bug");
+
                 List<Praticien> mesPraticiens = praticienDAO.ReadAll();
 
                 ViewBag.FutursRDV = futursRDV;
@@ -58,17 +62,33 @@ namespace GSB.Controllers
             }
         }
 
-        public ActionResult Echantillon()
+        public ActionResult Echantillon(int id_rdv)
         {
             Employe employe = (Employe)Session["Employe"];
             EchantillonDonneDAO echantillonDAO = new EchantillonDonneDAO();
-            ProduitDAO produitDAO = new ProduitDAO();
+            RendezVousDAO rendezVousManager = new RendezVousDAO();
+            RendezVous rendezVous = rendezVousManager.Read(id_rdv, false);
+            List<EchantillonDonne> mesEchantillons = echantillonDAO.ReadAllFromRendezVous(id_rdv);
 
-            List<Produit> mesProduits = produitDAO.ReadAll();
-
-            ViewBag.Echantillon = mesProduits;
+            ViewBag.Echantillon = mesEchantillons;
+            ViewBag.RendezVous = rendezVous;
             ViewBag.Employe = (Employe)Session["Employe"];
 
+            return View();
+        }
+
+        public ActionResult Produit()
+        {
+            Employe employe = (Employe)Session["Employe"];
+            ProduitDAO produitManager = new ProduitDAO();
+            List<Produit> listeProduit = new List<Produit>();
+            List<Produit> mesFamilles = produitManager.ReadFamille();
+            //List<Produit> mesNoms = produitManager.ReadNom(famille);
+
+            ViewBag.Famille = mesFamilles;
+            //ViewBag.Nom = mesNoms;
+            ViewBag.Employe = (Employe)Session["Employe"];
+            Debug.WriteLine("==================================="+mesFamilles);
             return View();
         }
 
@@ -79,17 +99,31 @@ namespace GSB.Controllers
 
             PersonneDAO personneDAO = new PersonneDAO();
             LigneFraisDAO ligneFraisDAO = new LigneFraisDAO();
-            TypeFraisDAO typeFraisDAO = new TypeFraisDAO();
+
+            //Debug.WriteLine("===============> ID RDV : " + id_rdv);
 
             List<LigneFrais> mesLignesFrais = ligneFraisDAO.ReadAllFromID(employe.Id, id_rdv);
-            List<TypeFrais> mesTypesFrais = typeFraisDAO.ReadAll();
+            List<LigneFrais.TypeFrais> mesTypesFrais = new List<LigneFrais.TypeFrais>();
+            List<LigneFrais.TypeForfait> mesTypesForfaits = new List<LigneFrais.TypeForfait>(); 
+            foreach (LigneFrais.TypeFrais typeFrais in (LigneFrais.TypeFrais[])Enum.GetValues(typeof(LigneFrais.TypeFrais)))
+            {
+                mesTypesFrais.Add(typeFrais);
+            }
+            foreach (LigneFrais.TypeForfait typeForfait in (LigneFrais.TypeForfait[])Enum.GetValues(typeof(LigneFrais.TypeForfait)))
+            {
+                mesTypesForfaits.Add(typeForfait);
+            }
+            
 
-            ViewBag.MesFichesFrais = mesLignesFrais;
+            ViewBag.MesLignesFrais = mesLignesFrais;
             ViewBag.MesTypesFrais = mesTypesFrais;
+            ViewBag.MesTypesForfaits = mesTypesForfaits;
             ViewBag.Employe = (Employe)Session["Employe"];
+            ViewBag.Id_rdv = id_rdv;
 
             //Debug.WriteLine("==================================="+employe.Id);
-            //Debug.WriteLine("==================================="+mesLignesFrais[0].Id + " === count === " + mesLignesFrais.Count);
+            //Debug.WriteLine("==================================="+mesLignesFrais[0].Date_engagement + " === count === " + mesLignesFrais.Count);
+            //Debug.WriteLine("==================================="+ mesTypesFrais[0].GetType() + " === count === " + mesLignesFrais.Count);
 
             return View();
         }
@@ -97,11 +131,10 @@ namespace GSB.Controllers
         public string AjaxReader(string table, int id)
         {
             string response = "";
-            string response1 = "";
             if (table.Equals("rendez_vous"))
             {
                 RendezVousDAO rendezVousManager = new RendezVousDAO();
-                RendezVous rendezVous = rendezVousManager.Read(id);
+                RendezVous rendezVous = rendezVousManager.Read(id, false);
                 JavaScriptSerializer serializer = new JavaScriptSerializer();
                 response = serializer.Serialize(rendezVous);
             }
@@ -121,7 +154,14 @@ namespace GSB.Controllers
                 
                 JavaScriptSerializer serializer = new JavaScriptSerializer();
                 response = serializer.Serialize(PraticiensInEtablissement);
+            }
+            else if (table.Equals("ligne_frais"))
+            {
+                LigneFraisDAO ligneFraisDAO = new LigneFraisDAO();
+                LigneFrais mesLigneFrais = ligneFraisDAO.Read(id);
 
+                JavaScriptSerializer serializer = new JavaScriptSerializer();
+                response = serializer.Serialize(mesLigneFrais);
             }
 
             return response;
@@ -133,9 +173,9 @@ namespace GSB.Controllers
             PraticienDAO praticienManager = new PraticienDAO();
             EmployeDAO employeManager = new EmployeDAO();
 
-            RendezVous newRDV = id == null ? new RendezVous() : rendezVousManager.Read((int)id);
+            RendezVous newRDV = id == null ? new RendezVous() : rendezVousManager.Read((int)id,false);
 
-            Debug.WriteLine("Debug.Time = > " + time);
+            //Debug.WriteLine("Debug.Time = > " + time);
 
             newRDV.Date_rdv = new DateTime(Convert.ToInt32(date.Substring(0, 4)),
                                Convert.ToInt32(date.Substring(5, 2)),
@@ -188,12 +228,45 @@ namespace GSB.Controllers
             etablissementManager.Create(etablissement);
         }
 
+        public void AjaxAddModifyFF(int? id_ligne_frais, int id_fiche_frais,  DateTime date_creation, string type_frais, string type_forfait, int montant, string libelle, int id_rdv, int id_employe)
+        {
+            LigneFraisDAO ligneFraisManager = new LigneFraisDAO();
+            FicheFraisDAO ficheFraisManager = new FicheFraisDAO();
+
+            LigneFrais newLigneFrais = id_ligne_frais == null ? new LigneFrais() : ligneFraisManager.Read((int)id_ligne_frais);
+
+            newLigneFrais.EtatLigne = LigneFrais.EtatLigneFrais.en_cours;
+            newLigneFrais.Forfait = (LigneFrais.TypeForfait)Enum.Parse(typeof(LigneFrais.TypeForfait), type_forfait);
+            newLigneFrais.Frais = (LigneFrais.TypeFrais)Enum.Parse(typeof(LigneFrais.TypeFrais), type_frais);
+            newLigneFrais.Montant = montant;
+            newLigneFrais.Libelle = libelle;
+            date_creation = DateTime.Now;
+            newLigneFrais.FicheFrais.Id_fiche_frais = id_fiche_frais;
+
+            
+
+            if (id_ligne_frais == null) // ADD
+            {
+                ligneFraisManager.Create(id_employe, newLigneFrais, id_rdv);
+            }
+            else // MODIFY
+            {
+                ligneFraisManager.Update(newLigneFrais);
+            }
+        }
+
         public void AjaxDelete(string table, int id)
         {
             if(table.Equals("rendez_vous"))
             {
                 RendezVousDAO rendezVousManager = new RendezVousDAO();
-                rendezVousManager.Delete(rendezVousManager.Read(id));
+                rendezVousManager.Delete(rendezVousManager.Read(id, false));
+            }
+
+            if(table.Equals("ligne_frais"))
+            {
+                LigneFraisDAO ligneFraisDAO = new LigneFraisDAO();
+                ligneFraisDAO.Delete(id);
             }
         }
 

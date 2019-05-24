@@ -6,11 +6,12 @@ namespace GSB.Models.DAO
 {
     public class ProduitDAO : DAO_Manager
     {
-        public Produit Read(int id)
+        public Produit Read(int id, bool isReadFromEchantillonDonne)
         {
             Produit produit = new Produit();
             if (OpenConnection())
             {
+                EchantillonDAO echantillonManager = new EchantillonDAO();
 
                 command = manager.CreateCommand();
                 command.CommandText = "SELECT * " +
@@ -29,6 +30,11 @@ namespace GSB.Models.DAO
                     produit.Nom = (string)dataReader["nom"];
                     produit.Notice = (string)dataReader["notice"];
                     produit.Libelle = (string)dataReader["libelle"];
+                    if(!isReadFromEchantillonDonne)
+                    {
+                        Debug.WriteLine("   JE NE SUIS PAS LU ET C BIEN");
+                        produit.Echantillons = echantillonManager.ReadAllFromProduit(produit);
+                    }
                 }
                 dataReader.Close();
                 CloseConnection();
@@ -123,6 +129,62 @@ namespace GSB.Models.DAO
             }
 
             return produits;
+        }
+
+        public List<Produit> ReadFamille()
+        {
+            List<Produit> famille = new List<Produit>();
+            if (OpenConnection())
+            {
+                Produit produit= null;
+
+                command = manager.CreateCommand();
+                command.CommandText = "SELECT distinct famille " +
+                    "FROM produit";
+
+                // Lecture des résultats
+                dataReader = command.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+                    produit = new Produit();
+                    produit.Famille = (string)dataReader["famille"];
+
+                    famille.Add(produit);
+                }
+                dataReader.Close();
+                CloseConnection();
+            }
+            return famille;
+        }
+
+        public List<Produit> ReadNom(string famille)
+        {
+            List<Produit> nom = new List<Produit>();
+            if (OpenConnection())
+            {
+                Produit produit;
+
+                command = manager.CreateCommand();
+                command.CommandText = "SELECT distinct nom " +
+                    "FROM produit "+ 
+                    "WHERE famille=@famille";
+                command.Parameters.AddWithValue("@famille", famille);
+
+                // Lecture des résultats
+                dataReader = command.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+                    produit = new Produit();
+                    produit.Nom = (string)dataReader["nom"];
+
+                    nom.Add(produit);
+                }
+                dataReader.Close();
+                CloseConnection();
+            }
+            return nom;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -32,9 +33,10 @@ namespace GSB.Models.DAO
                     echantillon.Quantite = (int)dataReader["quantite"];
                     echantillon.Libelle = (string)dataReader["libelle"];
                     echantillon.Concentration = (int)dataReader["concentration"];
-                    echantillon.Produit = produitManager.Read((int)dataReader["id_produit"]);
+                    echantillon.Produit = produitManager.Read((int)dataReader["id_produit"], isReadFromEchantillonDonnes);
                     if(!isReadFromEchantillonDonnes)
                     {
+                        //Debug.WriteLine("   JE NE SUIS PAS LU ET C BIEN");
                         echantillon.Liste_echantillons_donnes = enchantillonDonneManager.ReadAllFromEchantillon(echantillon);
                     }
                 }
@@ -70,7 +72,7 @@ namespace GSB.Models.DAO
                     echantillon.Id_echantillon = (int)dataReader["id_echantillon"];
                     echantillon.Quantite = (int)dataReader["quantite"];
                     echantillon.Libelle = (string)dataReader["libelle"];
-                    echantillon.Concentration = (int)dataReader["contentration"];
+                    echantillon.Concentration = (int)dataReader["concentration"];
                     echantillon.Liste_echantillons_donnes = echantillonDonneManager.ReadAllFromEchantillon(echantillon);
 
                     liste_echantillons.Add(echantillon);

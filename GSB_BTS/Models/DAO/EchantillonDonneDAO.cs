@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -29,6 +30,7 @@ namespace GSB.Models.DAO
         {
             List<EchantillonDonne> liste_echantillons_donnes = new List<EchantillonDonne>();
             RendezVousDAO rendezVousManager = new RendezVousDAO();
+            Produit produit = new Produit();
             if (OpenConnection())
             {
                 command = manager.CreateCommand();
@@ -45,7 +47,8 @@ namespace GSB.Models.DAO
                 {
                     liste_echantillons_donnes.Add(new EchantillonDonne((int)dataReader["quantite"],
                                                                         echantillon,
-                                                                        rendezVousManager.Read((int)dataReader["id_rdv"])));
+                                                                        rendezVousManager.Read((int)dataReader["id_rdv"], false),
+                                                                        produit));
                 }
                 dataReader.Close();
                 CloseConnection();
@@ -54,28 +57,37 @@ namespace GSB.Models.DAO
             return liste_echantillons_donnes;
         }
 
-        public List<EchantillonDonne> ReadAllFromRendezVous(RendezVous rendezVous)
+        public List<EchantillonDonne> ReadAllFromRendezVous(int id_rdv)
         {
             List<EchantillonDonne> liste_echantillons_donnes = new List<EchantillonDonne>();
             if (OpenConnection())
             {
+                EchantillonDonne echantillonDonne = new EchantillonDonne();
                 EchantillonDAO echantillonManager = new EchantillonDAO();
+                RendezVousDAO rendezVousManager = new RendezVousDAO();
+                ProduitDAO produitManager = new ProduitDAO();
 
                 command = manager.CreateCommand();
-                command.CommandText = "SELECT * " +
-                                      "FROM echantillon_donne " +
-                                      "WHERE id_rdv = @id_rdv";
+                command.CommandText =   "SELECT distinct * " +
+                                        "FROM produit p " +
+                                        "join echantillon e on e.id_produit = p.id_produit " +
+                                        "join echantillon_donne ed on ed.id_echantillon = e.id_echantillon " +
+                                        "where id_rdv =@id_rdv ";
 
-                command.Parameters.AddWithValue("@id_rdv", rendezVous.Id_rdv);
+
+                command.Parameters.AddWithValue("@id_rdv", id_rdv);
 
                 // Lecture des résultats
                 dataReader = command.ExecuteReader();
-
+                Debug.WriteLine("ICI ");
                 while (dataReader.Read())
                 {
-                    liste_echantillons_donnes.Add(new EchantillonDonne((int)dataReader["quantite"],
-                                                                        echantillonManager.Read((int)dataReader["id_echantillon"], true),
-                                                                        rendezVous));
+                    echantillonDonne.Echantillon = echantillonManager.Read((int)dataReader["id_echantillon"], true);
+                    echantillonDonne.Produit = produitManager.Read((int)dataReader["id_produit"], true);
+                    echantillonDonne.Quantite = (int)dataReader["quantite"];                 
+                    echantillonDonne.RendezVous = rendezVousManager.Read(id_rdv,true);
+
+                    liste_echantillons_donnes.Add(echantillonDonne);
                 }
                 dataReader.Close();
                 CloseConnection();

@@ -142,7 +142,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\DAO\TypeFraisDAO.cs" />
     <Compile Include="Models\Etablissement.cs" />
     <Compile Include="Models\DAO\EtablissementDAO.cs" />
     <Compile Include="Models\DAO\DAO_Manager.cs" />
@@ -165,7 +164,6 @@
     <Compile Include="Models\Praticien.cs" />
     <Compile Include="Models\Produit.cs" />
     <Compile Include="Models\RendezVous.cs" />
-    <Compile Include="Models\TypeFrais.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -202,6 +200,7 @@
     <Content Include="Scripts\esm\popper-utils.js.map" />
     <Content Include="libman.json" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
+    <Content Include="Scripts\GSB.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.js" />
