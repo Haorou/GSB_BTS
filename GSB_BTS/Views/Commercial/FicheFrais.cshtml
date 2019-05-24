@@ -109,8 +109,13 @@
                         <label for="type_forfait" class="col-form-label">Type de forfait:</label>
                         <select class="browser-default custom-select" id="type_forfait">
                             <option value="Choisir un forfait" selected>Choisir un forfait</option>
-                            <option value="hors_forfait">Hors forfait</option>
-                            <option value="forfait">Compris dans le forfait</option>
+                            @{
+                                var mesTypesForfaits = ViewBag.MesTypesForfaits;
+                                foreach (var typeForfait in mesTypesForfaits)
+                                {
+                                    <option value="typeForfait">@typeForfait</option>
+                                }
+                            }
                         </select>
                     </div>
 
@@ -122,7 +127,6 @@
                             @{
                                
                                 var mesTypeFrais = ViewBag.MesTypesFrais;
-                                int tailleListTypeFrais = ViewBag.MesTypesFrais.Count;
                                 foreach (var typeFrais in mesTypeFrais)
                                 {
                                     <option value="typeFrais">@typeFrais</option>
