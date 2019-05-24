@@ -8,11 +8,11 @@
 
 <div class="container">
     <h2 id="employe" data-id="@ViewBag.Employe.Id">Bienvenue @ViewBag.Employe.Prenom @ViewBag.Employe.Nom</h2>
-    <p>@ViewBag.Employe.Nom : vous avez donné :</p>
+    <p>@ViewBag.Employe.Nom : vous avez eu un rendez-vous avec :</p>
     <table class="table table-hover">
         <thead>
             <tr>
-                <th class="modal_RDV_form">Praticien : @</th>
+                <th class="modal_RDV_form">Praticien</th>
                 <th class="modal_RDV_form">Date RDV</th>
                 <th class="modal_RDV_form">Heure RDV</th>
                 <th class="modal_RDV_form">Date Bilan</th>
@@ -21,11 +21,16 @@
 
         </thead>
         <tbody>
-          
+            @{
+                var mesEchantillonDonne = ViewBag.mesEchantillonDonne;
+                //int tailleMesFichesFrais = mesFichesFrais.Count;
+
+               
+            }
         </tbody>
     </table>
     <h2>Liste echantillons donnees</h2>
-
+    <p>@ViewBag.Employe.Nom : vous avez donné :</p>
     <table class="table table-hover">
         <thead>
             <tr>
@@ -51,12 +56,8 @@
                 <th class="modal_RDV_form">concentration</th>
             </tr>
         </thead>
-        <tbody>
-           
-        </tbody>
+        <tbody></tbody>
     </table>
-
-
 
 
     <div class="modal fade" id="EDModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -83,35 +84,27 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="text" class="col-form-label">Indice de confiance:</label>
-                            <select class="browser-default custom-select" id="indice_confiance">
-                                <option selected>Choisir un indice</option>
-                               
-                            </select>
+                            <input for="text" class="form-control">Nombre:>
                         </div>
                         <div class="form-group">
                             <div class='col-sm-8' id="col-sm-8_RDV">
                                 <div class="form-group">
-                                    <label for="datetimepicker_rdv" class="col-form-label">Date bilan:</label>
-                                    <div class='input-group date' id='datetimepicker2'>
-                                        <input type='date' class="form-control" id="datetimepicker_rdv" />
-                                        <span class="input-group-addon">
-                                            <span class="glyphicon glyphicon-calendar"></span>
-                                        </span>
-                                    </div>
+                                    <input for="text" class="form-control">Concentration:>
                                 </div>
                             </div>
                         </div>
-
                     </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" id="send_RDV" class="btn btn-success" data-action="modify"><span class="glyphicon glyphicon-ok"></span>Envoyer</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="send_ED" class="btn btn-success" data-action="add"><span class="glyphicon glyphicon-ok"></span>Envoyer</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
             </div>
         </div>
     </div>
+</div>
 
 </div>
 
