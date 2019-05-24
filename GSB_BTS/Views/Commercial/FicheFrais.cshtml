@@ -53,7 +53,7 @@
 
                         <tr>
                             <th class="modal_FF_form">
-                                <input checked type="radio" aria-label="" name="rdv_futurs_radio" value="@mesFichesFrais[index].FicheFrais.Id_fiche_frais" data-id="@mesFichesFrais[index].FicheFrais.Id_fiche_frais">
+                                <input checked type="radio" aria-label="" name="fichesFrais" value="@mesFichesFrais[index].FicheFrais.Id_fiche_frais" data-id="@mesFichesFrais[index].FicheFrais.Id_fiche_frais">
                             </th>
                             <th class="modal_FF_form">@dateFiche</th>
                             <th class="modal_FF_form">@dateModif</th>
@@ -120,6 +120,7 @@
                         <select class="browser-default custom-select" id="type_frais">
                             <option selected>Choisir un type de frais</option>
                             @{
+                               
                                 var mesTypeFrais = ViewBag.MesTypesFrais;
                                 int tailleListTypeFrais = ViewBag.MesTypesFrais.Count;
                                 foreach (var typeFrais in mesTypeFrais)
@@ -210,20 +211,24 @@
 
 
         $('#send_RDV').click(function () {
-            var date = $('#date_rdv').val();
-            var motif = $('#motif_rdv').val();
-            var indice = $('#indice_confiance').val();
-            var id_praticien = $('#select_praticien').val();
-            var id_employe = $('#employe').data('id');
+            var date_creation = $('#date_creation').val();
+            var date_modif = $('#date_modif').val();
+            var date_engage = $('#date_engae').val();
+            var type_forfait = $('#type_forfait').val();
+            var type_frais = $('#type_frais').val();
+            var montant = $('#montant').val();
+            var libelle = $('#libelle').val();
 
-            var action = $('#send_RDV').data('action');
+            var action = $('#send_FF').data('action');
 
             if (action == 'add') {
                 try {
                     $.ajax({
                         type: "POST",
                         url: "/Commercial/AjaxAddModifyRDV",
-                        data: "id=" + '' + "&date=" + date + "&time=" + time + "&motif=" + motif + "&indice=" + indice + "&id_employe=" + id_employe + "&id_praticien=" + id_praticien,
+                        data: "id=" + '' + "&id_fiche_frais=" + "" + "&date_engagement=" + date_engage + "&type_frais=" + type_frais +
+                            "&libelle=" + libelle + "&type_forfait=" + type_forfait + "&montant=" + montant + "&justificatif=" + justificatif +
+                            "&etat_ligne_frais=" + "en_cours",
                     }).then(function () {
                         location.reload();
                     });
@@ -233,12 +238,14 @@
                 }
             }
             else if (action == 'modify') {
-                var id_rdv = $("input[name='rdv_futurs_radio']:checked").data('id');
+                var id_rdv = $("input[name='fichesFrais']:checked").data('id');
                 try {
                     $.ajax({
                         type: "POST",
-                        url: "/Commercial/AjaxAddModifyRDV",
-                        data: "id=" + id_rdv + "&date=" + date + "&time=" + time + "&motif=" + motif + "&indice=" + indice + "&id_employe=" + id_employe + "&id_praticien=" + id_praticien,
+                        url: "/Commercial/AjaxAddModifyFF",
+                        data: "id=" + '' + "&id_fiche_frais=" + "" + "&date_engagement=" + date_engage + "&type_frais=" + type_frais +
+                            "&libelle=" + libelle + "&type_forfait=" + type_forfait + "&montant=" + montant + "&justificatif=" + justificatif +
+                            "&etat_ligne_frais=" + "en_cours",
                     }).then(function () {
                         location.reload();
                     });
@@ -250,7 +257,7 @@
         });
 
         $('#eraseRDV').click(function () {
-            var id_rdv = $("input[name='rdv_futurs_radio']:checked").data('id');
+            var id_rdv = $("input[name='fichesFrais']:checked").data('id');
             if (id_rdv != null) {
                 $.ajax({
                     type: "POST",
