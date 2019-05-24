@@ -28,9 +28,9 @@ namespace GSB.Models.DAO
                 // Lecture des résultats
                 dataReader = command.ExecuteReader();
 
-                rendezVous.Id_rdv = id_rdv;
                 while (dataReader.Read())
                 {
+                    rendezVous.Id_rdv = (int)dataReader["id_rdv"];
                     rendezVous.Date_bilan = (DateTime)dataReader["date_bilan"];
                     rendezVous.Date_rdv = (DateTime)dataReader["date_rdv"];
                     rendezVous.Employe = employeManager.Read((int)dataReader["id_commercial"]);
@@ -39,7 +39,7 @@ namespace GSB.Models.DAO
                     // Utilisation d'un Enum.Parse pour transformer un string en Enum
                     // Pour ce faire : (Type Enum)Enum.Parse(typeof(Type Enum), (string)variable);
                     rendezVous.Motif_rdv = (RendezVous.Rdv)Enum.Parse(typeof(RendezVous.Rdv), (string)dataReader["motif_rdv"]);
-                    rendezVous.Liste_echantillons_donnes = echantillonDonneManager.ReadAllFromRendezVous(rendezVous);
+                    rendezVous.Liste_echantillons_donnes = echantillonDonneManager.ReadAllFromRendezVous(rendezVous.Id_rdv);
                     
                 }
 
@@ -144,7 +144,7 @@ namespace GSB.Models.DAO
                     rdv.Motif_rdv = (RendezVous.Rdv)Enum.Parse(typeof(RendezVous.Rdv), (string)dataReader["motif_rdv"]);
                     rdv.Indice_confiance = (int)dataReader["indice_confiance"];
                     rdv.Date_bilan = (DateTime)dataReader["date_bilan"];
-                    rdv.Liste_echantillons_donnes = echantillonDonneManager.ReadAllFromRendezVous(rdv);
+                    rdv.Liste_echantillons_donnes = echantillonDonneManager.ReadAllFromRendezVous(rdv.Id_rdv);
                     liste_rdv.Add(rdv);
                 }
                 dataReader.Close();
@@ -182,7 +182,7 @@ namespace GSB.Models.DAO
                     rdv.Date_bilan = (DateTime)dataReader["date_bilan"];
                     rdv.Motif_rdv = (RendezVous.Rdv)Enum.Parse(typeof(RendezVous.Rdv), (string)dataReader["motif_rdv"]);
                     rdv.Indice_confiance = (int)dataReader["indice_confiance"];
-                    rdv.Liste_echantillons_donnes = echantillonDonneManager.ReadAllFromRendezVous(rdv);
+                    rdv.Liste_echantillons_donnes = echantillonDonneManager.ReadAllFromRendezVous(rdv.Id_rdv);
                     liste_rdv.Add(rdv);
                 }
                 dataReader.Close();
@@ -221,7 +221,7 @@ namespace GSB.Models.DAO
                     rdv.Date_bilan = (DateTime)dataReader["date_bilan"];
                     rdv.Motif_rdv = (RendezVous.Rdv)Enum.Parse(typeof(RendezVous.Rdv), (string)dataReader["motif_rdv"]);
                     rdv.Indice_confiance = (int)dataReader["indice_confiance"];
-                    rdv.Liste_echantillons_donnes = echantillonDonneManager.ReadAllFromRendezVous(rdv);
+                    rdv.Liste_echantillons_donnes = echantillonDonneManager.ReadAllFromRendezVous(rdv.Id_rdv);
                     liste_rdv.Add(rdv);
                 }
                 dataReader.Close();
@@ -247,7 +247,7 @@ namespace GSB.Models.DAO
                 command.Parameters.AddWithValue("@id_commercial", id_commercial);
 
                 dataReader = command.ExecuteReader();
-
+                Debug.WriteLine("==== Je suis appellé une fois pour lire les RDV");
                 while (dataReader.Read())
                 {
                     rdv = new RendezVous();
@@ -258,7 +258,7 @@ namespace GSB.Models.DAO
                     rdv.Date_bilan = (DateTime)dataReader["date_bilan"];
                     rdv.Motif_rdv = (RendezVous.Rdv)Enum.Parse(typeof(RendezVous.Rdv), (string)dataReader["motif_rdv"]);
                     rdv.Indice_confiance = (int)dataReader["indice_confiance"];
-                    rdv.Liste_echantillons_donnes = echantillonDonneManager.ReadAllFromRendezVous(rdv);
+                    rdv.Liste_echantillons_donnes = echantillonDonneManager.ReadAllFromRendezVous(rdv.Id_rdv);
                     liste_rdv.Add(rdv);
                 }
                 dataReader.Close();

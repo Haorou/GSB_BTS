@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -61,10 +62,9 @@ namespace GSB.Models.DAO
             List<EchantillonDonne> liste_echantillons_donnes = new List<EchantillonDonne>();
             if (OpenConnection())
             {
-                EchantillonDonne echantillonManager = new EchantillonDonne();
-                Produit produit = new Produit();
-                Echantillon echantillon = new Echantillon();
-
+                EchantillonDonne echantillonDonne = new EchantillonDonne();
+                EchantillonDAO echantillonManager = new EchantillonDAO();
+                ProduitDAO produitManager = new ProduitDAO();
 
                 command = manager.CreateCommand();
                 command.CommandText =   "SELECT distinct * " +
@@ -78,17 +78,14 @@ namespace GSB.Models.DAO
 
                 // Lecture des résultats
                 dataReader = command.ExecuteReader();
-
+                Debug.WriteLine("ICI ");
                 while (dataReader.Read())
                 {
-                    echantillonManager.Echantillon.Id_echantillon = (int)dataReader["id_echantillon"];
-                    echantillonManager.Produit.Famille = (string)dataReader["famille"];
-                    echantillonManager.Produit.Nom = (string)dataReader["nom"];
-                    echantillonManager.Quantite = (int)dataReader["quantite"];
-                    echantillonManager.Echantillon.Concentration = (int)dataReader["concentration"];
-                   
+                    echantillonDonne.Echantillon = echantillonManager.Read((int)dataReader["id_echantillon"], true);
+                    echantillonDonne.Produit = produitManager.Read((int)dataReader["id_produit"], true);
+                    echantillonDonne.Quantite = (int)dataReader["quantite"];                 
 
-                    liste_echantillons_donnes.Add(echantillonManager);
+                    liste_echantillons_donnes.Add(echantillonDonne);
                 }
                 dataReader.Close();
                 CloseConnection();
