@@ -22,10 +22,22 @@
         </thead>
         <tbody>
             @{
-                var mesEchantillonDonne = ViewBag.mesEchantillonDonne;
-                //int tailleMesFichesFrais = mesFichesFrais.Count;
+                var passesRDV= ViewBag.PassesRDV ;
 
-               
+                    var dateRDV = passesRDV.Date_rdv.ToShortDateString();
+                    var heureRDV = passesRDV.Date_rdv.ToShortTimeString();
+                    var dateBilan = passesRDV.Date_bilan.ToShortDateString();
+
+                    <tr>
+                        <th class="modal_RDV_form">
+                            <input checked type="radio" aria-label="" name="rdv_futurs_radio" value="/Commercial/Echantillon?id_rdv=@passesRDVs.Id_rdv" data-id="@passesRDVs.Id_rdv">
+                        </th>
+                        <th class="modal_RDV_form">@passesRDV.Praticien.Nom</th>
+                        <th class="modal_RDV_form">@dateRDV</th>
+                        <th class="modal_RDV_form">@heureRDV</th>
+                        <th class="modal_RDV_form">@dateBilan</th>
+                        <th class="modal_RDV_form">@passesRDV.Liste_echantillons_donnes.Count</th>
+                    </tr>
             }
         </tbody>
     </table>
@@ -51,12 +63,41 @@
             </tr>
             <tr>
                 <th class="modal_RDV_form">Famille</th>
-                <th class="modal_RDV_form">nom</th>
-                <th class="modal_RDV_form">quantite</th>
-                <th class="modal_RDV_form">concentration</th>
+                <th class="modal_RDV_form">Nom</th>
+                <th class="modal_RDV_form">Quantite</th>
+                <th class="modal_RDV_form">Concentration</th>
             </tr>
         </thead>
-        <tbody></tbody>
+        <tbody>
+            @{
+                var mesEchantillonDonne = ViewBag.mesEchantillonDonne;
+                int tailleMesEchantillonDonne = mesEchantillonDonne.Count;
+                if (tailleMesEchantillonDonne != 0)
+                {
+                    for (int index = 0; index < tailleMesEchantillonDonne; index++)
+                    {
+                        <tr>
+                            <th class="modal_RDV_form">
+                                <input checked type="radio" aria-label="" name=" " value="@mesEchantillonDonne[index].FicheFrais.Id_fiche_frais" data-id="@mesEchantillonDonne[index].FicheFrais.Id_fiche_frais">
+                            </th>
+                            
+                            <th class="modal_RDV_form">@mesEchantillonDonne[index].Famille</th>
+                            <th class="modal_RDV_form">@mesEchantillonDonne[index].Nom</th>
+                            <th class="modal_RDV_form">@mesEchantillonDonne[index].Quantite</th>
+                            <th class="modal_RDV_form">@mesEchantillonDonne[index].Concentration</th>
+                        </tr>
+                    }
+
+                }
+
+                else
+                {
+                    <tr>
+                        <th colspan="7" style="text-align: center;">Vous n'avez donné aucun échantillon</th>
+                    </tr>
+                }
+            }
+        </tbody>
     </table>
 
 
