@@ -52,14 +52,14 @@ namespace GSB.Models.DAO
             }
         }
 
-        public void Delete(Personne personne)
+        public void Delete(int id)
         {
             if (OpenConnection())
             {
                 command = manager.CreateCommand();
                 command.CommandText = "DELETE FROM personne " +
                                       "WHERE id_personne=@id";
-                command.Parameters.AddWithValue("@id", personne.Id);
+                command.Parameters.AddWithValue("@id", id);
 
                 command.ExecuteNonQuery();
                 CloseConnection();

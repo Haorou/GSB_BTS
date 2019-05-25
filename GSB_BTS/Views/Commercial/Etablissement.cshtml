@@ -87,9 +87,10 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="access_modal_praticien" class="btn btn-success"  data-toggle="modal" data-target="#AddPraticienModal" data-action="add">
+                    <button type="button" id="access_modal_praticien" class="btn btn-success" data-toggle="modal" data-target="#AddPraticienModal" data-action="add">
                         <span class="glyphicon glyphicon-ok"></span>Ajouter un praticien
                     </button>
+                    <button type="button" class="btn btn-warning" id="erase_praticien"><span class="glyphicon glyphicon-trash"></span>Supprimer</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
                 </div>
             </div>
@@ -254,6 +255,23 @@
 
                 checkIfEmpty('#etablissement-add-adresse-input');
                 checkIfEmpty('#etablissement-add-nom-input');              
+            });
+
+            $('#erase_praticien').click(function () {
+                var id_praticien = $('#liste-praticiens').val();
+                if (id_praticien != null) {
+                    try {
+                        $.ajax({
+                            type: "POST",
+                            url: "/Commercial/AjaxDelete",
+                            data: "table=" + "praticien" + "&id=" + id_praticien,
+                        }).then(function () {
+                            location.reload();
+                        });
+                    } catch (ex) {
+                        alert("catch Ajax Error" + ex);
+                    }
+                }
             });
 
             $('#access_modal_praticien').click(function () {

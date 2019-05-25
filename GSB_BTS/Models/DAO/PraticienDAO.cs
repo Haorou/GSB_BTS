@@ -160,19 +160,20 @@ namespace GSB.Models.DAO
             }
         }
 
-        public void Delete(Praticien praticien)
+        public void Delete(int id)
         {
             if (OpenConnection())
             {
                 command = manager.CreateCommand();
                 command.CommandText = "DELETE FROM praticien " +
-                                      "WHERE id_praticien= @id" +
-                                      "DELETE FROM personne " +
-                                      "WHERE personne.id_personne= @id";
-                command.Parameters.AddWithValue("@id", praticien.Id);
+                                      "WHERE id_praticien= @id";
+                command.Parameters.AddWithValue("@id", id);
 
                 command.ExecuteNonQuery();
                 CloseConnection();
+
+                PersonneDAO personneManager = new PersonneDAO();
+                personneManager.Delete(id);
             }
         }
     }

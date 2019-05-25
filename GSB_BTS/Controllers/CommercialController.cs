@@ -262,11 +262,15 @@ namespace GSB.Controllers
                 RendezVousDAO rendezVousManager = new RendezVousDAO();
                 rendezVousManager.Delete(rendezVousManager.Read(id, false));
             }
-
-            if(table.Equals("ligne_frais"))
+            else if(table.Equals("ligne_frais"))
             {
                 LigneFraisDAO ligneFraisDAO = new LigneFraisDAO();
                 ligneFraisDAO.Delete(id);
+            }
+            else if(table.Equals("praticien"))
+            {
+                PraticienDAO praticienManager = new PraticienDAO();
+                praticienManager.Delete(id);
             }
         }
 
