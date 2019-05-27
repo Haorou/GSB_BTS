@@ -211,6 +211,28 @@ namespace GSB.Controllers
             }
         }
 
+        public void AjaxAddModifyED(string nom, int concentration, int id_rdv, int quantite)
+        {
+            EchantillonDonneDAO echantillonDonneManager = new EchantillonDonneDAO();
+            RendezVousDAO rendezVousManager = new RendezVousDAO();
+            EchantillonDAO echantillonManager = new EchantillonDAO();
+            Echantillon echantillonLu = echantillonManager.ReadNomConcentration(nom, concentration, false);
+            EchantillonDonne echantillonDonne = new EchantillonDonne();
+
+            echantillonDonne.Echantillon = echantillonLu;
+            echantillonDonne.RendezVous = rendezVousManager.Read(id_rdv, false);
+            echantillonDonne.Quantite = quantite;
+
+            if (echantillonDonne == null) // ADD
+            {
+                echantillonDonneManager.Create(echantillonDonne);
+            }
+            else // MODIFY
+            {
+                echantillonDonneManager.Update(echantillonDonne);
+            }
+        }
+
         public string AjaxProduitFromFamille(string famille)
         {
             string response = "";
@@ -294,6 +316,15 @@ namespace GSB.Controllers
             {
                 PraticienDAO praticienManager = new PraticienDAO();
                 praticienManager.Delete(id);
+            }
+        }
+
+        public void AjaxDeleteDoubleID(string table, int id1, int id2)
+        {
+            if (table.Equals("echantillon_donne"))
+            {
+                EchantillonDonneDAO echantillonDonneManager = new EchantillonDonneDAO();
+                echantillonDonneManager.Delete(id1, id2);
             }
         }
 

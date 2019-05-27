@@ -55,7 +55,7 @@
                     <button type="submit" class="btn btn-success buttonModal" data-toggle="modal" data-target="#EDModal" data-action="modify"><span class="glyphicon glyphicon-edit"></span>Modifier</button>
                 </td>
                 <td>
-                    <button type="submit" class="btn btn-warning" id="eraseRDV" data-toggle="modal"><span class="glyphicon glyphicon-trash"></span>Supprimer</button>
+                    <button type="submit" class="btn btn-warning" id="eraseED" data-toggle="modal"><span class="glyphicon glyphicon-trash"></span>Supprimer</button>
                 </td>
             </tr>
             <tr>
@@ -76,7 +76,7 @@
                     {
                         <tr>
                             <th class="modal_RDV_form">
-                                <input checked type="radio" aria-label="" name=" " value="@mesEchantillonDonne[index].RendezVous.Id_rdv|@mesEchantillonDonne[index].Echantillon.Id_echantillon" data-id="@mesEchantillonDonne[index].RendezVous.Id_rdv|@mesEchantillonDonne[index].Echantillon.Id_echantillon">
+                                <input checked type="radio" aria-label="" name="echantillon_donne_radio" value="@mesEchantillonDonne[index].RendezVous.Id_rdv|@mesEchantillonDonne[index].Echantillon.Id_echantillon" data-id="@mesEchantillonDonne[index].RendezVous.Id_rdv|@mesEchantillonDonne[index].Echantillon.Id_echantillon">
                             </th>
                             <th class="modal_RDV_form">@mesEchantillonDonne[index].Produit.Famille</th>
                             <th class="modal_RDV_form">@mesEchantillonDonne[index].Produit.Nom</th>
@@ -186,8 +186,8 @@
         $('.buttonModal').click(function () { // Bouton Ajouter / Modifier Click
 
             var action = $(this).data('action'); // data-action="modify" OU "add"
-            var modal = $('#RDVModal'); // ModalHTML du RDV
-            var id_rdv = $("input[name='rdv_futurs_radio']:checked").data('id'); // Bouton radio -> data-id="X"
+            var modal = $('#EDModal'); // ModalHTML du RDV
+            var id_echantillon_donne = $("input[name='echantillon_donne_radio']:checked").data('id'); // Bouton radio -> data-id="X"
 
             if (action === 'modify') {
                 $('#send_ED').data('action', 'modify'); // Permet de changer le rôle du bouton "Ajouter" au sein du modal
@@ -224,11 +224,11 @@
                 modal.find('.modal-body input').val(id_rdv);
             }
             else if (action === 'add') {
-                $('#send_RDV').data('action', 'add');
+                $('#send_ED').data('action', 'add');
 
-                $("#select_praticien").val("Choisir un praticien");
-                modal.find('.modal-title').text('Nouveau rendez-vous');
-                $("#select_praticien").attr('disabled', false);
+                $("#select_famille").val("Choisir une Famille");
+                modal.find('.modal-title').text('Nouvel echantillon Donne');
+                $("#select_famille").attr('disabled', false);
 
                 var date = new Date($.now());
                 var dateAmericanFormat = date.toISOString();
@@ -243,7 +243,7 @@
         });
 
 
-        $('#send_RDV').click(function () {
+        $('#send_ED').click(function () {
             var date = $('#date_rdv').val();
             var time = $('#time_rdv').val();
             var motif = $('#motif_rdv').val();
@@ -268,7 +268,7 @@
                 }
             }
             else if (action == 'modify') {
-                var id_rdv = $("input[name='rdv_futurs_radio']:checked").data('id');
+                var id_rdv = $("input[name='echantillon_donne_radio']:checked").data('id');
                 try {
                     $.ajax({
                         type: "POST",
@@ -284,13 +284,13 @@
             }
         });
 
-        $('#eraseRDV').click(function () {
-            var id_rdv = $("input[name='rdv_futurs_radio']:checked").data('id');
-            if (id_rdv != null) {
+        $('#eraseED').click(function () {
+            var id_ED = $("input[name='echantillon_donne_radio']:checked").data('id');
+            if (id_ED != null) {
                 $.ajax({
                     type: "POST",
                     url: "/Commercial/AjaxDelete",
-                    data: "table=" + 'rendez_vous' + "&id=" + id_rdv,
+                    data: "table=" + 'echantillon_donne' + "&id=" + id_ED,
                 }).then(function () {
                     location.reload();
                 });
