@@ -6,7 +6,7 @@
 <h2>FicheFrais</h2>
 
 <div class="container">
-    <h2 id="employe" data-id_rdv="@ViewBag.Id_rdv" data-id_employe="@ViewBag.Employe.Id">Fiches Frais de @ViewBag.Employe.Prenom @ViewBag.Employe.Nom</h2>
+    <h2 id="employe" data-id_fiche_frais="@ViewBag.Id_fiche_frais" data-id_rdv="@ViewBag.Id_rdv" data-id_employe="@ViewBag.Employe.Id">Fiches Frais de @ViewBag.Employe.Prenom @ViewBag.Employe.Nom</h2>
     <p>Consultation de vos Fiches frais</p>
     <table class="table table-hover">
         <thead>
@@ -48,7 +48,7 @@
                     for (int index = 0; index < tailleMesLignesFrais; index++)
                     {
                         var dateFiche = MesLignesFrais[index].FicheFrais.Date_fiche.ToShortDateString();
-                        var dateEngage = MesLignesFrais[index].Date_engagement.ToShortTimeString();
+                        var dateEngage = MesLignesFrais[index].Date_engagement == null ? "" : MesLignesFrais[index].Date_engagement.ToShortDateString();
                         var dateModif = MesLignesFrais[index].FicheFrais.Date_modification == null ? "" : MesLignesFrais[index].FicheFrais.Date_modification.ToShortDateString();
 
                         <tr>
@@ -167,8 +167,8 @@
             var action = $(this).data('action'); // data-action="modify" OU "add"
             var modal = $('#FFModal'); // ModalHTML du RDV
             var id_rdv = $('#employe').data('id_rdv'); // On récupère l'id qui est dans l'URL
-            var id_employe = $('#employe').data('id_employe');
             var id_ligneFrais = $("input[name='radio_ligneFrais']:checked").data('id');
+            
 
             //console.log(id_ligneFrais);
 
@@ -182,7 +182,7 @@
                         data: 'table=' + "ligne_frais" + '&id=' + id_ligneFrais,
                     }).then(function (response) { // Then fonctionne uniquement après que la fonction C# ait renvoyée quelque chose
                         var JsonResponse = JSON.parse(response);
-                        console.log(JsonResponse);
+                        //console.log(JsonResponse);
 
                         var milli = JsonResponse.FicheFrais.Date_fiche.replace(/\/Date\((-?\d+)\)\//, '$1');
                         var date = new Date(parseInt(milli));
@@ -197,10 +197,11 @@
 
                         $("#date_create").val(dateAmericanFormat.substring(0, 10));
                         $("#date_create").attr('disabled', true); // Ajoute Readonly "fixe la valeur" a un Input - Ici date_create
-                        $("#date_modif").val(dateAmericanFormat_now.substring(0,10));
+                        $("#date_modif").val(dateAmericanFormat_now.substring(0, 10));
+                        $("#date_modif").attr('disabled', true);
                         //$("#date_engage").val(dateAmericanFormat.substring(0, 10));
 
-                        console.log(dateAmericanFormat_now.substring(0, 10));
+                        //console.log(dateAmericanFormat_now.substring(0, 10));
                         
                         $("#libelle").val(JsonResponse.Libelle);
                         $("#montant").val(JsonResponse.Montant);
@@ -228,13 +229,12 @@
                 var date = Date.now();
                 var date_now = new Date(parseInt(date));
                 var dateAmericanFormat = date_now.toISOString();
+                
 
-
+                $('#date_create').val(dateAmericanFormat.substring(0, 10));
+                $("#date_create").attr('disabled', true);
                 $("#type_forfait").val("Choisir un forfait");
-
                 $('#type_frais').val("Choisir un type de frais");
-                $('#date_creation').val(dateAmericanFormat.substring(0, 10));
-                $("#date_create").attr('disabled', false);
                 $('#montant').val();
                 $('#libelle').val();
             }
@@ -243,13 +243,13 @@
 
 
         $('#send_FF').click(function () {
-            var type_frais = $('#type_frais').val();
-
+            
+            var id_fiche_frais = $('#employe').data('id_fiche_frais');
             var date = Date.now();
             var date_now = new Date(parseInt(date));
-            var date_creation = $('#date_modif').val(date_now);
 
             var type_forfait = $('#type_forfait').val();
+            var type_frais = $('#type_frais').val();
            
             var montant = $('#montant').val();
             var libelle = $('#libelle').val();
@@ -261,22 +261,17 @@
 
             if (action == 'add') {
                 try {
-                    console.log("Je reçois bien add ici");
-                    console.log("id_ligne_frais=" + '' + "&id_fiche_frais=" + '' + "&type_frais=" + type_frais +
-                            "&type_forfait=" + type_forfait + "&montant=" + montant + "&libelle=" + libelle +
-                            "&id_rdv=" + id_rdv + "&id_employe=" + id_employe);
-
-
+                   
                     $.ajax({
                         type: "POST",
                         url: "/Commercial/AjaxAddModifyFF",
-                        data: "id_ligne_frais=" + '' + "&id_fiche_frais=" + '' + "&type_frais=" + type_frais +
+                        data: "id_ligne_frais=" + '' + "&id_fiche_frais=" + id_fiche_frais + "&type_frais=" + type_frais +
                             "&type_forfait=" + type_forfait + "&montant=" + montant + "&libelle=" + libelle +
                             "&id_rdv=" + id_rdv + "&id_employe=" + id_employe, 
                     }).then(function () {
                         location.reload();
                     });
-                    console.log("DAns le Ajax à la fin");
+                    //console.log("DAns le Ajax à la fin");
                 }
                 catch (ex) {
                     alert("catch Ajax Error" + ex);
@@ -285,31 +280,32 @@
             }
             else if (action == 'modify') {
                 var id_rdv = $("input[name='fichesFrais']:checked").data('id');
+                var id_ligne_frais = $("input[name='radio_ligneFrais']:checked").data('id');
+                console.log("Je suis bien là");
                 try {
                     $.ajax({
                         type: "POST",
                         url: "/Commercial/AjaxAddModifyFF",
-                        data: "id=" + '' + "&id_fiche_frais=" + "" + "&date_modif=" + date_modif + "&date_engagement=" + date_engage + "&type_frais=" + type_frais +
-                            "&libelle=" + libelle + "&type_forfait=" + type_forfait + "&montant=" + montant + "&justificatif=" + justificatif +
-                            "&etat_ligne_frais=" + "en_cours",
+                        data: "id=" + id_ligne_frais + "&id_fiche_frais=" + id_fiche_frais + "&date_modif=" + date_modif + "&type_frais=" + type_frais +
+                            "&libelle=" + libelle + "&type_forfait=" + type_forfait + "&montant=" + montant + "&etat_ligne_frais=" + "en_cours",
                     }).then(function () {
                         location.reload();
                     });
                 }
+
                 catch (ex) {
                     alert("catch Ajax Error" + ex);
                 }
-             //   $('#FFModal').remove();
             }
         });
 
-        $('#eraseRDV').click(function () {
+        $('#eraseFF').click(function () {
             var id_rdv = $("input[name='fichesFrais']:checked").data('id');
             if (id_rdv != null) {
                 $.ajax({
                     type: "POST",
                     url: "/Commercial/AjaxDelete",
-                    data: "table=" + 'rendez_vous' + "&id=" + id_rdv,
+                    data: "table=" + 'ligne_frais' + "&id=" + id_rdv,
                 }).then(function () {
                     location.reload();
                 });

@@ -44,6 +44,36 @@ namespace GSB.Models.DAO
             return ficheFrais;
         }
 
+        public int GetIdFicheFrais (int id_rdv)
+        {
+            int id = 0;
+            if (OpenConnection())
+            {
+               
+                LigneFraisDAO ligneFraisManager = new LigneFraisDAO();
+                EmployeDAO employeManager = new EmployeDAO();
+                RendezVousDAO rendezVousManager = new RendezVousDAO();
+                command = manager.CreateCommand();
+                command.CommandText = "SELECT id_fiche_frais " +
+                                      "FROM fiche_frais " +
+                                      "WHERE id_rdv = @id_rdv";
+                command.Parameters.AddWithValue("@id_rdv", id_rdv);
+
+                // Lecture des résultats
+                dataReader = command.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+                    id = (int)dataReader["id_fiche_frais"];
+                }
+
+                dataReader.Close();
+                CloseConnection();
+
+            }
+            return id;
+        }
+
 
         public void Create(FicheFrais ficheFrais)
         {
