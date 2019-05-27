@@ -83,7 +83,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Compte Rendu</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Compte Rendu - Fiches Frais</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -94,12 +94,15 @@
                         <div class="row">
                             <div class='col-sm-6' id="col-sm-6_RDV">
                                 <div class="form-group" style="display:flex; flex-direction: row; align-items: center;">
-                                    <label for="example-date-input" class="col-2 col-form-label">Date création</label>
+                                    <label for="example-date-input" class="col-3 col-form-label">Date création</label>
                                     <input class="form-control" type="date" value="" id="date_create" required>
-                                    <label for="example-date-input" class="col-2 col-form-label">Date modification</label>
-                                    <input class="form-control" type="time" value="" id="date_modif" required>
-                                    <label for="example-date-input" class="col-2 col-form-label">Date engagement</label>
-                                    <input class="form-control" type="time" value="" id="date_engage" required>
+                                    <label for="example-date-input" class="col-3 col-form-label">Date modification</label>
+                                    <input class="form-control" type="date" value="" id="date_modif">
+                                </div>
+                                <div style="display: flex; flex-direction: row;">
+                                    <label for="example-date-input" class="col-3 col-form-label">Date engagement</label>
+                                    <div style="margin-right: 10px;"><input class="form-control" type="date" value="" id="date_engage"></div>
+                                    <div>Laisser vide pour la comptabilité</div>
                                 </div>
                             </div>
                         </div>
@@ -111,9 +114,11 @@
                             <option value="Choisir un forfait" selected>Choisir un forfait</option>
                             @{
                                 var mesTypesForfaits = ViewBag.MesTypesForfaits;
-                                foreach (var typeForfait in mesTypesForfaits)
+                                int tailleTypesForfait = mesTypesForfaits.Count;
+
+                                for (int x = 0; x < tailleTypesForfait; x++)
                                 {
-                                    <option value="typeForfait">@typeForfait</option>
+                                    <option value="@x">@mesTypesForfaits[x]</option>
                                 }
                             }
                         </select>
@@ -125,11 +130,13 @@
                         <select class="browser-default custom-select" id="type_frais">
                             <option selected>Choisir un type de frais</option>
                             @{
-                               
-                                var mesTypeFrais = ViewBag.MesTypesFrais;
-                                foreach (var typeFrais in mesTypeFrais)
+
+                                var mesTypesFrais = ViewBag.MesTypesFrais;
+                                int tailleTypesFrais = mesTypesFrais.Count;
+
+                                for (int x = 0; x < tailleTypesFrais; x++)
                                 {
-                                    <option value="typeFrais">@typeFrais</option>
+                                    <option value="@x">@mesTypesFrais[x]</option>
                                 }
                             }
                         </select>
@@ -139,7 +146,7 @@
                     <div class="form-group">
                         <div class='col-sm-8' id="col-sm-8_FicheFrais">
                             <label for="datetimepicker_rdv" class="col-form-label">Libellé:</label>
-                            <input type='text' class="form-control" id="" />
+                            <input type='text' class="form-control" id="libelle" />
                         </div>
                     </div>
 
@@ -176,19 +183,34 @@
                     }).then(function (response) { // Then fonctionne uniquement après que la fonction C# ait renvoyée quelque chose
                         var JsonResponse = JSON.parse(response);
                         console.log(JsonResponse);
-                        var milli = JsonResponse.Date_rdv.replace(/\/Date\((-?\d+)\)\//, '$1');
+
+                        var milli = JsonResponse.FicheFrais.Date_fiche.replace(/\/Date\((-?\d+)\)\//, '$1');
                         var date = new Date(parseInt(milli));
+                        var milli2 = Date.now();
+                        var date_now = new Date(parseInt(milli2));
+
+                        //console.log(date_now);
 
                         var dateAmericanFormat = date.toISOString();
+                        var dateAmericanFormat_now = date_now.toISOString();
+                        
 
                         $("#date_create").val(dateAmericanFormat.substring(0, 10));
                         $("#date_create").attr('disabled', true); // Ajoute Readonly "fixe la valeur" a un Input - Ici date_create
-                        $("#date_modif").val(dateAmericanFormat.substring(0, 10));
-                        $("#date_engage").val(dateAmericanFormat.substring(0, 10));
-                        $("#type_forfait").val(JsonResponse.LigneFrais.TypeForfait)
-                        $("#type_frais").val(JsonResponse.LigneFrais.TypeFrais)
-                        
+                        $("#date_modif").val(dateAmericanFormat_now.substring(0,10));
+                        //$("#date_engage").val(dateAmericanFormat.substring(0, 10));
 
+                        console.log(dateAmericanFormat_now.substring(0, 10));
+                        
+                        $("#libelle").val(JsonResponse.Libelle);
+                        $("#montant").val(JsonResponse.Montant);
+
+                        $("#type_forfait").val(JsonResponse.Forfait);
+                        $("#type_frais").val(JsonResponse.Frais);
+
+                        //console.log(JsonResponse.Libelle);
+                        //console.log(JsonResponse.Montant);
+                        
                         modal.find('.modal-title').text('Fiche Frais de votre rendez-vous');
                     });
                 }
@@ -222,8 +244,7 @@
 
         $('#send_RDV').click(function () {
             var type_frais = $('#type_frais').val();
-            var date_creation = $('#date_creation').val();
-            var date_modif = $('#date_modif').val();
+            var date_modif = $('#date_modif').val(now);
             var type_forfait = $('#type_forfait').val();
            
             var montant = $('#montant').val();
@@ -256,7 +277,7 @@
                     $.ajax({
                         type: "POST",
                         url: "/Commercial/AjaxAddModifyFF",
-                        data: "id=" + '' + "&id_fiche_frais=" + "" + "&date_engagement=" + date_engage + "&type_frais=" + type_frais +
+                        data: "id=" + '' + "&id_fiche_frais=" + "" + "&date_modif=" + date_modif + "&date_engagement=" + date_engage + "&type_frais=" + type_frais +
                             "&libelle=" + libelle + "&type_forfait=" + type_forfait + "&montant=" + montant + "&justificatif=" + justificatif +
                             "&etat_ligne_frais=" + "en_cours",
                     }).then(function () {

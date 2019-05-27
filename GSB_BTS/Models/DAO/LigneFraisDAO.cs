@@ -7,7 +7,7 @@ namespace GSB.Models.DAO
 {
     public class LigneFraisDAO : DAO_Manager
     {
-        public LigneFrais Read(int id_ligne_frais)
+        public LigneFrais Read(int id_ligne_frais, bool isSerialized)
         {
             LigneFrais ligneFrais = new LigneFrais();
             if (OpenConnection())
@@ -26,7 +26,7 @@ namespace GSB.Models.DAO
                 while (dataReader.Read())
                 {
                     ligneFrais.Id = (int)dataReader["id_ligne_frais"];
-                    ligneFrais.FicheFrais = ficheFraisDAO.Read((int)dataReader["id_fiche_frais"], false);
+                    ligneFrais.FicheFrais = ficheFraisDAO.Read((int)dataReader["id_fiche_frais"], isSerialized);
                     ligneFrais.Date_engagement = (DateTime)dataReader["date_engagement"];
                     ligneFrais.Frais = (LigneFrais.TypeFrais)Enum.Parse(typeof(LigneFrais.TypeFrais), (string)dataReader["type_frais"]);
                     ligneFrais.Forfait = (LigneFrais.TypeForfait)Enum.Parse(typeof(LigneFrais.TypeForfait), (string)dataReader["type_forfait"]);
