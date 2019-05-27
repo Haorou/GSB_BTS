@@ -27,7 +27,7 @@ namespace GSB.Models.DAO
                 {
                     ligneFrais.Id = (int)dataReader["id_ligne_frais"];
                     ligneFrais.FicheFrais = ficheFraisDAO.Read((int)dataReader["id_fiche_frais"], isSerialized);
-                    ligneFrais.Date_engagement = (DateTime)dataReader["date_engagement"];
+                    ligneFrais.Date_engagement = dataReader["date_engagement"].ToString() == "" ? null : (DateTime?)dataReader["date_engagement"];
                     ligneFrais.Frais = (LigneFrais.TypeFrais)Enum.Parse(typeof(LigneFrais.TypeFrais), (string)dataReader["type_frais"]);
                     ligneFrais.Forfait = (LigneFrais.TypeForfait)Enum.Parse(typeof(LigneFrais.TypeForfait), (string)dataReader["type_forfait"]);
                     ligneFrais.Libelle = (string)dataReader["libelle"];
@@ -70,7 +70,7 @@ namespace GSB.Models.DAO
                     ligne_frais.Forfait = (LigneFrais.TypeForfait)Enum.Parse(typeof(LigneFrais.TypeForfait), (string)dataReader["type_forfait"]);
                     ligne_frais.Frais = (LigneFrais.TypeFrais)Enum.Parse(typeof(LigneFrais.TypeFrais), (string)dataReader["type_frais"]);
                     ligne_frais.Libelle = (string)dataReader["libelle"];
-                    ligne_frais.Date_engagement = (DateTime)dataReader["date_engagement"];
+                    ligne_frais.Date_engagement = dataReader["date_engagement"].ToString() == "" ? null : (DateTime?)dataReader["date_engagement"];
                     list_fiche_frais.Add(ligne_frais);
                 }
                 dataReader.Close();
@@ -110,7 +110,10 @@ namespace GSB.Models.DAO
                     ligne_frais.Forfait = (LigneFrais.TypeForfait)Enum.Parse(typeof(LigneFrais.TypeForfait), (string)dataReader["type_forfait"]);
                     ligne_frais.Libelle = (string)dataReader["libelle"];
                     ligne_frais.Montant = (int)dataReader["montant"];
-                    ligne_frais.Date_engagement = (DateTime)dataReader["date_engagement"];
+                    if (!dataReader.IsDBNull(2)) //date_engagement est la colonne 2
+                    {
+                        ligne_frais.Date_engagement= (DateTime)dataReader["date_engagement"];
+                    }
 
                     list_fiche_frais.Add(ligne_frais);
                     
@@ -158,26 +161,16 @@ namespace GSB.Models.DAO
             }
         }
 
-        public void Create(int id_employe, LigneFrais ligneFrais, int id_rdv)
+        public void Create(int id_fiche_frais, LigneFrais ligneFrais)
         {
             if (OpenConnection())
             {
                 command = manager.CreateCommand();
 
-                command.CommandText = "INSERT INTO fiche_frais " +
-                                      "(id_commercial, id_rdv, date_fiche) " +
-                                      "VALUES (@id_commercial, @id_rdv, @date_fiche)";
-                command.Parameters.AddWithValue("@id_commercial", id_employe);
-                command.Parameters.AddWithValue("@id_rdv", id_rdv);
-                command.Parameters.AddWithValue("@date_fiche", DateTime.Now);
-
-                command.ExecuteNonQuery();
-
-
                 command.CommandText = "INSERT INTO ligne_frais " +
                       "(id_fiche_frais, date_engagement, type_frais, type_forfait, libelle, montant, etat_ligne_frais) " +
                       "VALUES (@id_fiche_frais, @date_engagement, @type_frais, @type_forfait, @libelle, @montant, @etat_ligne_frais)";
-                command.Parameters.AddWithValue("@id_fiche_frais", ligneFrais.FicheFrais.Id_fiche_frais);
+                command.Parameters.AddWithValue("@id_fiche_frais", id_fiche_frais);
                 command.Parameters.AddWithValue("@date_engagement", ligneFrais.Date_engagement);
                 command.Parameters.AddWithValue("@type_frais", ligneFrais.Frais);
                 command.Parameters.AddWithValue("@type_forfait", ligneFrais.Forfait);
