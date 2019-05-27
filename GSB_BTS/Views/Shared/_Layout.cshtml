@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var employe = ViewBag.Employe;
+ }
+
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -14,7 +19,7 @@
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
-        
+
     </environment>
 </head>
 <body>
@@ -34,10 +39,10 @@
 
                     @*TODO if commercial else comptable*@
                    
-                    <li><a href="Index/Home">Accueil</a></li>
-                    <li><a href="Commercial/ConsultationRDV">Consult</a></li>
-                    <li><a href="Comptable/Comptable">Fiche Frais</a></li>
-                    <li><a href="Home/Connexion">Connexion</a></li>
+                    <li><a href="/Commercial/ConsultationRDV">Consultation</a></li>
+                    <li><a href="/Commercial/Etablissement">Etablissement</a></li>
+                   
+
                 </ul>
             </div>
         </div>

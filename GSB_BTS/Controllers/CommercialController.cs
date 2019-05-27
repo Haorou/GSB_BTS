@@ -280,18 +280,19 @@ namespace GSB.Controllers
             etablissementManager.Create(etablissement);
         }
 
-        public void AjaxAddModifyFF(int? id_ligne_frais, int id_fiche_frais, string type_frais, string type_forfait, int montant, string libelle, int id_rdv, int id_employe)
+        public void AjaxAddModifyFF(int? id_ligne_frais, int id_fiche_frais, string type_frais, string type_forfait, int montant, string libelle, int id_rdv, int id_employe, DateTime date_modif)
         {
             LigneFraisDAO ligneFraisManager = new LigneFraisDAO();
             FicheFraisDAO ficheFraisManager = new FicheFraisDAO();
 
-            LigneFrais newLigneFrais = id_ligne_frais == null ? new LigneFrais() : ligneFraisManager.Read((int)id_ligne_frais, false);
-
+            LigneFrais newLigneFrais = id_ligne_frais == null ? new LigneFrais() : ligneFraisManager.Read((int)id_ligne_frais, true);
+            newLigneFrais.FicheFrais = ficheFraisManager.Read(id_fiche_frais, true);
             newLigneFrais.EtatLigne = LigneFrais.EtatLigneFrais.en_cours;
             newLigneFrais.Forfait = (LigneFrais.TypeForfait)Enum.Parse(typeof(LigneFrais.TypeForfait), type_forfait);
             newLigneFrais.Frais = (LigneFrais.TypeFrais)Enum.Parse(typeof(LigneFrais.TypeFrais), type_frais);
             newLigneFrais.Montant = montant;
-            newLigneFrais.Libelle = libelle;           
+            newLigneFrais.Libelle = libelle;
+            newLigneFrais.Date_modification = date_modif;
 
             if (id_ligne_frais == null) // ADD
             {
@@ -299,8 +300,8 @@ namespace GSB.Controllers
             }
             else // MODIFY
             {
-                Debug.WriteLine("Je suis là");
-                ligneFraisManager.Update(newLigneFrais);
+                ligneFraisManager.Update(newLigneFrais, date_modif);
+                //Debug.WriteLine("=============================================" + newLigneFrais.Date_modification);
             }
         }
 
