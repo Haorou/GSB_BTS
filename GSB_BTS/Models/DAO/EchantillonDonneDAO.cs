@@ -25,6 +25,54 @@ namespace GSB.Models.DAO
             }
         }
 
+        public void Read(EchantillonDonne echantillon_donne)
+        {
+            if (OpenConnection())
+            {
+                command = manager.CreateCommand();
+                command.CommandText = "SELECT * " +
+                                      "FROM echantillon_donne " +
+                                      "WHERE id_echantillon_donne= @id_echantillon_donne)";
+                command.Parameters.AddWithValue("@id_echantillon", echantillon_donne.Echantillon.Id_echantillon);
+                command.Parameters.AddWithValue("@id_rdv", echantillon_donne.RendezVous.Id_rdv);
+                command.Parameters.AddWithValue("@quantite", echantillon_donne.Quantite);
+
+                command.ExecuteNonQuery();
+                CloseConnection();
+            }
+        }
+
+        public void Update(EchantillonDonne echantillonDonne)
+        {
+            if (OpenConnection())
+            {
+                command = manager.CreateCommand();
+                command.CommandText = "UPDATE echantillon " +
+                                      "SET id_echantillon=@id_echantillon, id_rdv=@id_rdv, quantite=@quantite, " +
+                                      "WHERE  id_echantillon_donne=@id";
+                command.Parameters.AddWithValue("@id", echantillonDonne.Echantillon.Id_echantillon);
+                command.Parameters.AddWithValue("@id_rdv", echantillonDonne.RendezVous);
+                command.Parameters.AddWithValue("@quantite", echantillonDonne.Quantite);
+
+                CloseConnection();
+            }
+        }
+
+        public void Delete(int id_echantillon, int id_rdv)
+        {
+            if (OpenConnection())
+            {
+                command = manager.CreateCommand();
+                command.CommandText = "DELETE FROM echantillon_donne " +
+                                      "WHERE id_echantillon= @id AND " +
+                                      "id_rdv = @id_rdv";
+                command.Parameters.AddWithValue("@id", id_echantillon);
+                command.Parameters.AddWithValue("@id_rdv", id_rdv);
+
+                command.ExecuteNonQuery();
+                CloseConnection();
+            }
+        }
 
         public List<EchantillonDonne> ReadAllFromEchantillon(Echantillon echantillon)
         {
@@ -95,5 +143,7 @@ namespace GSB.Models.DAO
 
             return liste_echantillons_donnes;
         }
+
+
     }
 }

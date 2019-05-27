@@ -65,28 +65,34 @@ namespace GSB.Controllers
         public ActionResult Echantillon(int id_rdv)
         {
             Employe employe = (Employe)Session["Employe"];
+
+            ProduitDAO produitManager = new ProduitDAO();
             EchantillonDonneDAO echantillonDAO = new EchantillonDonneDAO();
             RendezVousDAO rendezVousManager = new RendezVousDAO();
+
             RendezVous rendezVous = rendezVousManager.Read(id_rdv, false);
             List<EchantillonDonne> mesEchantillons = echantillonDAO.ReadAllFromRendezVous(id_rdv);
+            List<Produit> mesFamilles = produitManager.ReadFamille();
 
+
+            ViewBag.Famille = mesFamilles;
             ViewBag.Echantillon = mesEchantillons;
             ViewBag.RendezVous = rendezVous;
-            ViewBag.Employe = (Employe)Session["Employe"];
+            ViewBag.Employe = (Employe)Session["Employe"]; 
 
             return View();
         }
 
-        public ActionResult Produit()
+        public ActionResult Produit(string famille)
         {
             Employe employe = (Employe)Session["Employe"];
             ProduitDAO produitManager = new ProduitDAO();
             List<Produit> listeProduit = new List<Produit>();
             List<Produit> mesFamilles = produitManager.ReadFamille();
-            //List<Produit> mesNoms = produitManager.ReadNom(famille);
+            List<Produit> mesNoms = produitManager.ReadNom(famille);
 
             ViewBag.Famille = mesFamilles;
-            //ViewBag.Nom = mesNoms;
+            ViewBag.Nom = mesNoms;
             ViewBag.Employe = (Employe)Session["Employe"];
             Debug.WriteLine("==================================="+mesFamilles);
             return View();
@@ -104,7 +110,7 @@ namespace GSB.Controllers
             int id_fiche_frais = ficheFraisDAO.GetIdFicheFrais(id_rdv);
 
             //Debug.WriteLine("===============> ID RDV : " + id_rdv);
-            
+
             List<LigneFrais> mesLignesFrais = ligneFraisDAO.ReadAllFromID(employe.Id, id_rdv);
             List<LigneFrais.TypeFrais> mesTypesFrais = new List<LigneFrais.TypeFrais>();
             List<LigneFrais.TypeForfait> mesTypesForfaits = new List<LigneFrais.TypeForfait>(); 
@@ -117,12 +123,15 @@ namespace GSB.Controllers
                 mesTypesForfaits.Add(typeForfait);
             }
             
+
             ViewBag.MesLignesFrais = mesLignesFrais;
             ViewBag.MesTypesFrais = mesTypesFrais;
             ViewBag.MesTypesForfaits = mesTypesForfaits;
             ViewBag.Employe = (Employe)Session["Employe"];
             ViewBag.Id_rdv = id_rdv;
             ViewBag.Id_Fiche_frais = id_fiche_frais;
+            //Debug.WriteLine("===========================================" + id_fiche_frais);
+
 
             //Debug.WriteLine("==================================="+employe.Id);
             //Debug.WriteLine("==================================="+mesLignesFrais[0].Date_engagement + " === count === " + mesLignesFrais.Count);
@@ -208,6 +217,41 @@ namespace GSB.Controllers
             }
         }
 
+        public void AjaxAddModifyED(string nom, int concentration, int id_rdv, int quantite, string addOrModify)
+        {
+            EchantillonDonneDAO echantillonDonneManager = new EchantillonDonneDAO();
+            RendezVousDAO rendezVousManager = new RendezVousDAO();
+            EchantillonDAO echantillonManager = new EchantillonDAO();
+
+            Echantillon echantillonLu = echantillonManager.ReadNomConcentration(nom, concentration, false);
+
+            EchantillonDonne echantillonDonne = new EchantillonDonne();
+            echantillonDonne.Echantillon = echantillonLu;
+            echantillonDonne.RendezVous = rendezVousManager.Read(id_rdv, false);
+            echantillonDonne.Quantite = quantite;
+
+            if (addOrModify.Equals("add")) // ADD
+            {
+                echantillonDonneManager.Create(echantillonDonne);
+            }
+            else // MODIFY
+            {
+                echantillonDonneManager.Update(echantillonDonne);
+            }
+        }
+
+        public string AjaxProduitFromFamille(string famille)
+        {
+            string response = "";
+            ProduitDAO produitManager = new ProduitDAO();
+            List<Produit> mesProduits = produitManager.ReadNom(famille);
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            response = serializer.Serialize(mesProduits);
+
+            return response;
+        }
+
         public void AjaxAddPraticienToEtablissement(string specialite, string fonction, string nom, string prenom, 
                                                     string telephone, string email, int id_etablissement)
         {
@@ -236,21 +280,18 @@ namespace GSB.Controllers
             etablissementManager.Create(etablissement);
         }
 
-        public void AjaxAddModifyFF(int? id_ligne_frais, int id_fiche_frais, string type_frais, string type_forfait, int montant, string libelle, int id_rdv, int id_employe, DateTime date_modif)
+        public void AjaxAddModifyFF(int? id_ligne_frais, int id_fiche_frais, string type_frais, string type_forfait, int montant, string libelle, int id_rdv, int id_employe)
         {
             LigneFraisDAO ligneFraisManager = new LigneFraisDAO();
             FicheFraisDAO ficheFraisManager = new FicheFraisDAO();
 
-            LigneFrais newLigneFrais = id_ligne_frais == null ? new LigneFrais() : ligneFraisManager.Read((int)id_ligne_frais, true);
-            newLigneFrais.FicheFrais = ficheFraisManager.Read(id_fiche_frais, true);
+            LigneFrais newLigneFrais = id_ligne_frais == null ? new LigneFrais() : ligneFraisManager.Read((int)id_ligne_frais, false);
+
             newLigneFrais.EtatLigne = LigneFrais.EtatLigneFrais.en_cours;
             newLigneFrais.Forfait = (LigneFrais.TypeForfait)Enum.Parse(typeof(LigneFrais.TypeForfait), type_forfait);
             newLigneFrais.Frais = (LigneFrais.TypeFrais)Enum.Parse(typeof(LigneFrais.TypeFrais), type_frais);
             newLigneFrais.Montant = montant;
-            newLigneFrais.Libelle = libelle;
-            newLigneFrais.Date_modification = date_modif;
-            
-
+            newLigneFrais.Libelle = libelle;           
 
             if (id_ligne_frais == null) // ADD
             {
@@ -258,8 +299,8 @@ namespace GSB.Controllers
             }
             else // MODIFY
             {
-                ligneFraisManager.Update(newLigneFrais, date_modif);
-                Debug.WriteLine("============================================="+newLigneFrais.Date_modification);
+                Debug.WriteLine("Je suis là");
+                ligneFraisManager.Update(newLigneFrais);
             }
         }
 
@@ -281,5 +322,17 @@ namespace GSB.Controllers
                 praticienManager.Delete(id);
             }
         }
+
+        public void AjaxDeleteDoubleID(string table, int id1, int id2)
+        {
+            if (table.Equals("echantillon_donne"))
+            {
+                EchantillonDonneDAO echantillonDonneManager = new EchantillonDonneDAO();
+                echantillonDonneManager.Delete(id1, id2);
+            }
+        }
+
+
     }
+   
 }
