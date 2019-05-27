@@ -164,10 +164,15 @@ namespace GSB.Controllers
             else if (table.Equals("ligne_frais"))
             {
                 LigneFraisDAO ligneFraisDAO = new LigneFraisDAO();
-                LigneFrais mesLigneFrais = ligneFraisDAO.Read(id);
+                LigneFrais mesLigneFrais = ligneFraisDAO.Read(id, true);
+
+                Debug.WriteLine("====================================" + mesLigneFrais.Frais);
 
                 JavaScriptSerializer serializer = new JavaScriptSerializer();
+                
                 response = serializer.Serialize(mesLigneFrais);
+
+                Debug.WriteLine("================================================" + response);
             }
 
             return response;
@@ -251,7 +256,7 @@ namespace GSB.Controllers
             LigneFraisDAO ligneFraisManager = new LigneFraisDAO();
             FicheFraisDAO ficheFraisManager = new FicheFraisDAO();
 
-            LigneFrais newLigneFrais = id_ligne_frais == null ? new LigneFrais() : ligneFraisManager.Read((int)id_ligne_frais);
+            LigneFrais newLigneFrais = id_ligne_frais == null ? new LigneFrais() : ligneFraisManager.Read((int)id_ligne_frais, false);
 
             newLigneFrais.EtatLigne = LigneFrais.EtatLigneFrais.en_cours;
             newLigneFrais.Forfait = (LigneFrais.TypeForfait)Enum.Parse(typeof(LigneFrais.TypeForfait), type_forfait);
