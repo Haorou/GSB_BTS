@@ -225,26 +225,30 @@
 
                 modal.find('.modal-title').text('Nouvelle Fiche Frais');
 
-                var date = new Date($.now());
-                var dateAmericanFormat = date.toISOString();
-                var timeLocalFormat = date.toLocaleTimeString();
+                var date = Date.now();
+                var date_now = new Date(parseInt(date));
+                var dateAmericanFormat = date_now.toISOString();
 
 
                 $("#type_forfait").val("Choisir un forfait");
 
                 $('#type_frais').val("Choisir un type de frais");
-                $('#date_creation').val(timeLocalFormat.substring(0, 5));
-                $('#montant').val(1);
-                $('#libelle').val(1);
-
+                $('#date_creation').val(dateAmericanFormat.substring(0, 10));
+                $("#date_create").attr('disabled', false);
+                $('#montant').val();
+                $('#libelle').val();
             }
 
         });
 
 
-        $('#send_RDV').click(function () {
+        $('#send_FF').click(function () {
             var type_frais = $('#type_frais').val();
-            var date_modif = $('#date_modif').val(now);
+
+            var date = Date.now();
+            var date_now = new Date(parseInt(date));
+            var date_creation = $('#date_modif').val(date_now);
+
             var type_forfait = $('#type_forfait').val();
            
             var montant = $('#montant').val();
@@ -257,19 +261,27 @@
 
             if (action == 'add') {
                 try {
+                    console.log("Je reçois bien add ici");
+                    console.log("id_ligne_frais=" + '' + "&id_fiche_frais=" + '' + "&type_frais=" + type_frais +
+                            "&type_forfait=" + type_forfait + "&montant=" + montant + "&libelle=" + libelle +
+                            "&id_rdv=" + id_rdv + "&id_employe=" + id_employe);
+
+
                     $.ajax({
                         type: "POST",
-                        url: "/Commercial/AjaxAddModifyRDV",
-                        data: "id=" + '' + "&id_fiche_frais=" + "" + "&date_engagement=" + "" + "&type_frais=" + type_frais +
-                            "&libelle=" + libelle + "&type_forfait=" + type_forfait + "&montant=" + montant + "&etat_ligne_frais=" + "en_cours"
-                            + "&id_rdv" + id_rdv + "&id_employe" + id_employe, 
+                        url: "/Commercial/AjaxAddModifyFF",
+                        data: "id_ligne_frais=" + '' + "&id_fiche_frais=" + '' + "&type_frais=" + type_frais +
+                            "&type_forfait=" + type_forfait + "&montant=" + montant + "&libelle=" + libelle +
+                            "&id_rdv=" + id_rdv + "&id_employe=" + id_employe, 
                     }).then(function () {
                         location.reload();
                     });
+                    console.log("DAns le Ajax à la fin");
                 }
                 catch (ex) {
                     alert("catch Ajax Error" + ex);
                 }
+//                $('#FFModal').remove();
             }
             else if (action == 'modify') {
                 var id_rdv = $("input[name='fichesFrais']:checked").data('id');
@@ -287,6 +299,7 @@
                 catch (ex) {
                     alert("catch Ajax Error" + ex);
                 }
+             //   $('#FFModal').remove();
             }
         });
 
