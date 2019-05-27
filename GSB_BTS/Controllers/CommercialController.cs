@@ -65,28 +65,34 @@ namespace GSB.Controllers
         public ActionResult Echantillon(int id_rdv)
         {
             Employe employe = (Employe)Session["Employe"];
+
+            ProduitDAO produitManager = new ProduitDAO();
             EchantillonDonneDAO echantillonDAO = new EchantillonDonneDAO();
             RendezVousDAO rendezVousManager = new RendezVousDAO();
+
             RendezVous rendezVous = rendezVousManager.Read(id_rdv, false);
             List<EchantillonDonne> mesEchantillons = echantillonDAO.ReadAllFromRendezVous(id_rdv);
+            List<Produit> mesFamilles = produitManager.ReadFamille();
 
+
+            ViewBag.Famille = mesFamilles;
             ViewBag.Echantillon = mesEchantillons;
             ViewBag.RendezVous = rendezVous;
-            ViewBag.Employe = (Employe)Session["Employe"];
+            ViewBag.Employe = (Employe)Session["Employe"]; 
 
             return View();
         }
 
-        public ActionResult Produit()
+        public ActionResult Produit(string famille)
         {
             Employe employe = (Employe)Session["Employe"];
             ProduitDAO produitManager = new ProduitDAO();
             List<Produit> listeProduit = new List<Produit>();
             List<Produit> mesFamilles = produitManager.ReadFamille();
-            //List<Produit> mesNoms = produitManager.ReadNom(famille);
+            List<Produit> mesNoms = produitManager.ReadNom(famille);
 
             ViewBag.Famille = mesFamilles;
-            //ViewBag.Nom = mesNoms;
+            ViewBag.Nom = mesNoms;
             ViewBag.Employe = (Employe)Session["Employe"];
             Debug.WriteLine("==================================="+mesFamilles);
             return View();
@@ -198,6 +204,18 @@ namespace GSB.Controllers
             {
                 rendezVousManager.Update(newRDV);
             }
+        }
+
+        public string AjaxProduitFromFamille(string famille)
+        {
+            string response = "";
+            ProduitDAO produitManager = new ProduitDAO();
+            List<Produit> mesProduits = produitManager.ReadNom(famille);
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            response = serializer.Serialize(mesProduits);
+
+            return response;
         }
 
         public void AjaxAddPraticienToEtablissement(string specialite, string fonction, string nom, string prenom, 

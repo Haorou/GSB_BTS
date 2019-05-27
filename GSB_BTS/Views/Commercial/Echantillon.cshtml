@@ -117,7 +117,7 @@
                                     var mesFamilles = ViewBag.Famille;
                                     foreach (var famille in mesFamilles)
                                     {
-                                        <option value="famille">@famille</option>
+                                        <option value="@famille.Famille">@famille.Famille</option>
                                     }
                                 }
                             </select>
@@ -125,17 +125,7 @@
                         <div class="form-group">
                             <label for="text" class="col-form-label">Medicament:</label>
                             <select class="browser-default custom-select" id="medicament">
-
                                 <option value="Choisir un medicament" selected>Choisir un medicament</option>
-                                @*@{
-
-                                    var mesNoms = ViewBag.Nom;
-                                    
-                                    foreach (var nom in mesNoms)
-                                    {
-                                        <option value="nom">@nom</option>
-                                    }
-                                }*@
                             </select>
                         </div>
                         <div class="form-group">
@@ -162,3 +152,151 @@
         </div>
     </div>
 </div>
+@section scripts {
+    <script type="text/javascript">
+
+        $('#select_famille').change(function () {
+            var famille = $(this).val();
+
+            try {
+                $.ajax({ // Plusieurs éléments sont attendus pour une requête Ajax : TYPE / URL / DATA
+                    type: "POST",
+                    url: "/Commercial/AjaxProduitFromFamille",
+                    data: 'famille=' + famille,
+                }).then(function (response) { // Then fonctionne uniquement après que la fonction C# est renvoyé quelque chose
+                    var JsonResponse = JSON.parse(response);
+
+                    $('#medicament').empty();
+
+                    $.each(JsonResponse, function (key, value) {
+                        html = "<option value="+ value.Id +">" + value.Nom + "</option>";
+                        $('#medicament').append(html);
+                    })
+                });
+            }
+            catch (ex) {
+                alert("catch Ajax Error" + ex);
+            }
+        });
+        
+        $('.buttonModal').click(function () {
+            console.log("hello");
+        });
+
+        $('.buttonModal').click(function () { // Bouton Ajouter / Modifier Click
+
+            var action = $(this).data('action'); // data-action="modify" OU "add"
+            var modal = $('#RDVModal'); // ModalHTML du RDV
+            var id_rdv = $("input[name='rdv_futurs_radio']:checked").data('id'); // Bouton radio -> data-id="X"
+
+            if (action === 'modify') {
+                $('#send_ED').data('action', 'modify'); // Permet de changer le rôle du bouton "Ajouter" au sein du modal
+                try {
+
+                    $.ajax({ // Plusieurs éléments sont attendus pour une requête Ajax : TYPE / URL / DATA
+                        type: "POST",
+                        url: "/Commercial/AjaxReader",
+                        data: 'table=' + "rendez_vous" + '&id=' + id_rdv,
+                    }).then(function (response) { // Then fonctionne uniquement après que la fonction C# est renvoyé quelque chose
+                        var JsonResponse = JSON.parse(response);
+
+                        $("#select_praticien").val(JsonResponse.Praticien.Id);
+                        $("#select_praticien").attr('disabled', true); // Ajoute Readonly "fixe la valeur" a un Input - Ici select_praticien
+
+                        var milli = JsonResponse.Date_rdv.replace(/\/Date\((-?\d+)\)\//, '$1');
+                        var date = new Date(parseInt(milli));
+
+                        var dateAmericanFormat = date.toISOString();
+                        var timeLocalFormat = date.toLocaleTimeString();
+
+                        $('#date_rdv').val(dateAmericanFormat.substring(0, 10));
+                        $('#time_rdv').val(timeLocalFormat.substring(0, 5));
+                        $('#motif_rdv').val(JsonResponse.Motif_rdv);
+                        $('#indice_confiance').val(JsonResponse.Indice_confiance);
+
+                        modal.find('.modal-title').text('Rendez-Vous avec ' + JsonResponse.Praticien.Nom);
+                    });
+                }
+                catch (ex) {
+                    alert("catch Ajax Error" + ex);
+                }
+
+                modal.find('.modal-body input').val(id_rdv);
+            }
+            else if (action === 'add') {
+                $('#send_RDV').data('action', 'add');
+
+                $("#select_praticien").val("Choisir un praticien");
+                modal.find('.modal-title').text('Nouveau rendez-vous');
+                $("#select_praticien").attr('disabled', false);
+
+                var date = new Date($.now());
+                var dateAmericanFormat = date.toISOString();
+                var timeLocalFormat = date.toLocaleTimeString();
+
+                $('#date_rdv').val(dateAmericanFormat.substring(0, 10));
+                $('#time_rdv').val(timeLocalFormat.substring(0, 5));
+                $('#motif_rdv').val("Choisir un motif");
+                $('#indice_confiance').val(1);
+            }
+
+        });
+
+
+        $('#send_RDV').click(function () {
+            var date = $('#date_rdv').val();
+            var time = $('#time_rdv').val();
+            var motif = $('#motif_rdv').val();
+            var indice = $('#indice_confiance').val();
+            var id_praticien = $('#select_praticien').val();
+            var id_employe = $('#employe').data('id');
+
+            var action = $('#send_RDV').data('action');
+
+            if (action == 'add') {
+                try {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Commercial/AjaxAddModifyRDV",
+                        data: "id=" + '' + "&date=" + date + "&time=" + time + "&motif=" + motif + "&indice=" + indice + "&id_employe=" + id_employe + "&id_praticien=" + id_praticien,
+                    }).then(function () {
+                        location.reload();
+                    });
+                }
+                catch (ex) {
+                    alert("catch Ajax Error" + ex);
+                }
+            }
+            else if (action == 'modify') {
+                var id_rdv = $("input[name='rdv_futurs_radio']:checked").data('id');
+                try {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Commercial/AjaxAddModifyRDV",
+                        data: "id=" + id_rdv + "&date=" + date + "&time=" + time + "&motif=" + motif + "&indice=" + indice + "&id_employe=" + id_employe + "&id_praticien=" + id_praticien,
+                    }).then(function () {
+                        location.reload();
+                    });
+                }
+                catch (ex) {
+                    alert("catch Ajax Error" + ex);
+                }
+            }
+        });
+
+        $('#eraseRDV').click(function () {
+            var id_rdv = $("input[name='rdv_futurs_radio']:checked").data('id');
+            if (id_rdv != null) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Commercial/AjaxDelete",
+                    data: "table=" + 'rendez_vous' + "&id=" + id_rdv,
+                }).then(function () {
+                    location.reload();
+                });
+            }
+        });
+
+    </script>
+
+}
