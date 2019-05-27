@@ -33,7 +33,6 @@ namespace GSB.Models.DAO
                     ficheFrais.Commercial_visiteur = employeManager.Read((int)dataReader["id_commercial_visiteur"]);
                     ficheFrais.Rdv = rendezVousManager.Read((int)dataReader["id_rdv"], false);
                     ficheFrais.Date_fiche = (DateTime)dataReader["date_fiche"];
-                    ficheFrais.Date_modification = dataReader["date_modification"].ToString() == "" ? null : (DateTime?)dataReader["date_modification"];
                     ficheFrais.Liste_lignes_frais = ligneFraisManager.ReadAllFromFicheFrais(ficheFrais, isSerializeRead);
                     Debug.WriteLine(ficheFrais);
                 }
@@ -88,7 +87,6 @@ namespace GSB.Models.DAO
                 command.Parameters.AddWithValue("@id_commercial_visiteur", ficheFrais.Commercial_visiteur);
                 command.Parameters.AddWithValue("@id_rdv", ficheFrais.Rdv);
                 command.Parameters.AddWithValue("@date_fiche", ficheFrais.Date_fiche);
-                command.Parameters.AddWithValue("@date_modification", ficheFrais.Date_modification);
 
                 command.ExecuteNonQuery();
                 // Add each ligne frais
@@ -120,7 +118,6 @@ namespace GSB.Models.DAO
                     ficheFrais.Comptable = dataReader["id_comptable"].ToString() == "" ? null : employeManager.Read((int)dataReader["id_comptable"]);
                     ficheFrais.Rdv = rendezVousManager.Read((int)dataReader["id_rdv"], false);
                     ficheFrais.Date_fiche = (DateTime)dataReader["date_fiche"];
-                    ficheFrais.Date_modification = dataReader["date_modification"].ToString() == "" ? null : (DateTime?)dataReader["date_modification"];
                     ficheFrais.Liste_lignes_frais = ligneFraisManager.ReadAllFromFicheFrais(ficheFrais, false);
 
                     liste_ficheFrais.Add(ficheFrais);
@@ -152,7 +149,6 @@ namespace GSB.Models.DAO
                 {
                     ficheFrais.Id_fiche_frais = (int)dataReader["id_fiche_frais"];
                     ficheFrais.Date_fiche = (DateTime)dataReader["date_fiche"];
-                    ficheFrais.Date_modification = dataReader["date_modification"].ToString() == "" ? null : (DateTime?)dataReader["date_modification"];
                 }
 
                 dataReader.Close();
@@ -198,7 +194,6 @@ namespace GSB.Models.DAO
                         ficheFrais.Commercial_visiteur = employeManager.Read((int)dataReader["id_commercial_visiteur"]);
                         ficheFrais.Comptable = employe;
                         ficheFrais.Date_fiche = (DateTime)dataReader["date_fiche"];
-                        ficheFrais.Date_modification = dataReader["date_modification"].ToString() == "" ? null : (DateTime?)dataReader["date_modification"];
                         ficheFrais.Liste_lignes_frais = ligneFraisManager.ReadAllFromFicheFrais(ficheFrais, false);
 
                         liste_ficheFrais.Add(ficheFrais);
@@ -213,7 +208,6 @@ namespace GSB.Models.DAO
                         ficheFrais.Commercial_visiteur = employe;
                         ficheFrais.Comptable = dataReader["id_comptable"].ToString() == "" ? null : employeManager.Read((int)dataReader["id_comptable"]);
                         ficheFrais.Date_fiche = (DateTime)dataReader["date_fiche"];
-                        ficheFrais.Date_modification = dataReader["date_modification"].ToString() == "" ? null : (DateTime?)dataReader["date_modification"];
                         ficheFrais.Liste_lignes_frais = ligneFraisManager.ReadAllFromFicheFrais(ficheFrais, false);
 
                         liste_ficheFrais.Add(ficheFrais);
@@ -239,7 +233,6 @@ namespace GSB.Models.DAO
                 command.Parameters.AddWithValue("@id_comptable", ficheFrais.Comptable);
                 command.Parameters.AddWithValue("@id_commercial_visiteur", ficheFrais.Commercial_visiteur);
                 command.Parameters.AddWithValue("@date_fiche", ficheFrais.Date_fiche);
-                command.Parameters.AddWithValue("@date_modification", ficheFrais.Date_modification);
                 
                 // Update ligne frais ?
 

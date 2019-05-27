@@ -30,7 +30,7 @@
                 <th class="modal_FF_form">Choix</th>
                 <th class="modal_FF_form">Date création</th>
                 <th class="modal_FF_form">Date modification</th>
-                <th class="modal_FF_form">Date Engagement</th>
+                <!--<th class="modal_FF_form">Date Engagement<th>-->
                 <th class="modal_FF_form">Type Frais</th>
                 <th class="modal_FF_form">Type</th>
                 <th class="modal_FF_form">Libelle</th>
@@ -48,21 +48,21 @@
                     for (int index = 0; index < tailleMesLignesFrais; index++)
                     {
                         var dateFiche = MesLignesFrais[index].FicheFrais.Date_fiche.ToShortDateString();
-                        var dateEngage = MesLignesFrais[index].Date_engagement == null ? "" : MesLignesFrais[index].Date_engagement.ToShortDateString();
-                        var dateModif = MesLignesFrais[index].FicheFrais.Date_modification == null ? "" : MesLignesFrais[index].FicheFrais.Date_modification.ToShortDateString();
+                        //var dateEngage = MesLignesFrais[index].Date_engagement == null ? "" : MesLignesFrais[index].Date_engagement.ToShortDateString();
+                        var dateModif = MesLignesFrais[index].Date_modification == null ? "" : MesLignesFrais[index].Date_modification.ToShortDateString();
 
-                        <tr>
-                            <th class="modal_FF_form">
-                                <input checked type="radio" aria-label="" name="radio_ligneFrais" value="@MesLignesFrais[index].Id" data-id="@MesLignesFrais[index].Id">
-                            </th>
-                            <th class="modal_FF_form">@dateFiche</th>
-                            <th class="modal_FF_form">@dateModif</th>
-                            <th class="modal_FF_form">@dateEngage</th>
-                            <th class="modal_FF_form">@MesLignesFrais[index].Frais</th>
-                            <th class="modal_FF_form">@MesLignesFrais[index].Forfait</th>
-                            <th class="modal_FF_form">@MesLignesFrais[index].Libelle</th>
-                            <th class="modal_FF_form">@MesLignesFrais[index].Montant</th>
-                        </tr>
+            <tr>
+                <th class="modal_FF_form">
+                    <input checked type="radio" aria-label="" name="radio_ligneFrais" value="@MesLignesFrais[index].Id" data-id="@MesLignesFrais[index].Id">
+                </th>
+                <th class="modal_FF_form">@dateFiche</th>
+                <th class="modal_FF_form">@dateModif</th>
+                <!--<th class="modal_FF_form"></th>-->
+                <th class="modal_FF_form">@MesLignesFrais[index].Frais</th>
+                <th class="modal_FF_form">@MesLignesFrais[index].Forfait</th>
+                <th class="modal_FF_form">@MesLignesFrais[index].Libelle</th>
+                <th class="modal_FF_form">@MesLignesFrais[index].Montant</th>
+            </tr>
                     }
 
                 }
@@ -93,17 +93,17 @@
                     <div class="container">
                         <div class="row">
                             <div class='col-sm-6' id="col-sm-6_RDV">
-                                <div class="form-group" style="display:flex; flex-direction: row; align-items: center;">
-                                    <label for="example-date-input" class="col-3 col-form-label">Date création</label>
+                                <div class="form-group" style="display:flex; flex-direction: row;">
+                                    <label for="example-date-input" class="col-3 col-form-label" style="flex-shrink:0;">Date création</label>
                                     <input class="form-control" type="date" value="" id="date_create" required>
-                                    <label for="example-date-input" class="col-3 col-form-label">Date modification</label>
+                                    <label for="example-date-input" class="col-3 col-form-label" style="flex-shrink:0;">Date modification</label>
                                     <input class="form-control" type="date" value="" id="date_modif">
                                 </div>
-                                <div style="display: flex; flex-direction: row;">
-                                    <label for="example-date-input" class="col-3 col-form-label">Date engagement</label>
-                                    <div style="margin-right: 10px;"><input class="form-control" type="date" value="" id="date_engage"></div>
-                                    <div>Laisser vide pour la comptabilité</div>
-                                </div>
+                                <!--<div style="display: flex; flex-direction: row;">
+        <label for="example-date-input" class="col-3 col-form-label">Date engagement</label>
+        <div style="margin-right: 10px;"><input class="form-control" type="date" value="" id="date_engage"></div>
+        <div>Laisser vide pour la comptabilité</div>
+    </div>-->
                             </div>
                         </div>
                     </div>
@@ -125,28 +125,32 @@
                     </div>
 
 
-                    <div class="form-group">
-                        <label for="text" class="col-form-label">Type de frais:</label>
-                        <select class="browser-default custom-select" id="type_frais">
-                            <option selected>Choisir un type de frais</option>
-                            @{
+                    <div class="form-group" style="display:flex; flex-direction:row;">
+                        <div style="display:flex; flex-direction: row;">
+                            <label for="text" class="col-form-label">Type de frais:</label>
+                            <select class="browser-default custom-select" id="type_frais" style="width:50%;" >
+                                <option selected>Choisir un type de frais</option>
+                                @{
 
-                                var mesTypesFrais = ViewBag.MesTypesFrais;
-                                int tailleTypesFrais = mesTypesFrais.Count;
+                                    var mesTypesFrais = ViewBag.MesTypesFrais;
+                                    int tailleTypesFrais = mesTypesFrais.Count;
 
-                                for (int x = 0; x < tailleTypesFrais; x++)
-                                {
-                                    <option value="@x">@mesTypesFrais[x]</option>
+                                    for (int x = 0; x < tailleTypesFrais; x++)
+                                    {
+                                        <option value="@x">@mesTypesFrais[x]</option>
+                                    }
                                 }
-                            }
-                        </select>
-                        <label for="text" class="col-form-label">Montant (en €):</label>
-                        <input class="form-control" type="number" value="" id="montant" required>
+                            </select>
+                        </div>
+                        <div style="display:flex; flex-direction: row;">
+                            <label for="text" class="col-form-label" style="flex-shrink:0;">Montant (en €):</label>
+                            <input class="form-control" type="number" value="" id="montant" style="text-align: center; width:75%;">
+                        </div>
                     </div>
                     <div class="form-group">
-                        <div class='col-sm-8' id="col-sm-8_FicheFrais">
+                        <div class='col-sm-8' id="col-sm-8_FicheFrais"  style="display:flex; flex-direction:row; padding-left: 0;">
                             <label for="datetimepicker_rdv" class="col-form-label">Libellé:</label>
-                            <input type='text' class="form-control" id="libelle" />
+                            <input type='text' class="form-control" id="libelle" style="text-align:center;"/>
                         </div>
                     </div>
 
@@ -168,7 +172,7 @@
             var modal = $('#FFModal'); // ModalHTML du RDV
             var id_rdv = $('#employe').data('id_rdv'); // On récupère l'id qui est dans l'URL
             var id_ligneFrais = $("input[name='radio_ligneFrais']:checked").data('id');
-            
+
 
             //console.log(id_ligneFrais);
 
@@ -182,36 +186,27 @@
                         data: 'table=' + "ligne_frais" + '&id=' + id_ligneFrais,
                     }).then(function (response) { // Then fonctionne uniquement après que la fonction C# ait renvoyée quelque chose
                         var JsonResponse = JSON.parse(response);
-                        //console.log(JsonResponse);
 
                         var milli = JsonResponse.FicheFrais.Date_fiche.replace(/\/Date\((-?\d+)\)\//, '$1');
                         var date = new Date(parseInt(milli));
                         var milli2 = Date.now();
                         var date_now = new Date(parseInt(milli2));
 
-                        //console.log(date_now);
-
                         var dateAmericanFormat = date.toISOString();
                         var dateAmericanFormat_now = date_now.toISOString();
-                        
+
 
                         $("#date_create").val(dateAmericanFormat.substring(0, 10));
                         $("#date_create").attr('disabled', true); // Ajoute Readonly "fixe la valeur" a un Input - Ici date_create
                         $("#date_modif").val(dateAmericanFormat_now.substring(0, 10));
-                        $("#date_modif").attr('disabled', true);
-                        //$("#date_engage").val(dateAmericanFormat.substring(0, 10));
+                        $("#date_modif").attr('disabled', true);  // Ajoute Readonly "fixe la valeur" a un Input
 
-                        //console.log(dateAmericanFormat_now.substring(0, 10));
-                        
                         $("#libelle").val(JsonResponse.Libelle);
                         $("#montant").val(JsonResponse.Montant);
 
                         $("#type_forfait").val(JsonResponse.Forfait);
                         $("#type_frais").val(JsonResponse.Frais);
 
-                        //console.log(JsonResponse.Libelle);
-                        //console.log(JsonResponse.Montant);
-                        
                         modal.find('.modal-title').text('Fiche Frais de votre rendez-vous');
                     });
                 }
@@ -245,8 +240,9 @@
         $('#send_FF').click(function () {
             
             var id_fiche_frais = $('#employe').data('id_fiche_frais');
-            var date = Date.now();
-            var date_now = new Date(parseInt(date));
+            var date_modif = $('#date_modif').val();
+
+            console.log(date_modif);
 
             var type_forfait = $('#type_forfait').val();
             var type_frais = $('#type_frais').val();
@@ -279,15 +275,15 @@
 //                $('#FFModal').remove();
             }
             else if (action == 'modify') {
-                var id_rdv = $("input[name='fichesFrais']:checked").data('id');
                 var id_ligne_frais = $("input[name='radio_ligneFrais']:checked").data('id');
                 console.log("Je suis bien là");
                 try {
                     $.ajax({
                         type: "POST",
                         url: "/Commercial/AjaxAddModifyFF",
-                        data: "id=" + id_ligne_frais + "&id_fiche_frais=" + id_fiche_frais + "&date_modif=" + date_modif + "&type_frais=" + type_frais +
-                            "&libelle=" + libelle + "&type_forfait=" + type_forfait + "&montant=" + montant + "&etat_ligne_frais=" + "en_cours",
+                        data: "id_ligne_frais=" + id_ligne_frais + "&id_fiche_frais=" + id_fiche_frais + "&type_frais=" + type_frais +
+                            "&type_forfait=" + type_forfait + "&montant=" + montant + "&libelle=" + libelle +
+                            "&id_rdv=" + id_rdv + "&id_employe=" + id_employe + "&date_modif=" + date_modif, 
                     }).then(function () {
                         location.reload();
                     });
@@ -300,12 +296,12 @@
         });
 
         $('#eraseFF').click(function () {
-            var id_rdv = $("input[name='fichesFrais']:checked").data('id');
-            if (id_rdv != null) {
+            var id_ligne_frais = $("input[name='radio_ligneFrais']:checked").data('id');
+            if (id_ligne_frais != null) {
                 $.ajax({
                     type: "POST",
                     url: "/Commercial/AjaxDelete",
-                    data: "table=" + 'ligne_frais' + "&id=" + id_rdv,
+                    data: "table=" + 'ligne_frais' + "&id=" + id_ligne_frais,
                 }).then(function () {
                     location.reload();
                 });

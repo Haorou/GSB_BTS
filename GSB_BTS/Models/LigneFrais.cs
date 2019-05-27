@@ -14,6 +14,7 @@ namespace GSB.Models
         private int id;
         private FicheFrais ficheFrais;
         private DateTime? date_engagement;
+        private DateTime? date_modification;
         private string libelle;
         private EtatLigneFrais etatLigne;
         private TypeForfait forfait;
@@ -23,6 +24,7 @@ namespace GSB.Models
         public int Id { get => id; set => id = value; }
         public FicheFrais FicheFrais { get => ficheFrais; set => ficheFrais = value; }
         public DateTime? Date_engagement { get => date_engagement; set => date_engagement = value; }
+        public DateTime? Date_modification { get => date_modification; set => date_modification = value; }
         public string Libelle { get => libelle; set => libelle = value; }
         public EtatLigneFrais EtatLigne { get => etatLigne; set => etatLigne = value; }
         public TypeForfait Forfait { get => forfait; set => forfait = value; }
@@ -30,11 +32,12 @@ namespace GSB.Models
         public int Montant { get => montant; set => montant = value; }
 
         public LigneFrais() { }
-        public LigneFrais(int id, FicheFrais ficheFrais, DateTime Date_engagement, string Libelle,
+        public LigneFrais(int id, FicheFrais ficheFrais, DateTime Date_modification, DateTime Date_engagement, string Libelle,
                           EtatLigneFrais etatLigneFrais, TypeForfait typeForfait, TypeFrais frais, int montant)
         {
             this.id = id;
             this.ficheFrais = ficheFrais;
+            this.Date_modification = Date_modification;
             this.Date_engagement = Date_engagement;
             this.Libelle = Libelle;
             this.EtatLigne = etatLigneFrais;
