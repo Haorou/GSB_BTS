@@ -146,7 +146,7 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" id="send_ED" class="btn btn-success" data-action="add"><span class="glyphicon glyphicon-ok"></span>Ajouter</button>
+                <button type="button" id="send_ED" class="btn btn-success" data-action="add"><span class="glyphicon glyphicon-ok"></span>Envoyer</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
             </div>
         </div>
@@ -242,7 +242,7 @@
 
         });
 
-
+         // Le bouton "ENVOYER" a la fin du modal (son data-action change au dessus avec bouton Modal)
         $('#send_ED').click(function () {
             var date = $('#date_rdv').val();
             var time = $('#time_rdv').val();

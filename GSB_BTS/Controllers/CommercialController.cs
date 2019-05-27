@@ -217,19 +217,20 @@ namespace GSB.Controllers
             }
         }
 
-        public void AjaxAddModifyED(string nom, int concentration, int id_rdv, int quantite)
+        public void AjaxAddModifyED(string nom, int concentration, int id_rdv, int quantite, string addOrModify)
         {
             EchantillonDonneDAO echantillonDonneManager = new EchantillonDonneDAO();
             RendezVousDAO rendezVousManager = new RendezVousDAO();
             EchantillonDAO echantillonManager = new EchantillonDAO();
-            Echantillon echantillonLu = echantillonManager.ReadNomConcentration(nom, concentration, false);
-            EchantillonDonne echantillonDonne = new EchantillonDonne();
 
+            Echantillon echantillonLu = echantillonManager.ReadNomConcentration(nom, concentration, false);
+
+            EchantillonDonne echantillonDonne = new EchantillonDonne();
             echantillonDonne.Echantillon = echantillonLu;
             echantillonDonne.RendezVous = rendezVousManager.Read(id_rdv, false);
             echantillonDonne.Quantite = quantite;
 
-            if (echantillonDonne == null) // ADD
+            if (addOrModify.Equals("add")) // ADD
             {
                 echantillonDonneManager.Create(echantillonDonne);
             }
