@@ -15,24 +15,29 @@
                     <th>Commercial</th>
                     <th>Comptable</th>
                     <th>Date fiche </th>
-                    <th>Date modification</th>
                 </tr>
             </thead>
             <tbody>
 
 
-                @foreach (var ficheFrais in ViewBag.FichesFrais)
-                {
+                @{
+                    var ficheFrais = ViewBag.FichesFrais;
+                    int tailleFichesFrais = ficheFrais.Count;
+                    for (int index = 0; index < tailleFichesFrais; index++)
+                    { 
+                    var dateFiche = ficheFrais[index].Date_fiche.ToShortDateString();
+
                     <tr>
-                        <th>@ficheFrais.Commercial_visiteur.Nom</th>
-                        <th>@if (ficheFrais.Comptable != null) { @ficheFrais.Comptable.Nom }</th>
-                        <th>@ficheFrais.Date_fiche</th>
-                        <th>@ficheFrais.Date_modification</th>
+                        <th>@ficheFrais[index].Commercial_visiteur.Nom</th>
+                        <th>@if (ficheFrais[index].Comptable != null){@ficheFrais[index].Comptable.Nom}</th>
+                        <th>@dateFiche</th>
+                       
                         <th>
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-id="@ficheFrais.Id_fiche_frais">Modifier</button>
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-id="@ficheFrais[index].Id_fiche_frais">Modifier</button>
                         </th>
                     </tr>
-                }
+                    }
+                 }
             </tbody>
         </table>
 
@@ -81,7 +86,6 @@
                             data: 'table=' + "fiche_frais" + '&id=' + recipient,
                         }).then(function (response) {
                             var JsonResponse = JSON.parse(response);
-                            alert(JsonResponse.Id_fiche_frais);
                         });
                     }
                     catch (ex) {

@@ -14,17 +14,30 @@ namespace GSB.Controllers
 
         public ActionResult Comptable()
         {
-            FicheFraisDAO ficheFraisManager = new FicheFraisDAO();
-            List<FicheFrais> fichesFrais = ficheFraisManager.ReadAll();
-            ViewBag.FichesFrais = fichesFrais;
+            ViewBag.Employe = (Employe)Session["Employe"];
 
-            ViewData["Message"] = "Page de Consultation des fiches de frais.";
+            if (ViewBag.Employe != null)
+            {
+                FicheFraisDAO ficheFraisManager = new FicheFraisDAO();
+                LigneFraisDAO ligneFraisDAO = new LigneFraisDAO();
+                List<FicheFrais> fichesFrais = ficheFraisManager.ReadAll();
 
-            return View();
+                ViewBag.FichesFrais = fichesFrais;
+
+                ViewData["Message"] = "Page de Consultation des fiches de frais.";
+
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         public string AjaxReceiver(string table, int id)
         {
+            ViewBag.Employe = (Employe)Session["Employe"];
+
             string response = "";
             if(table.Equals("fiche_frais"))
             {
