@@ -1,5 +1,10 @@
 ﻿@{
     var employe = ViewBag.Employe;
+    string type = "";
+    if (employe != null)
+    {
+        type = employe.Type.ToString();
+    }
  }
 
 
@@ -8,7 +13,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["GSB"] - GSB</title>
+    <title>@ViewData["GSB"]GSB @type</title>
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -37,11 +42,25 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
 
-                    @*TODO if commercial else comptable*@
-                   
-                    <li><a href="/Commercial/ConsultationRDV">Consultation</a></li>
-                    <li><a href="/Commercial/Etablissement">Etablissement</a></li>
-                   
+
+                    @if (type == "comptable")
+                    {
+                        <li><a href="/Comptable/Comptable">Accueil</a></li>
+                        <li><a href="/Comptable/FicheFraieVue">Fiche Frais</a></li>
+                        <li><a href="/Home/Deconnexion">Déconnexion</a></li>
+                    }
+                    else if (type == "")
+                    {
+
+                    }
+
+                    else
+                    {
+                        <li><a href="/Commercial/ConsultationRDV">Accueil</a></li>
+                        <li><a href="/Commercial/Etablissement">Etablissement</a></li>
+                        <li><a href="/Home/Deconnexion">Déconnexion</a></li>
+                    }
+
 
                 </ul>
             </div>

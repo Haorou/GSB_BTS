@@ -19,12 +19,11 @@ namespace GSB.Controllers
             EmployeDAO employeManager = new EmployeDAO();
 
             Employe employe = employeManager.Connexion(login, password);
+            Session["Employe"] = employe;
+            ViewBag.Employe = employe;
 
-            if(employe != null)
+            if (employe != null)
             {
-                Session["Employe"] =  employe;
-                
-
                 if (employe.Type == Employe.TypeEmploye.comptable)
                 {
                     return RedirectToAction("Comptable", "Comptable");
@@ -39,6 +38,13 @@ namespace GSB.Controllers
                 ViewBag.Message = "Accès refusé, veuillez vous authentifier";
                 return View("Index");
             }
+        }
+
+        public ActionResult Deconnexion()
+        {
+            ViewData["Message"] = "Veuillez vous authentifier";
+            Session["Employe"] = null;
+            return View("Index");
         }
 
     }
