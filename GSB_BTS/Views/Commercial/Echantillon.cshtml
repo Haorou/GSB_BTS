@@ -55,7 +55,7 @@
                     <button type="submit" class="btn btn-success buttonModal"  data-toggle="modal" data-target="#EDModal" data-action="modify"><span class="glyphicon glyphicon-edit"></span>Modifier</button>
                 </td>
                 <td>
-                    <button type="submit" class="btn btn-warning"  data-toggle="modal" data-target="#eraseED"><span class="glyphicon glyphicon-trash"></span>Supprimer</button>
+                    <button type="submit" class="btn btn-warning buttonModal"  data-toggle="modal" data-target="#eraseED"><span class="glyphicon glyphicon-trash"></span>Supprimer</button>
                 </td>
             </tr>
             <tr>
@@ -144,7 +144,7 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" id="envoyerEchantillon" class="btn btn-success"  data-action="add"><span class="glyphicon glyphicon-ok"></span>Envoyer</button>
+                <button type="button" id="echantillonEnvoyer" class="btn btn-success"  data-action="add"><span class="glyphicon glyphicon-ok"></span>Envoyer</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
             </div>
         </div>
@@ -227,9 +227,11 @@
                         $('#medicament').empty();
                         $('#medicament').append("<option value=" + JsonResponse.Echantillon.Produit.Nom +" selected>" + JsonResponse.Echantillon.Produit.Nom +"</option>")
                         $("#medicament").attr('disabled', true); // Ajoute Readonly "fixe la valeur" a un Input - Ici medicament
-                        $("#select_concentration").val(JsonResponse.Echantillon.Concentration);
-                        $('#select_concentration').append("<option value=" + JsonResponse.Echantillon.Concentration + " selected>" + JsonResponse.Echantillon.Concentration + "</option>")
-                        $("#select_concentration").attr('disabled', true); // Ajoute Readonly "fixe la valeur" a un Input - Ici select_concentration
+                        $("#concentration").val(JsonResponse.Echantillon.Concentration);
+                        $("#concentration").attr('readonly', true);
+                        //$("#select_concentration").val(JsonResponse.Echantillon.Concentration);
+                        //$('#select_concentration').append("<option value=" + JsonResponse.Echantillon.Concentration + " selected>" + JsonResponse.Echantillon.Concentration + "</option>")
+                        //$("#select_concentration").attr('disabled', true); // Ajoute Readonly "fixe la valeur" a un Input - Ici select_concentration
                         $("#quantite").val(JsonResponse.Quantite);
 
                     });
@@ -247,7 +249,7 @@
                 $("#select_famille").attr('disabled', false);
                 $('#medicament').val("Choisir un medicament");
                 $("#medicament").attr('disabled', false);
-                $('#select_concentration').val("Quantite");
+                $('#select_concentration').val("Concentration");
                 $("#select_concentration").attr('disabled', false);
                 $('#quantite').val("Quantite");
 
@@ -257,9 +259,11 @@
         });
 
         // // Le bouton "ENVOYER" a la fin du modal (son data-action change au dessus avec bouton Modal)
-        $('#envoyerEchantillon').click(function () {
+        $('#echantillonEnvoyer').click(function () {
             var id_echantillon = $("input[name='echantillon_donne_radio']:checked").data('id_echantillon'); 
-            var id_rdv = $('#employe').data('id_rdv');
+            var id_rdv = $("input[name='echantillon_donne_radio']:checked").data('id_rdv');
+            var concentration = $('#select_concentration').val("concentration");
+            var nom = $('#medicament').val("Choisir un medicament");
             var quantite = $('#quantite').val();
             
             var action = $('#send_ED').data('action');
@@ -269,7 +273,7 @@
                     $.ajax({
                         type: "POST",
                         url: "/Commercial/AjaxAddModifyED",
-                        data: "id_echantillon=" + id_echantillon + "&id_rdv=" + id_rdv + "&quantite=" + quantite 
+                        data: "&medicament=" + nom + "&select_concentration=" + concentration + "&id_rdv=" + id_rdv + "&quantite=" + quantite + "&addOrModify=" + action
                     }).then(function () {
                         location.reload();
                     });
