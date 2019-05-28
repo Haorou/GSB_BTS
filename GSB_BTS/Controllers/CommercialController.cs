@@ -73,11 +73,11 @@ namespace GSB.Controllers
                 RendezVousDAO rendezVousManager = new RendezVousDAO();
 
                 RendezVous rendezVous = rendezVousManager.Read(id_rdv, false);
-                List<EchantillonDonne> mesEchantillons = echantillonDAO.ReadAllFromRendezVous(id_rdv);
+                List<EchantillonDonne> mesEchantillonsDonnes = echantillonDAO.ReadAllFromRendezVous(id_rdv);
                 List<Produit> mesFamilles = produitManager.ReadFamille();
 
                 ViewBag.Famille = mesFamilles;
-                ViewBag.Echantillon = mesEchantillons;
+                ViewBag.EchantillonDonne = mesEchantillonsDonnes;
                 ViewBag.RendezVous = rendezVous;
 
                 return View();
@@ -331,6 +331,20 @@ namespace GSB.Controllers
                 PraticienDAO praticienManager = new PraticienDAO();
                 praticienManager.Delete(id);
             }
+        }
+
+        public string AjaxReaderDoubleID(string table, int id1, int id2)
+        {
+            string response = "";
+            if (table.Equals("echantillon_donne"))
+            {
+                EchantillonDonneDAO echantillonDonneManager = new EchantillonDonneDAO();
+                EchantillonDonne echantillonDonne = echantillonDonneManager.Read(id1, id2);
+                JavaScriptSerializer serializer = new JavaScriptSerializer();
+                response = serializer.Serialize(echantillonDonne);
+            }
+
+            return response;
         }
 
         public void AjaxDeleteDoubleID(string table, int id1, int id2)
