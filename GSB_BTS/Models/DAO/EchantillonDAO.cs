@@ -71,6 +71,7 @@ namespace GSB.Models.DAO
 
         public Echantillon ReadByNomConcentration(string nom, int concentration, bool isReadFromEchantillonDonnes)
         {
+            
             Echantillon echantillon = new Echantillon();
             Produit produit = new Produit();
 
@@ -80,7 +81,7 @@ namespace GSB.Models.DAO
                 EchantillonDonneDAO enchantillonDonneManager = new EchantillonDonneDAO();
 
                 command = manager.CreateCommand();
-                command.CommandText = "SELECT id_echantillon " +
+                command.CommandText = "SELECT * " +
                                       "FROM echantillon " +
                                       "JOIN produit on produit.id_produit = echantillon.id_produit " +
                                       "WHERE produit.nom = @nom AND echantillon.concentration = @concentration";

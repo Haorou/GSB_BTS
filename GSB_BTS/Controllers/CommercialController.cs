@@ -231,9 +231,9 @@ namespace GSB.Controllers
             EchantillonDonneDAO echantillonDonneManager = new EchantillonDonneDAO();
             RendezVousDAO rendezVousManager = new RendezVousDAO();
             EchantillonDAO echantillonManager = new EchantillonDAO();
-
+            Debug.WriteLine("coucou GSB1");
             Echantillon echantillonLu = echantillonManager.ReadByNomConcentration(nom, concentration, false);
-
+            Debug.WriteLine("coucou GSB2");
             EchantillonDonne echantillonDonne = new EchantillonDonne();
             echantillonDonne.Echantillon = echantillonLu;
             echantillonDonne.RendezVous = rendezVousManager.Read(id_rdv, false);
@@ -245,6 +245,7 @@ namespace GSB.Controllers
             }
             else // MODIFY
             {
+
                 echantillonDonneManager.Update(echantillonDonne);
             }
         }
