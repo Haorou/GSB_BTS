@@ -144,7 +144,7 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" id="echantillonEnvoyer" class="btn btn-success"  data-action="add"><span class="glyphicon glyphicon-ok"></span>Envoyer</button>
+                <button type="button" id="send_ED" class="btn btn-success"  data-action="add"><span class="glyphicon glyphicon-ok"></span>Envoyer</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
             </div>
         </div>
@@ -212,7 +212,6 @@
             if (action === 'modify') {
                 $('#send_ED').data('action', 'modify'); // Permet de changer le rôle du bouton "Ajouter" au sein du modal
                 try {
-
                     $.ajax({ // Plusieurs éléments sont attendus pour une requête Ajax : TYPE / URL / DATA
                         type: "POST",
                         url: "/Commercial/AjaxReaderDoubleID",
@@ -252,29 +251,29 @@
                 $('#select_concentration').val("Concentration");
                 $("#select_concentration").attr('disabled', false);
                 $('#quantite').val("Quantite");
-
-                
+  
             }
-
         });
 
         // // Le bouton "ENVOYER" a la fin du modal (son data-action change au dessus avec bouton Modal)
-        $('#echantillonEnvoyer').click(function () {
+        $('#send_ED').click(function () {
             var id_echantillon = $("input[name='echantillon_donne_radio']:checked").data('id_echantillon'); 
             var id_rdv = $("input[name='echantillon_donne_radio']:checked").data('id_rdv');
-            var concentration = $('#select_concentration').val("concentration");
-            var nom = $('#medicament').val("Choisir un medicament");
+            var concentration = $('#concentration').val();
+            var nom = $('#medicament').val();
             var quantite = $('#quantite').val();
             
             var action = $('#send_ED').data('action');
-
+            console.log("Je suis bien là");
             if (action == 'modify') {
+                console.log("Je suis bien là 2");
                 try {
                     $.ajax({
                         type: "POST",
                         url: "/Commercial/AjaxAddModifyED",
-                        data: "&medicament=" + nom + "&select_concentration=" + concentration + "&id_rdv=" + id_rdv + "&quantite=" + quantite + "&addOrModify=" + action
+                        data: "&medicament=" + nom + "&concentration=" + concentration + "&id_rdv=" + id_rdv + "&quantite=" + quantite + "&addOrModify=" + action,
                     }).then(function () {
+                        console.log("Je suis bien là 3");
                         location.reload();
                     });
                 }
@@ -291,8 +290,8 @@
                 try {
                     $.ajax({
                         type: "POST",
-                        url: "/Commercial/AjaxAddModifyRDV",
-                        data: "id_echantillon=" + "" + "&id_rdv=" + id_rdv + "&famille"+ famille + "&medicament"+ medicament +"&concentration"+ concentration + "&quantite=" + quantite
+                        url: "/Commercial/AjaxAddModifyED",
+                        data: "id_echantillon=" + "" + "&id_rdv=" + id_rdv + "&famille="+ famille + "&medicament="+ medicament +"&concentration="+ concentration + "&quantite=" + quantite
                     }).then(function () {
                         location.reload();
                     });
