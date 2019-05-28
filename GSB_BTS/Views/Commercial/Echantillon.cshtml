@@ -55,7 +55,7 @@
                     <button type="submit" class="btn btn-success buttonModal"  data-toggle="modal" data-target="#EDModal" data-action="modify"><span class="glyphicon glyphicon-edit"></span>Modifier</button>
                 </td>
                 <td>
-                    <button type="submit" class="btn btn-warning"  data-toggle="modal" ><span class="glyphicon glyphicon-trash"></span>Supprimer</button>
+                    <button type="submit" class="btn btn-warning"  data-toggle="modal" data-target="#eraseED"><span class="glyphicon glyphicon-trash"></span>Supprimer</button>
                 </td>
             </tr>
             <tr>
@@ -130,9 +130,10 @@
                         </div>
                         <div class="form-group">
                             <label for="text" class="col-form-label">Concentration:</label>
-                            <select class="browser-default custom-select" id="concentration">
+                            @*<select class="browser-default custom-select" id="concentration">
                                 <option value="Choisir une concentration" selected>Choisir une concentration</option>
-                            </select>
+                            </select>*@
+                                <input for="text" value="Choisir une concentration" class="form-control" id="concentration">
                         </div>
                         <div class="form-group">
                             <label for="text" class="col-form-label">Quantité:</label>
@@ -220,8 +221,6 @@
                         var JsonResponse = JSON.parse(response);
 
                         modal.find('.modal-title').text('MODIFICATION Echantillons données ');
-                        console.log("JE FONCTIONNE ! ");
-                        console.log(JsonResponse);
 
                         $("#select_famille").val(JsonResponse.Echantillon.Produit.Famille);
                         $("#select_famille").attr('disabled', true); // Ajoute Readonly "fixe la valeur" a un Input - Ici select_famille
@@ -229,6 +228,7 @@
                         $('#medicament').append("<option value=" + JsonResponse.Echantillon.Produit.Nom +" selected>" + JsonResponse.Echantillon.Produit.Nom +"</option>")
                         $("#medicament").attr('disabled', true); // Ajoute Readonly "fixe la valeur" a un Input - Ici medicament
                         $("#select_concentration").val(JsonResponse.Echantillon.Concentration);
+                        $('#select_concentration').append("<option value=" + JsonResponse.Echantillon.Concentration + " selected>" + JsonResponse.Echantillon.Concentration + "</option>")
                         $("#select_concentration").attr('disabled', true); // Ajoute Readonly "fixe la valeur" a un Input - Ici select_concentration
                         $("#quantite").val(JsonResponse.Quantite);
 
@@ -258,7 +258,7 @@
 
         // // Le bouton "ENVOYER" a la fin du modal (son data-action change au dessus avec bouton Modal)
         $('#envoyerEchantillon').click(function () {
-            var id_echantillon = $("input[name='echantillon_donne_radio']:checked").data('id'); 
+            var id_echantillon = $("input[name='echantillon_donne_radio']:checked").data('id_echantillon'); 
             var id_rdv = $('#employe').data('id_rdv');
             var quantite = $('#quantite').val();
             

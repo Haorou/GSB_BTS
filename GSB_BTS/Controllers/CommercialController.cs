@@ -270,6 +270,18 @@ namespace GSB.Controllers
             return response;
         }
 
+        //public int AjaxConcentrationFromNom(string nom)
+        //{
+        //    string response = "";
+        //    ProduitDAO produitManager = new ProduitDAO();
+        //    List<Produit> mesProduits = produitManager.ReadNom(famille);
+
+        //    JavaScriptSerializer serializer = new JavaScriptSerializer();
+        //    response = serializer.Serialize(mesProduits);
+
+        //    return response;
+        //}
+
         public void AjaxAddPraticienToEtablissement(string specialite, string fonction, string nom, string prenom, 
                                                     string telephone, string email, int id_etablissement)
         {
