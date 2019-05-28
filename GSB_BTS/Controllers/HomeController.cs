@@ -19,12 +19,11 @@ namespace GSB.Controllers
             EmployeDAO employeManager = new EmployeDAO();
 
             Employe employe = employeManager.Connexion(login, password);
+            Session["Employe"] = employe;
+            ViewBag.Employe = employe;
 
-            if(employe != null)
+            if (employe != null)
             {
-                Session["Employe"] =  employe;
-                
-
                 if (employe.Type == Employe.TypeEmploye.comptable)
                 {
                     return RedirectToAction("Comptable", "Comptable");

@@ -64,80 +64,89 @@ namespace GSB.Controllers
 
         public ActionResult Echantillon(int id_rdv)
         {
-            Employe employe = (Employe)Session["Employe"];
+            ViewBag.Employe = (Employe)Session["Employe"];
 
-            ProduitDAO produitManager = new ProduitDAO();
-            EchantillonDonneDAO echantillonDAO = new EchantillonDonneDAO();
-            RendezVousDAO rendezVousManager = new RendezVousDAO();
+            if (ViewBag.Employe != null)
+            {
+                ProduitDAO produitManager = new ProduitDAO();
+                EchantillonDonneDAO echantillonDAO = new EchantillonDonneDAO();
+                RendezVousDAO rendezVousManager = new RendezVousDAO();
 
-            RendezVous rendezVous = rendezVousManager.Read(id_rdv, false);
-            List<EchantillonDonne> mesEchantillons = echantillonDAO.ReadAllFromRendezVous(id_rdv);
-            List<Produit> mesFamilles = produitManager.ReadFamille();
+                RendezVous rendezVous = rendezVousManager.Read(id_rdv, false);
+                List<EchantillonDonne> mesEchantillons = echantillonDAO.ReadAllFromRendezVous(id_rdv);
+                List<Produit> mesFamilles = produitManager.ReadFamille();
 
+                ViewBag.Famille = mesFamilles;
+                ViewBag.Echantillon = mesEchantillons;
+                ViewBag.RendezVous = rendezVous;
 
-            ViewBag.Famille = mesFamilles;
-            ViewBag.Echantillon = mesEchantillons;
-            ViewBag.RendezVous = rendezVous;
-            ViewBag.Employe = (Employe)Session["Employe"]; 
-
-            return View();
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         public ActionResult Produit(string famille)
         {
-            Employe employe = (Employe)Session["Employe"];
-            ProduitDAO produitManager = new ProduitDAO();
-            List<Produit> listeProduit = new List<Produit>();
-            List<Produit> mesFamilles = produitManager.ReadFamille();
-            List<Produit> mesNoms = produitManager.ReadNom(famille);
-
-            ViewBag.Famille = mesFamilles;
-            ViewBag.Nom = mesNoms;
             ViewBag.Employe = (Employe)Session["Employe"];
-            Debug.WriteLine("==================================="+mesFamilles);
-            return View();
+
+            if (ViewBag.Employe != null)
+            {
+                ProduitDAO produitManager = new ProduitDAO();
+                List<Produit> listeProduit = new List<Produit>();
+                List<Produit> mesFamilles = produitManager.ReadFamille();
+                List<Produit> mesNoms = produitManager.ReadNom(famille);
+
+                ViewBag.Famille = mesFamilles;
+                ViewBag.Nom = mesNoms;
+
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         public ActionResult FicheFrais(int id_rdv)
         {
+            ViewBag.Employe = (Employe)Session["Employe"];
 
-            Employe employe = (Employe)Session["Employe"];
-
-            PersonneDAO personneDAO = new PersonneDAO();
-            LigneFraisDAO ligneFraisDAO = new LigneFraisDAO();
-            FicheFraisDAO ficheFraisDAO = new FicheFraisDAO();
-
-            int id_fiche_frais = ficheFraisDAO.GetIdFicheFrais(id_rdv);
-
-            //Debug.WriteLine("===============> ID RDV : " + id_rdv);
-
-            List<LigneFrais> mesLignesFrais = ligneFraisDAO.ReadAllFromID(employe.Id, id_rdv);
-            List<LigneFrais.TypeFrais> mesTypesFrais = new List<LigneFrais.TypeFrais>();
-            List<LigneFrais.TypeForfait> mesTypesForfaits = new List<LigneFrais.TypeForfait>(); 
-            foreach (LigneFrais.TypeFrais typeFrais in (LigneFrais.TypeFrais[])Enum.GetValues(typeof(LigneFrais.TypeFrais)))
+            if (ViewBag.Employe != null)
             {
-                mesTypesFrais.Add(typeFrais);
-            }
-            foreach (LigneFrais.TypeForfait typeForfait in (LigneFrais.TypeForfait[])Enum.GetValues(typeof(LigneFrais.TypeForfait)))
-            {
-                mesTypesForfaits.Add(typeForfait);
-            }
+                PersonneDAO personneDAO = new PersonneDAO();
+                LigneFraisDAO ligneFraisDAO = new LigneFraisDAO();
+                FicheFraisDAO ficheFraisDAO = new FicheFraisDAO();
+
+                int id_fiche_frais = ficheFraisDAO.GetIdFicheFrais(id_rdv);
+
+                List<LigneFrais> mesLignesFrais = ligneFraisDAO.ReadAllFromID(ViewBag.Employe.Id, id_rdv);
+                List<LigneFrais.TypeFrais> mesTypesFrais = new List<LigneFrais.TypeFrais>();
+                List<LigneFrais.TypeForfait> mesTypesForfaits = new List<LigneFrais.TypeForfait>(); 
+                foreach (LigneFrais.TypeFrais typeFrais in (LigneFrais.TypeFrais[])Enum.GetValues(typeof(LigneFrais.TypeFrais)))
+                {
+                    mesTypesFrais.Add(typeFrais);
+                }
+                foreach (LigneFrais.TypeForfait typeForfait in (LigneFrais.TypeForfait[])Enum.GetValues(typeof(LigneFrais.TypeForfait)))
+                {
+                    mesTypesForfaits.Add(typeForfait);
+                }
             
 
-            ViewBag.MesLignesFrais = mesLignesFrais;
-            ViewBag.MesTypesFrais = mesTypesFrais;
-            ViewBag.MesTypesForfaits = mesTypesForfaits;
-            ViewBag.Employe = (Employe)Session["Employe"];
-            ViewBag.Id_rdv = id_rdv;
-            ViewBag.Id_Fiche_frais = id_fiche_frais;
-            //Debug.WriteLine("===========================================" + id_fiche_frais);
+                ViewBag.MesLignesFrais = mesLignesFrais;
+                ViewBag.MesTypesFrais = mesTypesFrais;
+                ViewBag.MesTypesForfaits = mesTypesForfaits;
+                ViewBag.Id_rdv = id_rdv;
+                ViewBag.Id_Fiche_frais = id_fiche_frais;
 
-
-            //Debug.WriteLine("==================================="+employe.Id);
-            //Debug.WriteLine("==================================="+mesLignesFrais[0].Date_engagement + " === count === " + mesLignesFrais.Count);
-            //Debug.WriteLine("==================================="+ mesTypesFrais[0].GetType() + " === count === " + mesLignesFrais.Count);
-
-            return View();
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         public string AjaxReader(string table, int id)
