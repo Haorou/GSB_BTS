@@ -130,20 +130,20 @@
                         </div>
                         <div class="form-group">
                             <label for="text" class="col-form-label">Concentration:</label>
-                            <div class="form-group">
-                                <input for="text" value="Concentration" class="form-control" placeholder="Concentration">
-                            </div>
+                            <select class="browser-default custom-select" id="concentration">
+                                <option value="Choisir une concentration" selected>Choisir une concentration</option>
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="text" class="col-form-label">Quantité:</label>
-                            <input for="text" value="Quantite" class="form-control" id="quantite" placeholder="Quantité">
+                            <input for="text" value="Quantite" class="form-control" id="quantite">
                         </div>
                     </form>
                 </div>
 
             </div>
             <div class="modal-footer">
-                <button type="button" id="envoyerEchantillon" class="btn btn-success"  data-target="#EDModal" data-action="modify"y><span class="glyphicon glyphicon-ok"></span>Envoyer</button>
+                <button type="button" id="envoyerEchantillon" class="btn btn-success"  data-action="add"><span class="glyphicon glyphicon-ok"></span>Envoyer</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
             </div>
         </div>
@@ -175,6 +175,30 @@
                 alert("catch Ajax Error" + ex);
             }
         });
+
+        //$('#concentration').change(function () {
+        //    var concentration = $(this).val();
+
+        //    try {
+        //        $.ajax({ // Plusieurs éléments sont attendus pour une requête Ajax : TYPE / URL / DATA
+        //            type: "POST",
+        //            url: "/Commercial/AjaxProduitFromFamille",
+        //            data: 'concentration=' + concentration,
+        //        }).then(function (response) { // Then fonctionne uniquement après que la fonction C# est renvoyé quelque chose
+        //            var JsonResponse = JSON.parse(response);
+
+        //            $('#medicament').empty();
+
+        //            $.each(JsonResponse, function (key, value) {
+        //                html = "<option value="+ value.Id +">" + value.Nom + "</option>";
+        //                $('#concentration').append(html);
+        //            })
+        //        });
+        //    }
+        //    catch (ex) {
+        //        alert("catch Ajax Error" + ex);
+        //    }
+        //});
 
         $('.buttonModal').click(function () { // Bouton Ajouter / Modifier Click
 
@@ -233,18 +257,19 @@
         });
 
         // // Le bouton "ENVOYER" a la fin du modal (son data-action change au dessus avec bouton Modal)
-        $('').click(function () {
-         
+        $('#envoyerEchantillon').click(function () {
+            var id_echantillon = $("input[name='echantillon_donne_radio']:checked").data('id'); 
+            var id_rdv = $('#employe').data('id_rdv');
             var quantite = $('#quantite').val();
             
-            var action = $('#envoyerEchantillon').data('action');
+            var action = $('#send_ED').data('action');
 
-            if (action == 'add') {
+            if (action == 'modify') {
                 try {
                     $.ajax({
                         type: "POST",
-                        url: "/Commercial/AjaxModifyED",
-                        data: "&quantite=" + quantite 
+                        url: "/Commercial/AjaxAddModifyED",
+                        data: "id_echantillon=" + id_echantillon + "&id_rdv=" + id_rdv + "&quantite=" + quantite 
                     }).then(function () {
                         location.reload();
                     });
@@ -253,21 +278,25 @@
                     alert("catch Ajax Error" + ex);
                 }
             }
-            //else if (action == 'add') {
-            //    var id_echantillon = $("input[name='echantillon_donne_radio']:checked").data('id');
-            //    try {
-            //        $.ajax({
-            //            type: "POST",
-            //            url: "/Commercial/AjaxAddModifyRDV",
-            //            data: "table=" + "echantillon_donne" + "&id_echantillon=" +  id_echantillon +  "&quantite=" + quantite
-            //        }).then(function () {
-            //            location.reload();
-            //        });
-            //    }
-            //    catch (ex) {
-            //        alert("catch Ajax Error" + ex);
-            //    }
-            //}
+            else if (action == 'add') {
+                var id_rdv = $('#employe').data('id_rdv');
+                var famille =  $("#select_famille").val();
+                var medicament = $('#medicament').val();
+                var concentration = $('#select_concentration').val();
+                var quantite = $('#quantite').val();
+                try {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Commercial/AjaxAddModifyRDV",
+                        data: "id_echantillon=" + "" + "&id_rdv=" + id_rdv + "&famille"+ famille + "&medicament"+ medicament +"&concentration"+ concentration + "&quantite=" + quantite
+                    }).then(function () {
+                        location.reload();
+                    });
+                }
+                catch (ex) {
+                    alert("catch Ajax Error" + ex);
+                }
+            }
         });
 
         $('#eraseED').click(function () {
