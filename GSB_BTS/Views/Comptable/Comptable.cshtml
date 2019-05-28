@@ -15,7 +15,6 @@
                     <th>Commercial</th>
                     <th>Comptable</th>
                     <th>Date fiche </th>
-                    <th>Date modification</th>
                 </tr>
             </thead>
             <tbody>
@@ -87,7 +86,6 @@
                             data: 'table=' + "fiche_frais" + '&id=' + recipient,
                         }).then(function (response) {
                             var JsonResponse = JSON.parse(response);
-                            alert(JsonResponse.Id_fiche_frais);
                         });
                     }
                     catch (ex) {
