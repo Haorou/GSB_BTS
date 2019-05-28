@@ -14,8 +14,12 @@ namespace GSB.Controllers
 
         public ActionResult Comptable()
         {
+            ViewBag.Employe = (Employe)Session["Employe"];
+
             FicheFraisDAO ficheFraisManager = new FicheFraisDAO();
+            LigneFraisDAO ligneFraisDAO = new LigneFraisDAO();
             List<FicheFrais> fichesFrais = ficheFraisManager.ReadAll();
+
             ViewBag.FichesFrais = fichesFrais;
 
             ViewData["Message"] = "Page de Consultation des fiches de frais.";
@@ -25,6 +29,8 @@ namespace GSB.Controllers
 
         public string AjaxReceiver(string table, int id)
         {
+            ViewBag.Employe = (Employe)Session["Employe"];
+
             string response = "";
             if(table.Equals("fiche_frais"))
             {
