@@ -69,7 +69,7 @@ namespace GSB.Models.DAO
             return echantillon;
         }
 
-        public Echantillon ReadNomConcentration(string nom, int concentration, bool isReadFromEchantillonDonnes)
+        public Echantillon ReadByNomConcentration(string nom, int concentration, bool isReadFromEchantillonDonnes)
         {
             Echantillon echantillon = new Echantillon();
             Produit produit = new Produit();

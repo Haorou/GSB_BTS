@@ -232,7 +232,7 @@ namespace GSB.Controllers
             RendezVousDAO rendezVousManager = new RendezVousDAO();
             EchantillonDAO echantillonManager = new EchantillonDAO();
 
-            Echantillon echantillonLu = echantillonManager.ReadNomConcentration(nom, concentration, false);
+            Echantillon echantillonLu = echantillonManager.ReadByNomConcentration(nom, concentration, false);
 
             EchantillonDonne echantillonDonne = new EchantillonDonne();
             echantillonDonne.Echantillon = echantillonLu;
@@ -247,6 +247,15 @@ namespace GSB.Controllers
             {
                 echantillonDonneManager.Update(echantillonDonne);
             }
+        }
+
+        public void AjaxModifyED(int quantite)
+        {
+            EchantillonDonneDAO echantillonDonneManager = new EchantillonDonneDAO();
+            EchantillonDonne echantillonDonne = new EchantillonDonne();
+            echantillonDonne.Quantite = quantite;
+            echantillonDonneManager.Update(echantillonDonne);
+
         }
 
         public string AjaxProduitFromFamille(string famille)
@@ -316,17 +325,17 @@ namespace GSB.Controllers
 
         public void AjaxDelete(string table, int id)
         {
-            if(table.Equals("rendez_vous"))
+            if (table.Equals("rendez_vous"))
             {
                 RendezVousDAO rendezVousManager = new RendezVousDAO();
                 rendezVousManager.Delete(rendezVousManager.Read(id, false));
             }
-            else if(table.Equals("ligne_frais"))
+            else if (table.Equals("ligne_frais"))
             {
                 LigneFraisDAO ligneFraisDAO = new LigneFraisDAO();
                 ligneFraisDAO.Delete(id);
             }
-            else if(table.Equals("praticien"))
+            else if (table.Equals("praticien"))
             {
                 PraticienDAO praticienManager = new PraticienDAO();
                 praticienManager.Delete(id);
