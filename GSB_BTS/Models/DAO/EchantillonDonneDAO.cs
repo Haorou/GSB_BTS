@@ -25,21 +25,35 @@ namespace GSB.Models.DAO
             }
         }
 
-        public void Read(EchantillonDonne echantillon_donne)
+        public EchantillonDonne Read(int id_echantillon, int id_rdv)
         {
+            EchantillonDonne echantillonDonne = new EchantillonDonne();
             if (OpenConnection())
             {
                 command = manager.CreateCommand();
+
+                EchantillonDAO echantillonManager = new EchantillonDAO();
+                RendezVousDAO rendezVousManager = new RendezVousDAO();
+
                 command.CommandText = "SELECT * " +
                                       "FROM echantillon_donne " +
-                                      "WHERE id_echantillon_donne= @id_echantillon_donne)";
-                command.Parameters.AddWithValue("@id_echantillon", echantillon_donne.Echantillon.Id_echantillon);
-                command.Parameters.AddWithValue("@id_rdv", echantillon_donne.RendezVous.Id_rdv);
-                command.Parameters.AddWithValue("@quantite", echantillon_donne.Quantite);
+                                      "WHERE id_echantillon = @id_echantillon AND " +
+                                      "id_rdv = @id_rdv";
+                command.Parameters.AddWithValue("@id_echantillon", id_echantillon);
+                command.Parameters.AddWithValue("@id_rdv", id_rdv);
 
-                command.ExecuteNonQuery();
+                dataReader = command.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+                    echantillonDonne.Echantillon = echantillonManager.Read((int)dataReader["id_echantillon"], true);
+                    echantillonDonne.RendezVous = rendezVousManager.Read((int)dataReader["id_rdv"], true);
+                    echantillonDonne.Quantite = (int)dataReader["quantite"];
+                }
+                dataReader.Close();
                 CloseConnection();
             }
+            return echantillonDonne;
         }
 
         public void Update(EchantillonDonne echantillonDonne)

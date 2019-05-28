@@ -68,7 +68,7 @@
         </thead>
         <tbody>
             @{
-                var mesEchantillonDonne = ViewBag.Echantillon;
+                var mesEchantillonDonne = ViewBag.EchantillonDonne;
                 int tailleMesEchantillonDonne = mesEchantillonDonne.Count;
                 if (tailleMesEchantillonDonne != 0)
                 {
@@ -76,7 +76,7 @@
                     {
                         <tr>
                             <th class="modal_RDV_form">
-                                <input checked type="radio" aria-label="" name="echantillon_donne_radio" value="@mesEchantillonDonne[index].RendezVous.Id_rdv|@mesEchantillonDonne[index].Echantillon.Id_echantillon" data-id="@mesEchantillonDonne[index].RendezVous.Id_rdv|@mesEchantillonDonne[index].Echantillon.Id_echantillon">
+                                <input checked type="radio" aria-label="" name="echantillon_donne_radio" data-id_echantillon="@mesEchantillonDonne[index].Echantillon.Id_echantillon" data-id_rdv="@mesEchantillonDonne[index].RendezVous.Id_rdv">
                             </th>
                             <th class="modal_RDV_form">@mesEchantillonDonne[index].Produit.Famille</th>
                             <th class="modal_RDV_form">@mesEchantillonDonne[index].Produit.Nom</th>
@@ -187,7 +187,9 @@
 
             var action = $(this).data('action'); // data-action="modify" OU "add"
             var modal = $('#EDModal'); // ModalHTML du RDV
-            var id_echantillon_donne = $("input[name='echantillon_donne_radio']:checked").data('id'); // Bouton radio -> data-id="X"
+
+            var id_echantillon = $("input[name='echantillon_donne_radio']:checked").data('id_echantillon'); // Bouton radio -> data-id="X"
+            var id_rdv = $("input[name='echantillon_donne_radio']:checked").data('id_rdv');
 
             if (action === 'modify') {
                 $('#send_ED').data('action', 'modify'); // Permet de changer le rôle du bouton "Ajouter" au sein du modal
@@ -195,13 +197,21 @@
 
                     $.ajax({ // Plusieurs éléments sont attendus pour une requête Ajax : TYPE / URL / DATA
                         type: "POST",
-                        url: "/Commercial/AjaxReader",
-                        data: 'table=' + "rendez_vous" + '&id=' + id_rdv,
+                        url: "/Commercial/AjaxReaderDoubleID",
+                        data: 'table=' + "echantillon_donne" + '&id1=' + id_echantillon + '&id2=' + id_rdv,
                     }).then(function (response) { // Then fonctionne uniquement après que la fonction C# est renvoyé quelque chose
                         var JsonResponse = JSON.parse(response);
 
-                        $("#select_praticien").val(JsonResponse.Praticien.Id);
-                        $("#select_praticien").attr('disabled', true); // Ajoute Readonly "fixe la valeur" a un Input - Ici select_praticien
+                        console.log("JE FONCTIONNE ! ");
+                        console.log(JsonResponse);
+
+                        $("#select_famille").val(JsonResponse.Echantillon.Produit.Famille);
+                        $("#select_famille").attr('disabled', true); // Ajoute Readonly "fixe la valeur" a un Input - Ici select_famille
+                        $('#medicament').empty();
+                        $('#medicament').append("<option value=" + JsonResponse.Echantillon.Produit.Nom +" selected>" + JsonResponse.Echantillon.Produit.Nom +"</option>")
+                        $("#medicament").attr('disabled', true); // Ajoute Readonly "fixe la valeur" a un Input - Ici select_nom
+                        $("#select_concentration").val(JsonResponse.Echantillon.Concentration);
+                        $("#select_concentration").attr('disabled', true); // Ajoute Readonly "fixe la valeur" a un Input - Ici select_nom
 
                         var milli = JsonResponse.Date_rdv.replace(/\/Date\((-?\d+)\)\//, '$1');
                         var date = new Date(parseInt(milli));
@@ -251,13 +261,13 @@
             var id_praticien = $('#select_praticien').val();
             var id_employe = $('#employe').data('id');
 
-            var action = $('#send_RDV').data('action');
+            var action = $('#send_ED').data('action');
 
             if (action == 'add') {
                 try {
                     $.ajax({
                         type: "POST",
-                        url: "/Commercial/AjaxAddModifyRDV",
+                        url: "/Commercial/AjaxAddModifyED",
                         data: "id=" + '' + "&date=" + date + "&time=" + time + "&motif=" + motif + "&indice=" + indice + "&id_employe=" + id_employe + "&id_praticien=" + id_praticien,
                     }).then(function () {
                         location.reload();
