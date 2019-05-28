@@ -42,11 +42,25 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
 
-                    @*TODO if commercial else comptable*@
-                   
-                    <li><a href="/Commercial/ConsultationRDV">Consultation</a></li>
-                    <li><a href="/Commercial/Etablissement">Etablissement</a></li>
-                   
+
+                    @if (type == "comptable")
+                    {
+                        <li><a href="/Comptable/Comptable">Accueil</a></li>
+                        <li><a href="/Comptable/FicheFraieVue">Fiche Frais</a></li>
+                        <li><a href="/Home/Deconnexion">Déconnexion</a></li>
+                    }
+                    else if (type == "")
+                    {
+
+                    }
+
+                    else
+                    {
+                        <li><a href="/Commercial/ConsultationRDV">Accueil</a></li>
+                        <li><a href="/Commercial/Etablissement">Etablissement</a></li>
+                        <li><a href="/Home/Deconnexion">Déconnexion</a></li>
+                    }
+
 
                 </ul>
             </div>

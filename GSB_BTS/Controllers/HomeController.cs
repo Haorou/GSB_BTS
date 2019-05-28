@@ -40,5 +40,12 @@ namespace GSB.Controllers
             }
         }
 
+        public ActionResult Deconnexion()
+        {
+            ViewData["Message"] = "Veuillez vous authentifier";
+            Session["Employe"] = null;
+            return View("Index");
+        }
+
     }
 }
