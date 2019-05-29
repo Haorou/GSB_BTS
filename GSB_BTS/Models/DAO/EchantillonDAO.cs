@@ -70,13 +70,9 @@ namespace GSB.Models.DAO
             return echantillon;
         }
 
-        public int id_echantillon(string nom, int concentration, bool isReadFromEchantillonDonnes)
+        public int Read_IdEchantillon_FromNomConcentration(string nom, int concentration)
         {
             int id = 0;
-            
-            Echantillon echantillon = new Echantillon();
-            Produit produit = new Produit();
-
             if (OpenConnection())
             {
                 ProduitDAO produitManager = new ProduitDAO();
@@ -97,16 +93,10 @@ namespace GSB.Models.DAO
                 while (dataReader.Read())
                 {
                     id = (int)dataReader["id_echantillon"];
-                    if (!isReadFromEchantillonDonnes)
-                    {
-                        //Debug.WriteLine("   JE NE SUIS PAS LU ET C BIEN");
-                        echantillon.Liste_echantillons_donnes = enchantillonDonneManager.ReadAllFromEchantillon(echantillon);
-                    }
                 }
                 dataReader.Close();
                 CloseConnection();
             }
-            Debug.WriteLine("==============================" + id);
 
             return id;
         }
