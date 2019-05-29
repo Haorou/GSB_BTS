@@ -232,18 +232,13 @@ namespace GSB.Controllers
             RendezVousDAO rendezVousManager = new RendezVousDAO();
             EchantillonDAO echantillonManager = new EchantillonDAO();
             ProduitDAO produitDAO = new ProduitDAO();
-            
-            Debug.WriteLine("coucou GSB1 "+" " + nom +" " + concentration + " " + id_rdv + " " + quantite + " " + addOrModify);
-            int id_echantillonLu = echantillonManager.id_echantillon(nom, concentration, false);
-            //int id_echantillonLu =1;
-            Debug.WriteLine("============================" + id_echantillonLu);
+
+            Echantillon echantillonLu = echantillonManager.ReadByNomConcentration(nom, concentration, false);
+
             EchantillonDonne echantillonDonne = new EchantillonDonne();
             echantillonDonne.RendezVous = rendezVousManager.Read(id_rdv, true);
-            echantillonDonne.Echantillon = echantillonManager.Read(id_echantillonLu, true);
+            echantillonDonne.Echantillon = echantillonLu;
             echantillonDonne.Quantite = quantite;
-            echantillonDonne.Produit = produitDAO.ReadFromNom(nom, true);
-
-            Debug.WriteLine(id_echantillonLu + " " + echantillonDonne.RendezVous.Id_rdv);
 
             if (addOrModify.Equals("add")) // ADD
             {
