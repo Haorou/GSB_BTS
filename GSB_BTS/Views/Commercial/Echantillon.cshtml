@@ -280,16 +280,18 @@
                 }
             }
             else if (action == 'add') {
-                var id_rdv = $('#employe').data('id_rdv');
+                
+                var id_rdv = $("input[name='echantillon_donne_radio']:checked").data('id_rdv');
                 var famille =  $("#select_famille").val();
-                var medicament = $('#medicament').val();
-                var concentration = $('#select_concentration').val();
+                var nom = $('#medicament').val();
+                var concentration = $('#concentration').val();
                 var quantite = $('#quantite').val();
+                var action = $('#send_ED').data('action');
                 try {
                     $.ajax({
                         type: "POST",
                         url: "/Commercial/AjaxAddModifyED",
-                        data: "id_echantillon=" + "" + "&id_rdv=" + id_rdv + "&famille="+ famille + "&medicament="+ medicament +"&concentration="+ concentration + "&quantite=" + quantite
+                        data: "id_rdv=" + id_rdv + "&famille=" + famille + "&nom=" + nom + "&concentration=" + concentration + "&quantite=" + quantite + "&addOrModify=" + action,
                     }).then(function () {
                         location.reload();
                     });
@@ -297,6 +299,7 @@
                 catch (ex) {
                     alert("catch Ajax Error" + ex);
                 }
+                console.log("id_echantillon=" + "" + "&id_rdv=" + id_rdv + "&famille=" + famille + "&nom=" + nom + "&concentration=" + concentration + "&quantite=" + quantite);
             }
         });
 
