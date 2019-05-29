@@ -88,8 +88,8 @@ namespace GSB.Models.DAO
                                       "JOIN produit on produit.id_produit = echantillon.id_produit " +
                                       "WHERE produit.nom = @nom AND echantillon.concentration = @concentration";
 
-                command.Parameters.AddWithValue("@nom", produit.Nom );
-                command.Parameters.AddWithValue("@concentration", echantillon.Concentration);
+                command.Parameters.AddWithValue("@nom", nom );
+                command.Parameters.AddWithValue("@concentration", concentration);
 
                 // Lecture des résultats
                 dataReader = command.ExecuteReader();
