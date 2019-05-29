@@ -233,11 +233,11 @@ namespace GSB.Controllers
             EchantillonDAO echantillonManager = new EchantillonDAO();
             ProduitDAO produitDAO = new ProduitDAO();
 
-            Echantillon echantillonLu = echantillonManager.ReadByNomConcentration(nom, concentration, false);
+            int echantillonLu = echantillonManager.id_echantillon(nom, concentration, true);
 
             EchantillonDonne echantillonDonne = new EchantillonDonne();
             echantillonDonne.RendezVous = rendezVousManager.Read(id_rdv, true);
-            echantillonDonne.Echantillon = echantillonLu;
+            echantillonDonne.Echantillon = echantillonManager.Read(echantillonLu, true);
             echantillonDonne.Quantite = quantite;
 
             if (addOrModify.Equals("add")) // ADD
