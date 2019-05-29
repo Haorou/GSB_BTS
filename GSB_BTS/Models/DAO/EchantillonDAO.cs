@@ -96,7 +96,7 @@ namespace GSB.Models.DAO
 
                 while (dataReader.Read())
                 {
-                    echantillon.Id_echantillon = (int)dataReader["id_echantillon"];
+                    id = (int)dataReader["id_echantillon"];
                     if (!isReadFromEchantillonDonnes)
                     {
                         //Debug.WriteLine("   JE NE SUIS PAS LU ET C BIEN");
