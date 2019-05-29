@@ -42,6 +42,42 @@ namespace GSB.Models.DAO
             return produit;
         }
 
+        public Produit ReadFromNom(string nom, bool isReadFromEchantillonDonne)
+        {
+            Produit produit = new Produit();
+            if (OpenConnection())
+            {
+                EchantillonDAO echantillonManager = new EchantillonDAO();
+
+                command = manager.CreateCommand();
+                command.CommandText = "SELECT * " +
+                                        "FROM produit " +
+                                        "WHERE nom = @nom";
+                command.Parameters.AddWithValue("@nom", nom);
+
+                // Lecture des résultats
+                dataReader = command.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+                    produit.Id_produit = (int)dataReader["id_produit"];
+                    produit.Pathologie = (string)dataReader["pathologie"];
+                    produit.Famille = (string)dataReader["famille"];
+                    produit.Nom = (string)dataReader["nom"];
+                    produit.Notice = (string)dataReader["notice"];
+                    produit.Libelle = (string)dataReader["libelle"];
+                    if (!isReadFromEchantillonDonne)
+                    {
+                        Debug.WriteLine("   JE NE SUIS PAS LU ET C BIEN");
+                        produit.Echantillons = echantillonManager.ReadAllFromProduit(produit);
+                    }
+                }
+                dataReader.Close();
+                CloseConnection();
+            }
+            return produit;
+        }
+
 
         public void Create(Produit produit)
         {
