@@ -239,6 +239,7 @@ namespace GSB.Controllers
             echantillonDonne.RendezVous = rendezVousManager.Read(id_rdv, true);
             echantillonDonne.Echantillon = echantillonManager.Read(echantillonLu, true);
             echantillonDonne.Quantite = quantite;
+            echantillonDonne.Produit = produitDAO.ReadFromNom(nom, true);
 
             if (addOrModify.Equals("add")) // ADD
             {
