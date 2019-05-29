@@ -231,13 +231,17 @@ namespace GSB.Controllers
             EchantillonDonneDAO echantillonDonneManager = new EchantillonDonneDAO();
             RendezVousDAO rendezVousManager = new RendezVousDAO();
             EchantillonDAO echantillonManager = new EchantillonDAO();
-            Debug.WriteLine("coucou GSB1"+ nom + concentration + id_rdv + quantite + addOrModify);
-            Echantillon echantillonLu = echantillonManager.ReadByNomConcentration(nom, concentration, false);
-            Debug.WriteLine("coucou GSB2");
+            
+            Debug.WriteLine("coucou GSB1 "+" " + nom +" " + concentration + " " + id_rdv + " " + quantite + " " + addOrModify);
+            int id_echantillonLu = echantillonManager.id_echantillon(nom, concentration, false);
+            //int id_echantillonLu =1;
+            Debug.WriteLine("============================" + id_echantillonLu);
             EchantillonDonne echantillonDonne = new EchantillonDonne();
-            echantillonDonne.RendezVous.Id_rdv = id_rdv;
-            echantillonDonne.Echantillon.Id_echantillon = echantillonLu.Id_echantillon;
+            echantillonDonne.RendezVous = rendezVousManager.Read(id_rdv, true);
+            echantillonDonne.Echantillon = echantillonManager.Read(id_echantillonLu, true);
             echantillonDonne.Quantite = quantite;
+
+            Debug.WriteLine(id_echantillonLu + " " + echantillonDonne.RendezVous.Id_rdv);
 
             if (addOrModify.Equals("add")) // ADD
             {
@@ -245,7 +249,7 @@ namespace GSB.Controllers
             }
             else // MODIFY
             {
-                Debug.WriteLine("coucou GSB3");
+                //Debug.WriteLine("coucou GSB3");
                 echantillonDonneManager.Update(echantillonDonne);
             }
         }

@@ -262,20 +262,22 @@
             var concentration = $('#concentration').val();
             var nom = $('#medicament').val();
             var quantite = $('#quantite').val();
+
+            //console.log("======================== +++++    ++++++=" + nom)
             
             var action = $('#send_ED').data('action');
-            console.log("Je suis bien là");
+            //console.log("Je suis bien là");
             if (action == 'modify') {
-                console.log("Je suis bien là 2");
+                //console.log("Je suis bien là 2");
                 try {
                     $.ajax({
                         type: "POST",
                         url: "/Commercial/AjaxAddModifyED",
-                        data: "&medicament=" + nom + "&concentration=" + concentration + "&id_rdv=" + id_rdv + "&quantite=" + quantite + "&addOrModify=" + action,
+                        data: "medicament=" + nom + "&concentration=" + concentration + "&id_rdv=" + id_rdv + "&quantite=" + quantite + "&addOrModify=" + action,
                     }).then(function () {
-                        console.log("Je suis bien là 3");
-                        location.reload();
-                    });
+                       //location.reload();
+                        });
+                    console.log("medicament=" + nom + "&concentration=" + concentration + "&id_rdv=" + id_rdv + "&quantite=" + quantite + "&addOrModify=" + action);
                 }
                 catch (ex) {
                     alert("catch Ajax Error" + ex);

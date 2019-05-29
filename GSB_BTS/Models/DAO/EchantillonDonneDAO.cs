@@ -62,11 +62,11 @@ namespace GSB.Models.DAO
             {
                 command = manager.CreateCommand();
                 command.CommandText = "UPDATE echantillon_donne " +
-                                      "SET quantite=@quantite, " +
-                                      "WHERE  id_echantillon_donne=@id " +
+                                      "SET quantite=@quantite " +
+                                      "WHERE  id_echantillon=@id " +
                                       "AND id_rdv=@id_rdv";
                 command.Parameters.AddWithValue("@id", echantillonDonne.Echantillon.Id_echantillon);
-                command.Parameters.AddWithValue("@id_rdv", echantillonDonne.RendezVous);
+                command.Parameters.AddWithValue("@id_rdv", echantillonDonne.RendezVous.Id_rdv);
                 command.Parameters.AddWithValue("@quantite", echantillonDonne.Quantite);
 
                 command.ExecuteNonQuery();

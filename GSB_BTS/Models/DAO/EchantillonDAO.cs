@@ -52,10 +52,11 @@ namespace GSB.Models.DAO
                 while (dataReader.Read())
                 {
                     echantillon.Id_echantillon = (int)dataReader["id_echantillon"];
-                    echantillon.Quantite = (int)dataReader["quantite"];
-                    echantillon.Libelle = (string)dataReader["libelle"];
-                    echantillon.Concentration = (int)dataReader["concentration"];
                     echantillon.Produit = produitManager.Read((int)dataReader["id_produit"], isReadFromEchantillonDonnes);
+                    echantillon.Quantite = (int)dataReader["quantite"];
+                    echantillon.Concentration = (int)dataReader["concentration"];
+                    echantillon.Libelle = (string)dataReader["libelle"];
+                    
                     if(!isReadFromEchantillonDonnes)
                     {
                         //Debug.WriteLine("   JE NE SUIS PAS LU ET C BIEN");
@@ -69,8 +70,9 @@ namespace GSB.Models.DAO
             return echantillon;
         }
 
-        public Echantillon ReadByNomConcentration(string nom, int concentration, bool isReadFromEchantillonDonnes)
+        public int id_echantillon(string nom, int concentration, bool isReadFromEchantillonDonnes)
         {
+            int id = 0;
             
             Echantillon echantillon = new Echantillon();
             Produit produit = new Produit();
@@ -81,7 +83,7 @@ namespace GSB.Models.DAO
                 EchantillonDonneDAO enchantillonDonneManager = new EchantillonDonneDAO();
 
                 command = manager.CreateCommand();
-                command.CommandText = "SELECT * " +
+                command.CommandText = "SELECT id_echantillon " +
                                       "FROM echantillon " +
                                       "JOIN produit on produit.id_produit = echantillon.id_produit " +
                                       "WHERE produit.nom = @nom AND echantillon.concentration = @concentration";
@@ -95,10 +97,6 @@ namespace GSB.Models.DAO
                 while (dataReader.Read())
                 {
                     echantillon.Id_echantillon = (int)dataReader["id_echantillon"];
-                    echantillon.Quantite = (int)dataReader["quantite"];
-                    echantillon.Libelle = (string)dataReader["libelle"];
-                    echantillon.Concentration = (int)dataReader["concentration"];
-                    echantillon.Produit = produitManager.Read((int)dataReader["id_produit"], isReadFromEchantillonDonnes);
                     if (!isReadFromEchantillonDonnes)
                     {
                         //Debug.WriteLine("   JE NE SUIS PAS LU ET C BIEN");
@@ -108,8 +106,9 @@ namespace GSB.Models.DAO
                 dataReader.Close();
                 CloseConnection();
             }
+            Debug.WriteLine("==============================" + id);
 
-            return echantillon;
+            return id;
         }
 
         //public void Update(Echantillon echantillon)
