@@ -147,6 +147,7 @@ namespace GSB.Models.DAO
                 Debug.WriteLine("ICI ");
                 while (dataReader.Read())
                 {
+                    echantillonDonne = new EchantillonDonne();
                     echantillonDonne.Echantillon = echantillonManager.Read((int)dataReader["id_echantillon"], true);
                     echantillonDonne.Produit = produitManager.Read((int)dataReader["id_produit"], true);
                     echantillonDonne.Quantite = (int)dataReader["echantillonQuantite"];

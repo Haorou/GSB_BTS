@@ -54,7 +54,7 @@
                     <button type="submit" class="btn btn-success buttonModal"  data-toggle="modal" data-target="#EDModal" data-action="modify"><span class="glyphicon glyphicon-edit"></span>Modifier</button>
                 </td>
                 <td>
-                    <button type="submit" class="btn btn-warning buttonModal"  data-toggle="modal" id="eraseED"><span class="glyphicon glyphicon-trash"></span>Supprimer</button>
+                    <button type="submit" class="btn btn-warning" id="eraseED"><span class="glyphicon glyphicon-trash"></span>Supprimer</button>
                 </td>
             </tr>
             <tr>
@@ -300,18 +300,18 @@
             }
         });
 
-        $('eraseED').click(function () {
+        $('#eraseED').click(function () {
             console.log("SUPPRIMER")
-            var id_ED = $("input[name='echantillon_donne_radio']:checked").data('id');
+            var id_echantillon = $("input[name='echantillon_donne_radio']:checked").data('id_echantillon');
             var id_rdv = $("#employe").data('id_rdv');
-
+            
             try {
-                if (id_ED != null) {
+                if (id_echantillon != null) {
                     console.log("SUPPRIMER")
                     $.ajax({
                         type: "POST",
                         url: "/Commercial/AjaxDeleteDoubleID",
-                        data: "table=" + 'echantillon_donne' + "&id1=" + id_ED + "&id2=" + id_rdv,
+                        data: "table=" + 'echantillon_donne' + "&id1=" + id_echantillon + "&id2=" + id_rdv,
                     }).then(function () {
                         location.reload();
                         console.log("SUPPRIMER")
