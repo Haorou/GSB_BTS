@@ -1,13 +1,14 @@
 ﻿
 @{
     ViewBag.Title = "Echantillon";
+    var passeRDV = ViewBag.RendezVous;
 }
 
 <h2>Echantillon</h2>
-
+<p hidden></p>
 
 <div class="container">
-    <h2 id="employe" data-id="@ViewBag.Employe.Id">Bienvenue @ViewBag.Employe.Prenom @ViewBag.Employe.Nom</h2>
+    <h2 id="employe" data-id_rdv="@passeRDV.Id_rdv" data-id="@ViewBag.Employe.Id">Bienvenue @ViewBag.Employe.Prenom @ViewBag.Employe.Nom</h2>
     <p>@ViewBag.Employe.Nom : vous avez eu un rendez-vous avec :</p>
     <table class="table table-hover">
         <thead>
@@ -22,8 +23,6 @@
         </thead>
         <tbody>
             @{
-                var passeRDV = ViewBag.RendezVous;
-
                 var dateRDV = passeRDV.Date_rdv.ToShortDateString();
                 var heureRDV = passeRDV.Date_rdv.ToShortTimeString();
                 var dateBilan = passeRDV.Date_bilan.ToShortDateString();
@@ -76,7 +75,7 @@
                     {
                         <tr>
                             <th class="modal_RDV_form">
-                                <input checked type="radio" aria-label="" name="echantillon_donne_radio" data-id_echantillon="@mesEchantillonDonne[index].Echantillon.Id_echantillon" data-id_rdv="@mesEchantillonDonne[index].RendezVous.Id_rdv">
+                                <input checked type="radio" aria-label="" name="echantillon_donne_radio" data-id_echantillon="@mesEchantillonDonne[index].Echantillon.Id_echantillon">
                             </th>
 
                             <th class="modal_RDV_form">@mesEchantillonDonne[index].Produit.Famille</th>
@@ -133,11 +132,11 @@
                             @*<select class="browser-default custom-select" id="concentration">
                         <option value="Choisir une concentration" selected>Choisir une concentration</option>
                     </select>*@
-                            <input for="text" value="Choisir une concentration" class="form-control" id="concentration">
+                            <input for="text" placeholder="Choisir une concentration" class="form-control" id="concentration">
                         </div>
                         <div class="form-group">
                             <label for="text" class="col-form-label">Quantité:</label>
-                            <input for="text" value="Quantite" class="form-control" id="quantite">
+                            <input for="text" placeholder="Quantité" class="form-control" id="quantite">
                         </div>
                     </form>
                 </div>
@@ -167,7 +166,7 @@
                     $('#medicament').empty();
 
                     $.each(JsonResponse, function (key, value) {
-                        html = "<option value="+ value.Id +">" + value.Nom + "</option>";
+                        html = "<option value=" + value.Nom + ">" + value.Nom + "</option>";
                         $('#medicament').append(html);
                     })
                 });
@@ -207,7 +206,7 @@
             var modal = $('#EDModal'); // ModalHTML du RDV
 
             var id_echantillon = $("input[name='echantillon_donne_radio']:checked").data('id_echantillon'); // Bouton radio -> data-id="X"
-            var id_rdv = $("input[name='echantillon_donne_radio']:checked").data('id_rdv');
+            var id_rdv = $("#employe").data('id_rdv');
 
             if (action === 'modify') {
                 $('#send_ED').data('action', 'modify'); // Permet de changer le rôle du bouton "Ajouter" au sein du modal
@@ -224,7 +223,7 @@
                         $("#select_famille").val(JsonResponse.Echantillon.Produit.Famille);
                         $("#select_famille").attr('disabled', true); // Ajoute Readonly "fixe la valeur" a un Input - Ici select_famille
                         $('#medicament').empty();
-                        $('#medicament').append("<option value=" + JsonResponse.Echantillon.Produit.Nom +" selected>" + JsonResponse.Echantillon.Produit.Nom +"</option>")
+                        $('#medicament').append("<option value=\"" + JsonResponse.Echantillon.Produit.Nom +"\" selected>" + JsonResponse.Echantillon.Produit.Nom +"</option>")
                         $("#medicament").attr('disabled', true); // Ajoute Readonly "fixe la valeur" a un Input - Ici medicament
                         $("#concentration").val(JsonResponse.Echantillon.Concentration);
                         $("#concentration").attr('readonly', true);
@@ -246,19 +245,18 @@
 
                 $("#select_famille").val("Choisir une Famille");
                 $("#select_famille").attr('disabled', false);
-                $('#medicament').val("Choisir un medicament");
+                $('#medicament').val("");
                 $("#medicament").attr('disabled', false);
                 $('#select_concentration').val("Concentration");
                 $("#select_concentration").attr('disabled', false);
-                $('#quantite').val("Quantite");
+                $('#quantite').val("");
   
             }
         });
 
         // // Le bouton "ENVOYER" a la fin du modal (son data-action change au dessus avec bouton Modal)
         $('#send_ED').click(function () {
-            var id_echantillon = $("input[name='echantillon_donne_radio']:checked").data('id_echantillon'); 
-            var id_rdv = $("input[name='echantillon_donne_radio']:checked").data('id_rdv');
+            var id_rdv = $("#employe").data('id_rdv');
             var concentration = $('#concentration').val();
             var nom = $('#medicament').val();
             var quantite = $('#quantite').val();
@@ -279,14 +277,12 @@
                     alert("catch Ajax Error" + ex);
                 }
             }
-            else if (action == 'add') {
-                
-                var id_rdv = $("input[name='echantillon_donne_radio']:checked").data('id_rdv');
+            else if (action == 'add')
+            {
                 var famille =  $("#select_famille").val();
-                var nom = $('#medicament').val();
-                var concentration = $('#concentration').val();
-                var quantite = $('#quantite').val();
-                var action = $('#send_ED').data('action');
+
+                console.log("JE SUIS UN LOG ::::: " + "id_rdv=" + id_rdv + "&famille=" + famille + "&nom=" + nom + "&concentration=" + concentration + "&quantite=" + quantite + "&addOrModify=" + action);
+
                 try {
                     $.ajax({
                         type: "POST",

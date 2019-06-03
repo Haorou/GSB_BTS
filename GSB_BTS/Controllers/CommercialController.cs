@@ -247,7 +247,6 @@ namespace GSB.Controllers
             }
             else // MODIFY
             {
-                //Debug.WriteLine("coucou GSB3");
                 echantillonDonneManager.Update(echantillonDonne);
             }
         }
