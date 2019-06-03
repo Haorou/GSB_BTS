@@ -69,11 +69,11 @@ namespace GSB.Controllers
             if (ViewBag.Employe != null)
             {
                 ProduitDAO produitManager = new ProduitDAO();
-                EchantillonDonneDAO echantillonDAO = new EchantillonDonneDAO();
+                EchantillonDonneDAO echantillonDonneManager = new EchantillonDonneDAO();
                 RendezVousDAO rendezVousManager = new RendezVousDAO();
 
                 RendezVous rendezVous = rendezVousManager.Read(id_rdv, false);
-                List<EchantillonDonne> mesEchantillonsDonnes = echantillonDAO.ReadAllFromRendezVous(id_rdv);
+                List<EchantillonDonne> mesEchantillonsDonnes = echantillonDonneManager.ReadAllFromRendezVous(id_rdv);
                 List<Produit> mesFamilles = produitManager.ReadFamille();
 
                 ViewBag.Famille = mesFamilles;

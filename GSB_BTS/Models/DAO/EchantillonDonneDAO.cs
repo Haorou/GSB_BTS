@@ -133,7 +133,7 @@ namespace GSB.Models.DAO
                 ProduitDAO produitManager = new ProduitDAO();
 
                 command = manager.CreateCommand();
-                command.CommandText =   "SELECT distinct * " +
+                command.CommandText =   "SELECT ed.id_echantillon, ed.id_rdv, ed.quantite AS echantillonQuantite, p.id_produit " +
                                         "FROM produit p " +
                                         "join echantillon e on e.id_produit = p.id_produit " +
                                         "join echantillon_donne ed on ed.id_echantillon = e.id_echantillon " +
@@ -149,7 +149,7 @@ namespace GSB.Models.DAO
                 {
                     echantillonDonne.Echantillon = echantillonManager.Read((int)dataReader["id_echantillon"], true);
                     echantillonDonne.Produit = produitManager.Read((int)dataReader["id_produit"], true);
-                    echantillonDonne.Quantite = (int)dataReader["quantite"];                 
+                    echantillonDonne.Quantite = (int)dataReader["echantillonQuantite"];
                     echantillonDonne.RendezVous = rendezVousManager.Read(id_rdv,true);
 
                     liste_echantillons_donnes.Add(echantillonDonne);

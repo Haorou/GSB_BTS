@@ -54,11 +54,12 @@
                     <button type="submit" class="btn btn-success buttonModal"  data-toggle="modal" data-target="#EDModal" data-action="modify"><span class="glyphicon glyphicon-edit"></span>Modifier</button>
                 </td>
                 <td>
-                    <button type="submit" class="btn btn-warning buttonModal"  data-toggle="modal" data-target="#eraseED"><span class="glyphicon glyphicon-trash"></span>Supprimer</button>
+                    <button type="submit" class="btn btn-warning buttonModal"  data-toggle="modal" id="eraseED"><span class="glyphicon glyphicon-trash"></span>Supprimer</button>
                 </td>
             </tr>
             <tr>
                 <th class="modal_RDV_form">Choix</th>
+                <th class="modal_RDV_form">Données</th>
                 <th class="modal_RDV_form">Famille</th>
                 <th class="modal_RDV_form">Nom</th>
                 <th class="modal_RDV_form">Quantite</th>
@@ -77,10 +78,10 @@
                             <th class="modal_RDV_form">
                                 <input checked type="radio" aria-label="" name="echantillon_donne_radio" data-id_echantillon="@mesEchantillonDonne[index].Echantillon.Id_echantillon">
                             </th>
-
+                            <th class="modal_RDV_form">@mesEchantillonDonne[index].Quantite</th>
                             <th class="modal_RDV_form">@mesEchantillonDonne[index].Produit.Famille</th>
                             <th class="modal_RDV_form">@mesEchantillonDonne[index].Produit.Nom</th>
-                            <th class="modal_RDV_form">@mesEchantillonDonne[index].Quantite</th>
+                            <th class="modal_RDV_form">@mesEchantillonDonne[index].Echantillon.Quantite</th>
                             <th class="modal_RDV_form">@mesEchantillonDonne[index].Echantillon.Concentration</th>
                         </tr>
                     }
@@ -299,18 +300,28 @@
             }
         });
 
-        $('#eraseED').click(function () {
+        $('eraseED').click(function () {
+            console.log("SUPPRIMER")
             var id_ED = $("input[name='echantillon_donne_radio']:checked").data('id');
-            if (id_ED != null) {
-                $.ajax({
-                    type: "POST",
-                    url: "/Commercial/AjaxDelete",
-                    data: "table=" + 'echantillon_donne' + "&id1=" + id_ED + "&id2=" + id_rdv,
-                }).then(function () {
-                    location.reload();
-                });
+            var id_rdv = $("#employe").data('id_rdv');
+
+            try {
+                if (id_ED != null) {
+                    console.log("SUPPRIMER")
+                    $.ajax({
+                        type: "POST",
+                        url: "/Commercial/AjaxDeleteDoubleID",
+                        data: "table=" + 'echantillon_donne' + "&id1=" + id_ED + "&id2=" + id_rdv,
+                    }).then(function () {
+                        location.reload();
+                        console.log("SUPPRIMER")
+                    });
+                }
             }
-        });
+            catch (ex) {
+                 alert("catch Ajax Error" + ex);
+            }
+            });
 
     </script>
 
