@@ -208,7 +208,7 @@
                     try {
                         $.ajax({
                             type: "POST",
-                            url: "/Commercial/AjaxReader",
+                            url: "/AjaxCommercial/Read",
                             data: "table=" + 'etablissement' + "&id=" + id_etablissement,
                         }).then(function (response) {
                             var JsonResponse = JSON.parse(response);
@@ -243,7 +243,7 @@
                     try {
                         $.ajax({
                             type: "POST",
-                            url: "/Commercial/AjaxAddEtablissement",
+                            url: "/AjaxCommercial/AddEtablissement",
                             data: "nom=" + nom + "&adresse=" + adresse,
                         }).then(function () {
                             location.reload();
@@ -263,7 +263,7 @@
                     try {
                         $.ajax({
                             type: "POST",
-                            url: "/Commercial/AjaxDelete",
+                            url: "/AjaxCommercial/Delete",
                             data: "table=" + "praticien" + "&id=" + id_praticien,
                         }).then(function () {
                             location.reload();
@@ -293,7 +293,7 @@
                     try {
                         $.ajax({
                             type: "POST",
-                            url: "/Commercial/AjaxAddPraticienToEtablissement",
+                            url: "/AjaxCommercial/AddPraticienToEtablissement",
                             data: "fonction=" + fonction + "&specialite=" + specialite + "&nom=" + nom + "&prenom=" +
                                 prenom + "&telephone=" + telephone + "&email=" + email + "&id_etablissement=" + id_etablissement,
                         }).then(function () {

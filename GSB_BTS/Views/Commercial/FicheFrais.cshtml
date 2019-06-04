@@ -178,7 +178,7 @@
 
                     $.ajax({ // Plusieurs éléments sont attendus pour une requête Ajax : TYPE / URL / DATA
                         type: "POST",
-                        url: "/Commercial/AjaxReader",
+                        url: "/AjaxCommercial/Read",
                         data: 'table=' + "ligne_frais" + '&id=' + id_ligneFrais,
                     }).then(function (response) { // Then fonctionne uniquement après que la fonction C# ait renvoyée quelque chose
                         var JsonResponse = JSON.parse(response);
@@ -248,7 +248,7 @@
                    
                     $.ajax({
                         type: "POST",
-                        url: "/Commercial/AjaxAddModifyFF",
+                        url: "/AjaxCommercial/AddModifyFF",
                         data: "id_ligne_frais=" + '' + "&id_fiche_frais=" + id_fiche_frais + "&type_frais=" + type_frais +
                             "&type_forfait=" + type_forfait + "&montant=" + montant + "&libelle=" + libelle +
                             "&id_rdv=" + id_rdv + "&id_employe=" + id_employe + "&date_modif=" + date_modif, 
@@ -265,7 +265,7 @@
                 try {
                     $.ajax({
                         type: "POST",
-                        url: "/Commercial/AjaxAddModifyFF",
+                        url: "/AjaxCommercial/AddModifyFF",
                         data: "id_ligne_frais=" + id_ligne_frais + "&id_fiche_frais=" + id_fiche_frais + "&type_frais=" + type_frais +
                             "&type_forfait=" + type_forfait + "&montant=" + montant + "&libelle=" + libelle +
                             "&id_rdv=" + id_rdv + "&id_employe=" + id_employe + "&date_modif=" + date_modif, 
@@ -284,7 +284,7 @@
             if (id_ligne_frais != null) {
                 $.ajax({
                     type: "POST",
-                    url: "/Commercial/AjaxDelete",
+                    url: "/AjaxCommercial/Delete",
                     data: "table=" + 'ligne_frais' + "&id=" + id_ligne_frais,
                 }).then(function () {
                     location.reload();

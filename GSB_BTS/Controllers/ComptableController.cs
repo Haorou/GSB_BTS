@@ -36,8 +36,6 @@ namespace GSB.Controllers
 
         public string AjaxReceiver(string table, int id)
         {
-            ViewBag.Employe = (Employe)Session["Employe"];
-
             string response = "";
             if(table.Equals("fiche_frais"))
             {

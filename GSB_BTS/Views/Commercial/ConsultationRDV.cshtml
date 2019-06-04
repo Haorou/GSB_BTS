@@ -208,7 +208,7 @@
 
                         $.ajax({ // Plusieurs éléments sont attendus pour une requête Ajax : TYPE / URL / DATA
                             type: "POST",
-                            url: "/Commercial/AjaxReader",
+                            url: "/AjaxCommercial/Read",
                             data: 'table=' + "rendez_vous" + '&id=' + id_rdv,
                         }).then(function (response) { // Then fonctionne uniquement après que la fonction C# est renvoyé quelque chose
                             var JsonResponse = JSON.parse(response);
@@ -272,7 +272,7 @@
                     try {
                         $.ajax({
                             type: "POST",
-                            url: "/Commercial/AjaxAddModifyRDV",
+                            url: "/AjaxCommercial/AddModifyRDV",
                             data: "id=" + '' + "&date=" + date + "&time=" + time + "&motif=" + motif + "&indice=" + indice + "&id_employe=" + id_employe + "&id_praticien=" + id_praticien,
                         }).then(function () {
                             location.reload();
@@ -288,7 +288,7 @@
                     try {
                         $.ajax({
                             type: "POST",
-                            url: "/Commercial/AjaxAddModifyRDV",
+                            url: "/AjaxCommercial/AddModifyRDV",
                             data: "id=" + id_rdv + "&date=" + date + "&time=" + time + "&motif=" + motif + "&indice=" + indice + "&id_employe=" + id_employe + "&id_praticien=" + id_praticien,
                         }).then(function () {
                             location.reload();
@@ -305,7 +305,7 @@
                 if (id_rdv != null) {
                     $.ajax({
                         type: "POST",
-                        url: "/Commercial/AjaxDelete",
+                        url: "/AjaxCommercial/Delete",
                         data: "table=" + 'rendez_vous' + "&id=" + id_rdv,
                     }).then(function () {
                         location.reload();

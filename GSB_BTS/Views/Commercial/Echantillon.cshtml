@@ -160,7 +160,7 @@
             try {
                 $.ajax({ // Plusieurs éléments sont attendus pour une requête Ajax : TYPE / URL / DATA
                     type: "POST",
-                    url: "/Commercial/AjaxProduitFromFamille",
+                    url: "/AjaxCommercial/ProduitFromFamille",
                     data: 'famille=' + famille,
                 }).then(function (response) { // Then fonctionne uniquement après que la fonction C# est renvoyé quelque chose
                     var JsonResponse = JSON.parse(response);
@@ -190,7 +190,7 @@
                 try {
                     $.ajax({ // Plusieurs éléments sont attendus pour une requête Ajax : TYPE / URL / DATA
                         type: "POST",
-                        url: "/Commercial/AjaxReaderDoubleID",
+                        url: "/AjaxCommercial/ReadDoubleID",
                         data: 'table=' + "echantillon_donne" + '&id1=' + id_echantillon + '&id2=' + id_rdv,
                     }).then(function (response) { // Then fonctionne uniquement après que la fonction C# est renvoyé quelque chose
                         var JsonResponse = JSON.parse(response);
@@ -251,7 +251,7 @@
                 try {
                     $.ajax({
                         type: "POST",
-                        url: "/Commercial/AjaxAddModifyED",
+                        url: "/AjaxCommercial/AddModifyED",
                         data: "nom=" + nom + "&concentration=" + concentration + "&id_rdv=" + id_rdv + "&quantite=" + quantite + "&addOrModify=" + action,
                     }).then(function () {
                         location.reload();
@@ -269,7 +269,7 @@
                     console.log(nom);
                     $.ajax({
                         type: "POST",
-                        url: "/Commercial/AjaxAddModifyED",
+                        url: "/AjaxCommercial/AddModifyED",
                         data: "id_rdv=" + id_rdv + "&famille=" + famille + "&nom=" + nom + "&concentration=" + concentration + "&quantite=" + quantite + "&addOrModify=" + action,
                     }).then(function (response)
                     {
@@ -298,7 +298,7 @@
                 if (id_echantillon != null) {
                     $.ajax({
                         type: "POST",
-                        url: "/Commercial/AjaxDeleteDoubleID",
+                        url: "/AjaxCommercial/DeleteDoubleID",
                         data: "table=" + 'echantillon_donne' + "&id1=" + id_echantillon + "&id2=" + id_rdv,
                     }).then(function () {
                         location.reload();
@@ -309,33 +309,6 @@
                  alert("catch Ajax Error" + ex);
             }
             });
-
-
-
-
-        //$('#concentration').change(function () {
-        //    var concentration = $(this).val();
-
-        //    try {
-        //        $.ajax({ // Plusieurs éléments sont attendus pour une requête Ajax : TYPE / URL / DATA
-        //            type: "POST",
-        //            url: "/Commercial/AjaxProduitFromFamille",
-        //            data: 'concentration=' + concentration,
-        //        }).then(function (response) { // Then fonctionne uniquement après que la fonction C# est renvoyé quelque chose
-        //            var JsonResponse = JSON.parse(response);
-
-        //            $('#medicament').empty();
-
-        //            $.each(JsonResponse, function (key, value) {
-        //                html = "<option value="+ value.Id +">" + value.Nom + "</option>";
-        //                $('#concentration').append(html);
-        //            })
-        //        });
-        //    }
-        //    catch (ex) {
-        //        alert("catch Ajax Error" + ex);
-        //    }
-        //});
 
     </script>
 
