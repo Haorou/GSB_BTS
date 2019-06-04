@@ -9,68 +9,92 @@
     <div class="container">
         <h2>Hover Rows</h2>
         <p>Consultation des fiches frais</p>
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>Commercial</th>
-                    <th>Comptable</th>
-                    <th>Date fiche </th>
-                </tr>
-            </thead>
-            <tbody>
 
+        @{
+            var ficheFrais = ViewBag.FichesFrais;
+            int tailleFichesFrais = ficheFrais.Count;
+            for (int index = 0; index < tailleFichesFrais; index++)
+            {
+                <table class="table table-hover">
 
-                @{
-                    var ficheFrais = ViewBag.FichesFrais;
-                    int tailleFichesFrais = ficheFrais.Count;
-                    for (int index = 0; index < tailleFichesFrais; index++)
-                    { 
-                    var dateFiche = ficheFrais[index].Date_fiche.ToShortDateString();
+                    <thead>
+                        <tr>
+                            <th>Commercial</th>
+                            <th>Praticien</th>
+                            <th>Date RDV</th>
+                            <th>Motif RDV</th>
+                            <th>Date fiche </th>
+                        </tr>
+                    </thead>
+                    <tbody>
 
-                    <tr>
-                        <th>@ficheFrais[index].Commercial_visiteur.Nom</th>
-                        <th>@if (ficheFrais[index].Comptable != null){@ficheFrais[index].Comptable.Nom}</th>
-                        <th>@dateFiche</th>
-                       
-                        <th>
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-id="@ficheFrais[index].Id_fiche_frais">Modifier</button>
-                        </th>
-                    </tr>
+                        @{var dateFiche = ficheFrais[index].Date_fiche.ToShortDateString();
+                            var dateRdv = ficheFrais[index].Rdv.Date_rdv.ToShortDateString();}
+                        <tr>
+                            <th>@ficheFrais[index].Commercial_visiteur.Nom</th>
+                            <th>@ficheFrais[index].Rdv.Praticien.Nom</th>
+                            <th>@dateRdv</th>
+                            <th>@ficheFrais[index].Rdv.Motif_rdv</th>
+                            <!--<th>@if (ficheFrais[index].Comptable != null){@ficheFrais[index].Comptable.Nom}</th>-->
+                            <th>@dateFiche</th>
+                        </tr>
+
+                        <thead>
+                            <tr>
+                                <th>Type frais</th>
+                                <th>Type forfait</th>
+                                <th>Libelle</th>
+                                <th>Montant</th>
+                                <th>Etat ligne frais</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var ligne_frais in ficheFrais[index].Liste_lignes_frais)
+                            {
+                                <tr>
+                                    <th>@ligne_frais.Frais</th>
+                                    <th>@ligne_frais.Forfait</th>
+                                    <th>@ligne_frais.Libelle</th>
+                                    <th>@ligne_frais.Montant</th>
+                                    <th>@ligne_frais.EtatLigne</th>
+                                </tr>
+                            }
+                        </tbody>
+                    </tbody>
+                </table>
                     }
-                 }
-            </tbody>
-        </table>
+                    }
 
 
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Fiche Frais</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form>
-                            <div class="form-group">
-                                <label for="recipient-name" class="col-form-label">Recipient:</label>
-                                <input type="text" class="form-control" id="recipient-name">
+                <div class="modal fade" id="modalFicheFrais" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Fiche Frais</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
                             </div>
-                            <div class="form-group">
-                                <label for="message-text" class="col-form-label">Message:</label>
-                                <textarea class="form-control" id="message-text"></textarea>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="form-group">
+                                        <label for="recipient-name" class="col-form-label">Recipient:</label>
+                                        <input type="text" class="form-control" id="recipient-name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="message-text" class="col-form-label">Message:</label>
+                                        <textarea class="form-control" id="message-text"></textarea>
+                                    </div>
+                                </form>
                             </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Send message</button>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Send message</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 
         @section scripts {
             <script type="text/javascript">
@@ -82,7 +106,7 @@
 
                         $.ajax({
                             type: "POST",
-                            url: "http://localhost:51921/Comptable/AjaxReceiver",
+                            url: "/AjaxComptable/Read",
                             data: 'table=' + "fiche_frais" + '&id=' + recipient,
                         }).then(function (response) {
                             var JsonResponse = JSON.parse(response);
@@ -97,6 +121,12 @@
                     modal.find('.modal-title').text('Fiche Frais n°' + recipient)
                     modal.find('.modal-body input').val(recipient)
                 })
+
+
+
+
+
+
             </script>
         }
     }

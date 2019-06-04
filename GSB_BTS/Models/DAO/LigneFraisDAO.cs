@@ -73,6 +73,7 @@ namespace GSB.Models.DAO
                     ligne_frais.Libelle = (string)dataReader["libelle"];
                     ligne_frais.Date_engagement = dataReader["date_engagement"].ToString() == "" ? null : (DateTime?)dataReader["date_engagement"];
                     ligne_frais.Date_modification = dataReader["date_modification"].ToString() == "" ? null : (DateTime?)dataReader["date_modification"];
+                    ligne_frais.Montant = (int)dataReader["montant"];
                     list_fiche_frais.Add(ligne_frais);
                 }
                 dataReader.Close();

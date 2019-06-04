@@ -33,19 +33,5 @@ namespace GSB.Controllers
                 return RedirectToAction("Index", "Home");
             }
         }
-
-        public string AjaxReceiver(string table, int id)
-        {
-            string response = "";
-            if(table.Equals("fiche_frais"))
-            {
-                FicheFraisDAO ficheFraisManager = new FicheFraisDAO();
-                FicheFrais ficheFrais = ficheFraisManager.Read(id, true);
-                JavaScriptSerializer serializer = new JavaScriptSerializer();
-                response = serializer.Serialize(ficheFrais);
-            }
-
-            return response;
-        }
     }
 }

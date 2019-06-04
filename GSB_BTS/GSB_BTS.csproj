@@ -138,6 +138,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AjaxCommercialController.cs" />
     <Compile Include="Controllers\CommercialController.cs" />
+    <Compile Include="Controllers\AjaxComptableController.cs" />
     <Compile Include="Controllers\ComptableController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
@@ -242,7 +243,6 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Commercial\ConsultationRDV.cshtml" />
     <Content Include="Views\Comptable\Comptable.cshtml" />
-    <Content Include="Views\Comptable\FicheFraisVue.cshtml" />
     <Content Include="Views\Home\Error.cshtml" />
     <Content Include="Views\Shared\_CookieConsentPartial.cshtml" />
     <Content Include="Views\Shared\_ValidationScriptsPartial.cshtml" />
