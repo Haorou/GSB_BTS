@@ -325,7 +325,7 @@ namespace GSB.Controllers
             etablissementManager.Create(etablissement);
         }
 
-        public void AjaxAddModifyFF(int? id_ligne_frais, int id_fiche_frais, string type_frais, string type_forfait, int montant, string libelle, int id_rdv, int id_employe, DateTime date_modif)
+        public void AjaxAddModifyFF(int? id_ligne_frais, int id_fiche_frais, string type_frais, string type_forfait, int montant, string libelle, int id_rdv, int id_employe, DateTime? date_modif)
         {
             LigneFraisDAO ligneFraisManager = new LigneFraisDAO();
             FicheFraisDAO ficheFraisManager = new FicheFraisDAO();
@@ -345,7 +345,7 @@ namespace GSB.Controllers
             }
             else // MODIFY
             {
-                ligneFraisManager.Update(newLigneFrais, date_modif);
+                ligneFraisManager.Update(newLigneFrais, (DateTime)date_modif);
                 //Debug.WriteLine("=============================================" + newLigneFrais.Date_modification);
             }
         }

@@ -167,7 +167,7 @@
     <script type="text/javascript">
 
         $('.buttonModal').click(function () { // Bouton Ajouter / Modifier Click
-            var action = $(this).data('action'); // data-action="modify" OU "add"
+            var action = $(this).data('action'); // data-action="modify" OU "add"                      
             var modal = $('#FFModal'); // ModalHTML du RDV
             var id_rdv = $('#employe').data('id_rdv'); // On récupère l'id qui est dans l'URL
             var id_ligneFrais = $("input[name='radio_ligneFrais']:checked").data('id');
@@ -251,7 +251,7 @@
                         url: "/Commercial/AjaxAddModifyFF",
                         data: "id_ligne_frais=" + '' + "&id_fiche_frais=" + id_fiche_frais + "&type_frais=" + type_frais +
                             "&type_forfait=" + type_forfait + "&montant=" + montant + "&libelle=" + libelle +
-                            "&id_rdv=" + id_rdv + "&id_employe=" + id_employe, 
+                            "&id_rdv=" + id_rdv + "&id_employe=" + id_employe + "&date_modif=" + date_modif, 
                     }).then(function () {
                         location.reload();
                     });
@@ -273,7 +273,6 @@
                         location.reload();
                     });
                 }
-
                 catch (ex) {
                     alert("catch Ajax Error" + ex);
                 }
