@@ -226,8 +226,9 @@ namespace GSB.Controllers
             }
         }
 
-        public void AjaxAddModifyED(string nom, int concentration, int id_rdv, int quantite, string addOrModify)
+        public string AjaxAddModifyED(string nom, int concentration, int id_rdv, int quantite, string addOrModify)
         {
+            string response = "";
             EchantillonDonneDAO echantillonDonneManager = new EchantillonDonneDAO();
             RendezVousDAO rendezVousManager = new RendezVousDAO();
             EchantillonDAO echantillonManager = new EchantillonDAO();
@@ -243,12 +244,24 @@ namespace GSB.Controllers
 
             if (addOrModify.Equals("add")) // ADD
             {
-                echantillonDonneManager.Create(echantillonDonne);
+                if (echantillonDonneManager.Read(echantillonDonne.Echantillon.Id_echantillon,
+                                                echantillonDonne.RendezVous.Id_rdv) == null)
+                {
+                    echantillonDonneManager.Create(echantillonDonne);
+                    response = "Add done !";
+                }
+                else
+                {
+                    response = "Allready exist !";
+                }
+
             }
             else // MODIFY
             {
                 echantillonDonneManager.Update(echantillonDonne);
+                response = "Modify done !";
             }
+            return response;
         }
 
         public void AjaxModifyED(int quantite)
@@ -364,7 +377,14 @@ namespace GSB.Controllers
                 EchantillonDonneDAO echantillonDonneManager = new EchantillonDonneDAO();
                 EchantillonDonne echantillonDonne = echantillonDonneManager.Read(id1, id2);
                 JavaScriptSerializer serializer = new JavaScriptSerializer();
-                response = serializer.Serialize(echantillonDonne);
+                if (echantillonDonne == null)
+                {
+                    response = "null";
+                }
+                else
+                {
+                    response = serializer.Serialize(echantillonDonne);
+                }
             }
 
             return response;
@@ -378,7 +398,6 @@ namespace GSB.Controllers
                 echantillonDonneManager.Delete(id1, id2);
             }
         }
-
 
     }
    

@@ -27,7 +27,7 @@ namespace GSB.Models.DAO
 
         public EchantillonDonne Read(int id_echantillon, int id_rdv)
         {
-            EchantillonDonne echantillonDonne = new EchantillonDonne();
+            EchantillonDonne echantillonDonne = null;
             if (OpenConnection())
             {
                 command = manager.CreateCommand();
@@ -46,6 +46,7 @@ namespace GSB.Models.DAO
 
                 while (dataReader.Read())
                 {
+                    echantillonDonne = new EchantillonDonne();
                     echantillonDonne.Echantillon = echantillonManager.Read((int)dataReader["id_echantillon"], true);
                     echantillonDonne.RendezVous = rendezVousManager.Read((int)dataReader["id_rdv"], true);
                     echantillonDonne.Quantite = (int)dataReader["quantite"];

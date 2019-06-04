@@ -59,10 +59,10 @@
             </tr>
             <tr>
                 <th class="modal_RDV_form">Choix</th>
-                <th class="modal_RDV_form">Données</th>
+                <th class="modal_RDV_form">Boites données</th>
                 <th class="modal_RDV_form">Famille</th>
                 <th class="modal_RDV_form">Nom</th>
-                <th class="modal_RDV_form">Quantite</th>
+                <th class="modal_RDV_form">Nombre de cachets</th>
                 <th class="modal_RDV_form">Concentration</th>
             </tr>
         </thead>
@@ -124,16 +124,17 @@
                         </div>
                         <div class="form-group">
                             <label for="text" class="col-form-label">Medicament:</label>
-                            <select class="browser-default custom-select" id="medicament">
+                            <select class="browser-default custom-select"  id="medicament">
                                 <option value="Choisir un medicament" selected>Choisir un medicament</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="text" class="col-form-label">Concentration:</label>
-                            @*<select class="browser-default custom-select" id="concentration">
-                        <option value="Choisir une concentration" selected>Choisir une concentration</option>
-                    </select>*@
-                            <input for="text" placeholder="Choisir une concentration" class="form-control" id="concentration">
+                            <select class="browser-default custom-select" id="concentration">
+                                <option value="500" selected>500</option>
+                                <option value="1000">1000</option>
+                            </select>
+                            <!--<input for="text" placeholder="Choisir une concentration" class="form-control" id="concentration">-->
                         </div>
                         <div class="form-group">
                             <label for="text" class="col-form-label">Quantité:</label>
@@ -177,32 +178,7 @@
             }
         });
 
-        //$('#concentration').change(function () {
-        //    var concentration = $(this).val();
-
-        //    try {
-        //        $.ajax({ // Plusieurs éléments sont attendus pour une requête Ajax : TYPE / URL / DATA
-        //            type: "POST",
-        //            url: "/Commercial/AjaxProduitFromFamille",
-        //            data: 'concentration=' + concentration,
-        //        }).then(function (response) { // Then fonctionne uniquement après que la fonction C# est renvoyé quelque chose
-        //            var JsonResponse = JSON.parse(response);
-
-        //            $('#medicament').empty();
-
-        //            $.each(JsonResponse, function (key, value) {
-        //                html = "<option value="+ value.Id +">" + value.Nom + "</option>";
-        //                $('#concentration').append(html);
-        //            })
-        //        });
-        //    }
-        //    catch (ex) {
-        //        alert("catch Ajax Error" + ex);
-        //    }
-        //});
-
         $('.buttonModal').click(function () { // Bouton Ajouter / Modifier Click
-
             var action = $(this).data('action'); // data-action="modify" OU "add"
             var modal = $('#EDModal'); // ModalHTML du RDV
 
@@ -219,7 +195,7 @@
                     }).then(function (response) { // Then fonctionne uniquement après que la fonction C# est renvoyé quelque chose
                         var JsonResponse = JSON.parse(response);
 
-                        modal.find('.modal-title').text('MODIFICATION Echantillons données ');
+                        modal.find('.modal-title').text('MODIFICATION Echantillons donnés ');
 
                         $("#select_famille").val(JsonResponse.Echantillon.Produit.Famille);
                         $("#select_famille").attr('disabled', true); // Ajoute Readonly "fixe la valeur" a un Input - Ici select_famille
@@ -244,14 +220,13 @@
 
                 modal.find('.modal-title').text('NOUVEL echantillon Donne');
 
-                $("#select_famille").val("Choisir une Famille");
+                $("#select_famille").val("Choisir une famille");
                 $("#select_famille").attr('disabled', false);
-                $('#medicament').val("");
+                $('#medicament').val("Choisir un medicament");
                 $("#medicament").attr('disabled', false);
                 $('#select_concentration').val("Concentration");
                 $("#select_concentration").attr('disabled', false);
                 $('#quantite').val("");
-  
             }
         });
 
@@ -263,7 +238,15 @@
             var quantite = $('#quantite').val();
 
             var action = $('#send_ED').data('action');
-            if (action == 'modify') {
+
+            if (nom == "Choisir un médicament" || quantite == 0 || quantite == null)
+            {
+                swal({
+                    title: "Veuillez renseigner tous les champs",
+                    type: "warning"
+                });
+            }
+            else if (action == 'modify') {
 
                 try {
                     $.ajax({
@@ -282,39 +265,43 @@
             {
                 var famille =  $("#select_famille").val();
 
-                console.log("JE SUIS UN LOG ::::: " + "id_rdv=" + id_rdv + "&famille=" + famille + "&nom=" + nom + "&concentration=" + concentration + "&quantite=" + quantite + "&addOrModify=" + action);
-
                 try {
+                    console.log(nom);
                     $.ajax({
                         type: "POST",
                         url: "/Commercial/AjaxAddModifyED",
                         data: "id_rdv=" + id_rdv + "&famille=" + famille + "&nom=" + nom + "&concentration=" + concentration + "&quantite=" + quantite + "&addOrModify=" + action,
-                    }).then(function () {
-                        location.reload();
+                    }).then(function (response)
+                    {
+                        if (response == "Allready exist !") {
+                            swal({
+                                title: "Vous avez déjà donné cet échantillon",
+                                type: "warning"
+                            });
+                        }
+                        else {
+                            location.reload();
+                        }
                     });
                 }
                 catch (ex) {
                     alert("catch Ajax Error" + ex);
                 }
-                console.log("id_echantillon=" + "" + "&id_rdv=" + id_rdv + "&famille=" + famille + "&nom=" + nom + "&concentration=" + concentration + "&quantite=" + quantite);
             }
         });
 
         $('#eraseED').click(function () {
-            console.log("SUPPRIMER")
             var id_echantillon = $("input[name='echantillon_donne_radio']:checked").data('id_echantillon');
             var id_rdv = $("#employe").data('id_rdv');
             
             try {
                 if (id_echantillon != null) {
-                    console.log("SUPPRIMER")
                     $.ajax({
                         type: "POST",
                         url: "/Commercial/AjaxDeleteDoubleID",
                         data: "table=" + 'echantillon_donne' + "&id1=" + id_echantillon + "&id2=" + id_rdv,
                     }).then(function () {
                         location.reload();
-                        console.log("SUPPRIMER")
                     });
                 }
             }
@@ -322,6 +309,33 @@
                  alert("catch Ajax Error" + ex);
             }
             });
+
+
+
+
+        //$('#concentration').change(function () {
+        //    var concentration = $(this).val();
+
+        //    try {
+        //        $.ajax({ // Plusieurs éléments sont attendus pour une requête Ajax : TYPE / URL / DATA
+        //            type: "POST",
+        //            url: "/Commercial/AjaxProduitFromFamille",
+        //            data: 'concentration=' + concentration,
+        //        }).then(function (response) { // Then fonctionne uniquement après que la fonction C# est renvoyé quelque chose
+        //            var JsonResponse = JSON.parse(response);
+
+        //            $('#medicament').empty();
+
+        //            $.each(JsonResponse, function (key, value) {
+        //                html = "<option value="+ value.Id +">" + value.Nom + "</option>";
+        //                $('#concentration').append(html);
+        //            })
+        //        });
+        //    }
+        //    catch (ex) {
+        //        alert("catch Ajax Error" + ex);
+        //    }
+        //});
 
     </script>
 

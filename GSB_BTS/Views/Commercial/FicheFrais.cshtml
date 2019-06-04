@@ -94,9 +94,9 @@
                             <div class='col-sm-6' id="col-sm-6_RDV">
                                 <div class="form-group" style="display:flex; flex-direction: row;">
                                     <label for="example-date-input" class="col-3 col-form-label" style="flex-shrink:0;">Date création</label>
-                                    <input class="form-control" type="date" value="" id="date_create" required>
+                                    <input class="form-control" type="date" value="" id="date_create" disabled>
                                     <label for="example-date-input" class="col-3 col-form-label" style="flex-shrink:0;">Date modification</label>
-                                    <input class="form-control" type="date" value="" id="date_modif">
+                                    <input class="form-control" type="date" value="" id="date_modif" disabled>
                                 </div>
                                 <!--<div style="display: flex; flex-direction: row;">
         <label for="example-date-input" class="col-3 col-form-label">Date engagement</label>
@@ -172,9 +172,6 @@
             var id_rdv = $('#employe').data('id_rdv'); // On récupère l'id qui est dans l'URL
             var id_ligneFrais = $("input[name='radio_ligneFrais']:checked").data('id');
 
-
-            //console.log(id_ligneFrais);
-
             if (action === 'modify') {
                 $('#send_FF').data('action', 'modify'); // Permet de changer le rôle du bouton "Ajouter" au sein du modal
                 try {
@@ -196,9 +193,7 @@
 
 
                         $("#date_create").val(dateAmericanFormat.substring(0, 10));
-                        $("#date_create").attr('disabled', true); // Ajoute Readonly "fixe la valeur" a un Input - Ici date_create
                         $("#date_modif").val(dateAmericanFormat_now.substring(0, 10));
-                        $("#date_modif").attr('disabled', true);  // Ajoute Readonly "fixe la valeur" a un Input
 
                         $("#libelle").val(JsonResponse.Libelle);
                         $("#montant").val(JsonResponse.Montant);
@@ -226,7 +221,6 @@
                 
 
                 $('#date_create').val(dateAmericanFormat.substring(0, 10));
-                $("#date_create").attr('disabled', true);
                 $("#type_forfait").val("Choisir un forfait");
                 $('#type_frais').val("Choisir un type de frais");
                 $('#montant').val();
@@ -240,15 +234,10 @@
             
             var id_fiche_frais = $('#employe').data('id_fiche_frais');
             var date_modif = $('#date_modif').val();
-
-            console.log(date_modif);
-
             var type_forfait = $('#type_forfait').val();
-            var type_frais = $('#type_frais').val();
-           
+            var type_frais = $('#type_frais').val();         
             var montant = $('#montant').val();
             var libelle = $('#libelle').val();
-
             var id_employe = $('#employe').data('id_employe');
             var id_rdv = $('#employe').data('id_rdv');
 
@@ -266,16 +255,13 @@
                     }).then(function () {
                         location.reload();
                     });
-                    //console.log("DAns le Ajax à la fin");
                 }
                 catch (ex) {
                     alert("catch Ajax Error" + ex);
                 }
-//                $('#FFModal').remove();
             }
             else if (action == 'modify') {
                 var id_ligne_frais = $("input[name='radio_ligneFrais']:checked").data('id');
-                //console.log("Je suis bien là");
                 try {
                     $.ajax({
                         type: "POST",
