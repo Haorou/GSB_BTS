@@ -226,15 +226,14 @@ namespace GSB.Models.DAO
             {
                 command = manager.CreateCommand();
                 command.CommandText = "UPDATE fiche_frais " +
-                                      "SET id_comptable=@id_comptable, id_commercial_visiteur=@id_commercial_visiteur, id_rdv=@id_rdv,  date_fiche=@date_fiche, date_modification=@date_modification " +
+                                      "SET id_comptable=@id_comptable, id_commercial_visiteur=@id_commercial_visiteur, id_rdv=@id_rdv, date_fiche=@date_fiche " +
                                       "WHERE fiche_frais.id_fiche_frais = @id_fiche_frais";
 
                 command.Parameters.AddWithValue("@id_fiche_frais", ficheFrais.Id_fiche_frais);
-                command.Parameters.AddWithValue("@id_comptable", ficheFrais.Comptable);
-                command.Parameters.AddWithValue("@id_commercial_visiteur", ficheFrais.Commercial_visiteur);
+                command.Parameters.AddWithValue("@id_comptable", ficheFrais.Comptable.Id);
+                command.Parameters.AddWithValue("@id_commercial_visiteur", ficheFrais.Commercial_visiteur.Id);
                 command.Parameters.AddWithValue("@date_fiche", ficheFrais.Date_fiche);
-                
-                // Update ligne frais ?
+                command.Parameters.AddWithValue("@id_rdv", ficheFrais.Rdv.Id_rdv);
 
                 command.ExecuteNonQuery();
                 CloseConnection();

@@ -140,7 +140,7 @@ namespace GSB.Models.DAO
             }
         }
 
-        public void Update(LigneFrais ligneFrais, DateTime date_modif)
+        public void Update(LigneFrais ligneFrais)
         {
             if (OpenConnection())
             {

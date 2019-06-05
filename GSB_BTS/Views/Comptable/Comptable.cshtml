@@ -123,6 +123,20 @@
                     var id_comptable = $('#employe').data('id');
                     var id_ligne_frais = $(this).data('id_ligne_frais');
                     var id_fiche_frais = $(this).data('id_fiche_frais');
+                    var etat_ligne_frais = $(this).val();
+                    
+                    try {
+                        $.ajax({
+                            type: "POST",
+                            url: "/AjaxComptable/UpdateLigneFrais", 
+                            data: 'id_comptable=' + id_comptable + '&id_ligne_frais=' + id_ligne_frais + "&id_fiche_frais=" + id_fiche_frais + "&etat_ligne_frais=" + etat_ligne_frais,
+                        }).then(function () {
+                            location.reload();
+                        });
+                    }
+                    catch (ex) {
+                        alert("catch Ajax Error");
+                    }
 
                 });
 

@@ -193,8 +193,7 @@ namespace GSB.Controllers
             }
             else // MODIFY
             {
-                ligneFraisManager.Update(newLigneFrais, (DateTime)date_modif);
-                //Debug.WriteLine("=============================================" + newLigneFrais.Date_modification);
+                ligneFraisManager.Update(newLigneFrais);
             }
         }
 
