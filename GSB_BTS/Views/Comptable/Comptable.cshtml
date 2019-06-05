@@ -51,12 +51,24 @@
                         <tbody>
                             @foreach (var ligne_frais in ficheFrais[index].Liste_lignes_frais)
                             {
+                                string select_ligne_frais;
                                 <tr>
                                     <th>@ligne_frais.Frais</th>
                                     <th>@ligne_frais.Forfait</th>
                                     <th>@ligne_frais.Libelle</th>
                                     <th>@ligne_frais.Montant</th>
-                                    <th>@ligne_frais.EtatLigne</th>
+                                
+                                    <th>
+                                        <select class="browser-default custom-select" id="ligne_frais">
+                                            <option value="en_cours" @{select_ligne_frais = ligne_frais.EtatLigne.ToString() == "en_cours" ? "selected" : ""; 
+                                                @select_ligne_frais}>En cours</option>
+                                            <option value="refuse" @{select_ligne_frais = ligne_frais.EtatLigne.ToString() == "refuse" ? "selected" : ""; 
+                                                @select_ligne_frais }>Refusé</option> 
+                                            <option value="mise_en_paiement" @{select_ligne_frais = ligne_frais.EtatLigne.ToString() == "mise_en_paiement" ? "selected" : ""; 
+                                                @select_ligne_frais}>Mise en paiement</option>
+                                        </select>
+                                    </th>
+        
                                 </tr>
                             }
                         </tbody>
@@ -98,35 +110,36 @@
 
         @section scripts {
             <script type="text/javascript">
-                $('#exampleModal').on('show.bs.modal', function (event) {
-                    var button = $(event.relatedTarget) // Button that triggered the modal
-                    var recipient = button.data('id')
 
-                    try {
-
-                        $.ajax({
-                            type: "POST",
-                            url: "/AjaxComptable/Read",
-                            data: 'table=' + "fiche_frais" + '&id=' + recipient,
-                        }).then(function (response) {
-                            var JsonResponse = JSON.parse(response);
-                        });
-                    }
-                    catch (ex) {
-                        alert("catch Ajax Error");
-                    }
-
-                    var modal = $(this)
-
-                    modal.find('.modal-title').text('Fiche Frais n°' + recipient)
-                    modal.find('.modal-body input').val(recipient)
-                })
+                $('#ligne_frais').change(function () {
 
 
+                });
 
 
+                //$('#exampleModal').on('show.bs.modal', function (event) {
+                //    var button = $(event.relatedTarget) // Button that triggered the modal
+                //    var recipient = button.data('id')
 
+                //    try {
 
+                //        $.ajax({
+                //            type: "POST",
+                //            url: "/AjaxComptable/Read",
+                //            data: 'table=' + "fiche_frais" + '&id=' + recipient,
+                //        }).then(function (response) {
+                //            var JsonResponse = JSON.parse(response);
+                //        });
+                //    }
+                //    catch (ex) {
+                //        alert("catch Ajax Error");
+                //    }
+
+                //    var modal = $(this)
+
+                //    modal.find('.modal-title').text('Fiche Frais n°' + recipient)
+                //    modal.find('.modal-body input').val(recipient)
+                //})
             </script>
         }
     }
