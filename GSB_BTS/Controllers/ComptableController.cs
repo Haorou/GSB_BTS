@@ -19,7 +19,6 @@ namespace GSB.Controllers
             if (ViewBag.Employe != null)
             {
                 FicheFraisDAO ficheFraisManager = new FicheFraisDAO();
-                LigneFraisDAO ligneFraisDAO = new LigneFraisDAO();
                 List<FicheFrais> fichesFrais = ficheFraisManager.ReadAll();
 
                 ViewBag.FichesFrais = fichesFrais;

@@ -7,7 +7,7 @@
 
 @{
     <div class="container">
-        <h2>Hover Rows</h2>
+        <h2 id="employe" data-id="@ViewBag.Employe.Id">Bienvenue @ViewBag.Employe.Prenom @ViewBag.Employe.Nom</h2>
         <p>Consultation des fiches frais</p>
 
         @{
@@ -39,80 +39,90 @@
                             <th>@dateFiche</th>
                         </tr>
 
-                        <thead>
+                    <thead>
+                        <tr>
+                            <th>Type frais</th>
+                            <th>Type forfait</th>
+                            <th>Libelle</th>
+                            <th>Montant</th>
+                            <th>Etat ligne frais</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var ligne_frais in ficheFrais[index].Liste_lignes_frais)
+                        {
+                            string select_ligne_frais;
+                            string etat_ligne = ligne_frais.EtatLigne.ToString();
                             <tr>
-                                <th>Type frais</th>
-                                <th>Type forfait</th>
-                                <th>Libelle</th>
-                                <th>Montant</th>
-                                <th>Etat ligne frais</th>
+                                <th>@ligne_frais.Frais</th>
+                                <th>@ligne_frais.Forfait</th>
+                                <th>@ligne_frais.Libelle</th>
+                                <th>@ligne_frais.Montant</th>
+
+                                <th>
+                                    <select class="browser-default custom-select ligne_frais" 
+                                            data-id_fiche_frais="@ligne_frais.FicheFrais.Id_fiche_frais" data-id_ligne_frais="@ligne_frais.Id">
+                                        <option value="en_cours" @{select_ligne_frais = etat_ligne == "en_cours" ? "selected" : ""; 
+                                            @select_ligne_frais }>
+                                            En cours
+                                        </option>
+                                        <option value="refuse" @{select_ligne_frais = etat_ligne == "refuse" ? "selected" : ""; 
+                                            @select_ligne_frais  }>
+                                            Refusé
+                                        </option>
+                                        <option value="mise_en_paiement" @{select_ligne_frais = etat_ligne == "mise_en_paiement" ? "selected" : ""; 
+                                            @select_ligne_frais }>
+                                            Mise en paiement
+                                        </option>
+                                    </select>
+                                </th>
+
                             </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var ligne_frais in ficheFrais[index].Liste_lignes_frais)
-                            {
-                                string select_ligne_frais;
-                                <tr>
-                                    <th>@ligne_frais.Frais</th>
-                                    <th>@ligne_frais.Forfait</th>
-                                    <th>@ligne_frais.Libelle</th>
-                                    <th>@ligne_frais.Montant</th>
-                                
-                                    <th>
-                                        <select class="browser-default custom-select" id="ligne_frais">
-                                            <option value="en_cours" @{select_ligne_frais = ligne_frais.EtatLigne.ToString() == "en_cours" ? "selected" : ""; 
-                                                @select_ligne_frais}>En cours</option>
-                                            <option value="refuse" @{select_ligne_frais = ligne_frais.EtatLigne.ToString() == "refuse" ? "selected" : ""; 
-                                                @select_ligne_frais }>Refusé</option> 
-                                            <option value="mise_en_paiement" @{select_ligne_frais = ligne_frais.EtatLigne.ToString() == "mise_en_paiement" ? "selected" : ""; 
-                                                @select_ligne_frais}>Mise en paiement</option>
-                                        </select>
-                                    </th>
-        
-                                </tr>
-                            }
-                        </tbody>
+                        }
+                    </tbody>
                     </tbody>
                 </table>
-                    }
-                    }
+            }
+        }
 
 
-                <div class="modal fade" id="modalFicheFrais" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Fiche Frais</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
+        <div class="modal fade" id="modalFicheFrais" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Fiche Frais</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">Recipient:</label>
+                                <input type="text" class="form-control" id="recipient-name">
                             </div>
-                            <div class="modal-body">
-                                <form>
-                                    <div class="form-group">
-                                        <label for="recipient-name" class="col-form-label">Recipient:</label>
-                                        <input type="text" class="form-control" id="recipient-name">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="message-text" class="col-form-label">Message:</label>
-                                        <textarea class="form-control" id="message-text"></textarea>
-                                    </div>
-                                </form>
+                            <div class="form-group">
+                                <label for="message-text" class="col-form-label">Message:</label>
+                                <textarea class="form-control" id="message-text"></textarea>
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Send message</button>
-                            </div>
-                        </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Send message</button>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 
         @section scripts {
             <script type="text/javascript">
 
-                $('#ligne_frais').change(function () {
-
+                $('.ligne_frais').change(function () {
+                    var id_comptable = $('#employe').data('id');
+                    var id_ligne_frais = $(this).data('id_ligne_frais');
+                    var id_fiche_frais = $(this).data('id_fiche_frais');
 
                 });
 
