@@ -15,7 +15,7 @@
         int tailleFichesFrais = ficheFrais.Count;
         for (int index = 0; index < tailleFichesFrais; index++)
         {
-            <table class="table table-hover">
+            <table class="table table-hover" style="background-color:floralwhite">
 
                 <thead>
                     <tr>
@@ -39,7 +39,7 @@
                         <th>@dateFiche</th>
                     </tr>
 
-                <thead>
+                <thead style="background-color:aliceblue">
                     <tr>
                         <th>Type frais</th>
                         <th>Type forfait</th>
@@ -48,7 +48,7 @@
                         <th>Etat ligne frais</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody style="background-color:aliceblue">
                     @foreach (var ligne_frais in ficheFrais[index].Liste_lignes_frais)
                     {
                         string select_ligne_frais;
